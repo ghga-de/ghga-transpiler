@@ -17,35 +17,44 @@
 Module containing the main FastAPI router and (optionally) top-level API enpoints.
 Additional endpoints might be structured in dedicated modules
 (each of them having a sub-router).
+
+THIS INCLUDES PLACE HOLDERS. API IS NOT IMPLEMENTED
 """
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from ghga_service_commons.api import configure_app
 
 from ..config import CONFIG
-from ..core.greeting import generate_greeting
-from ..models import Greeting
-from .deps import get_config
 
 app = FastAPI()
 configure_app(app, config=CONFIG)
 
 
-@app.get("/", summary="Greet the world")
-async def index():
-    """Greet the World"""
-    return "Hello World."
+@app.post("/upload", summary="Upload excel spread-sheet")
+async def upload_spread_sheet():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    return "uploaded"
 
 
-@app.get(
-    "/greet/{name}",
-    summary="Greet a person",
-    description=(
-        "Greet a person by name. You may choose a formal or an informal greeting."
-        "The language for the greeting is configured in the backend."
-    ),
-    response_model=Greeting,
-)
-async def greet(name: str, isinformal: bool = True, config=Depends(get_config)):
-    """Greet a person"""
-    return generate_greeting(name=name, language=config.language, isinformal=isinformal)
+@app.get("/convert", summary="Convert excel spread-sheet to json")
+async def convert_spread_sheet():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    return "converted"
+
+
+@app.get("/download_json", summary="Download json")
+async def download_spread_sheet():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    return "downloaded"

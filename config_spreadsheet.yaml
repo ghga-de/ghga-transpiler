@@ -12,22 +12,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-"""Entrypoint of the package"""
-
-import asyncio
-
-from ghga_service_commons.api import run_server
-
-from .api.main import app  # noqa: F401 pylint: disable=unused-import
-from .config import CONFIG, Config
-
-
-def run(config: Config = CONFIG):
-    """Run the service"""
-    # Please adapt to package name
-    asyncio.run(run_server(app="my_microservice.__main__:app", config=config))
-
-
-if __name__ == "__main__":
-    run()
+StudyFiles:
+  start_row: 1
+  end_row: 21
+  start_column: 2
+  end_column: 8
+  header:  "true"
+  synonym: "study_files"
+Datasets:
+  start_row: 1
+  end_row: 3
+  start_column: 2
+  end_column: 6
+  header: "true"
+  synonym: "datasets"

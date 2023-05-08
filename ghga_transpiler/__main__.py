@@ -13,21 +13,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Config Parameter Modeling and Parsing"""
+"""Entrypoint of the package"""
+from pathlib import Path
 
-from ghga_service_commons.api import ApiConfigBase
-from hexkit.config import config_from_yaml
-
-from .models import SupportedLanguages
-
-
-# Please adapt config prefix and remove unnecessary config bases:
-@config_from_yaml(prefix="my_microservice")
-class Config(ApiConfigBase):
-    """Config parameters and their defaults."""
-
-    service_name: str = "my_microservice"  # Please adapt
-    language: SupportedLanguages = "Croatian"
+import typer
+from typing_extensions import Annotated
 
 
-CONFIG = Config()
+def main(
+    spread_sheet: Annotated[
+        Path, typer.Option(None, exists=True, help="The path to the excel spread sheet")
+    ]
+):
+    """Function to convert excel spread sheet to JSON
+
+    Args:
+        spread_sheet (Annotated[str, typer.Argument): The path to the excel spread sheet
+    """
+    if spread_sheet is None:
+        print("No input spread sheet is provided")
+        raise typer.Abort()
+
+
+if __name__ == "__main__":
+    typer.run(main)
