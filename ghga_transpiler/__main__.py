@@ -23,7 +23,15 @@ from typing_extensions import Annotated
 def main(
     spread_sheet: Annotated[
         Path, typer.Option(None, exists=True, help="The path to the excel spread sheet")
-    ]
+    ],
+    config: Annotated[
+        Path,
+        typer.Option(
+            None,
+            envvar="GHGA_TRANSPILER_CONFIG_YAML",
+            help="Environmental variable for the config file pointing to the config file",
+        ),
+    ],
 ):
     """Function to convert excel spread sheet to JSON
 
@@ -31,6 +39,10 @@ def main(
         spread_sheet (Annotated[str, typer.Argument): The path to the excel spread sheet
     """
     if spread_sheet is None:
+        print("No input spread sheet is provided")
+        raise typer.Abort()
+
+    if config is None:
         print("No input spread sheet is provided")
         raise typer.Abort()
 

@@ -17,17 +17,6 @@
 from openpyxl import load_workbook
 
 
-class Worksheet:
-    """_summary_"""
-
-    name: str
-    min_row: int
-    max_row: int
-    min_col: int
-    max_col: int
-    header: bool
-
-
 def read_workbook(filename: str):
     """
     Function to read-in spreadsheet

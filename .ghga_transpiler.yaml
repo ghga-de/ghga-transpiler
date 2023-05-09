@@ -1,0 +1,98 @@
+StudyFiles:
+  name: "study_files"
+  start_row: 1
+  end_row: 21
+  start_column: 2
+  end_column: 8
+  header: True
+Datasets:
+  name: "datasets"
+  start_row: 1
+  end_row: 3
+  start_column: 2
+  end_column: 6
+  header: True
+Studies:
+  name: "studies"
+  start_row: 1
+  end_row: 2
+  start_column: 2
+  end_column: 7
+  header: True
+Publications:
+  name: "publications"
+  start_row: 1
+  end_row: 1
+  start_column: 2
+  end_column: 8
+  header: True
+SampleFiles:
+  name: "sample_files"
+  start_row: 1
+  end_row: 2
+  start_column: 2
+  end_column: 8
+  header: True
+Samples:
+  name: "samples"
+  start_row: 1
+  end_row: 3
+  start_column: 2
+  end_column: 16
+  header: True
+Conditions:
+  name: "conditions"
+  start_row: 1
+  end_row: 2
+  start_column: 2
+  end_column: 4
+  header: True
+Biospecimens:
+  name: "biospecimens"
+  start_row: 1
+  end_row: 2
+  start_column: 2
+  end_column: 9
+  header: True
+Individuals:
+  name: "individuals"
+  start_row: 1
+  end_row: 2
+  start_column: 2
+  end_column: 9
+  header: True
+SequencingProcessFiles:
+  name: "sequencing_process_files"
+  start_row: 1
+  end_row: 21
+  start_column: 2
+  end_column: 8
+  header: True
+SequencingExperiments:
+  name: "sequencing_experiments"
+  start_row: 1
+  end_row: 1
+  start_column: 1
+  end_column: 6
+  header: True
+SequencingProcesses:
+  name: "sequencing_processes"
+  start_row: 1
+  end_row: 2
+  start_column: 1
+  end_column: 8
+  header: True
+SequencingProtocolls:
+  name: "sequencing_protocols"
+  start_row: 1
+  end_row: 1
+  start_column: 1
+  end_column: 18
+  header: True
+LibraryPreparationProtocolls:
+  name: "library_preparation_protocols"
+  start_row: 1
+  end_row: 1
+  start_column: 1
+  end_column: 14
+  header: True
