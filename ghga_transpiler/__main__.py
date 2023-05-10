@@ -27,7 +27,7 @@ def convert_workbook(filename: Path) -> dict:
     """Function to run steps for conversion
 
     Args:
-        filename (Path): _description_
+        filename (Path): Path to input spread sheet
 
     Returns:
         dict: dictionary of worksheet names as keys and list of sheet row values as values.
@@ -35,17 +35,17 @@ def convert_workbook(filename: Path) -> dict:
     converted_workbook = {}
     workbook = read_workbook(str(filename))
     for sheet_name in workbook.sheetnames:
-        worksheet = workbook[sheet_name]
         sheet_annotation = getattr(CONFIG, sheet_name)
         rows = get_worksheet_rows(
-            worksheet,
+            workbook[sheet_name],
             sheet_annotation["start_row"],
             sheet_annotation["end_row"],
             sheet_annotation["start_column"],
             sheet_annotation["end_column"],
         )
-        header = get_header(CONFIG, sheet_name, rows)
-        converted_workbook[sheet_annotation["name"]] = convert_rows(header, rows[1:])
+        converted_workbook[sheet_annotation["name"]] = convert_rows(
+            get_header(sheet_annotation, rows), rows[1:]
+        )
     return converted_workbook
 
 

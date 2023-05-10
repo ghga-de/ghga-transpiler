@@ -29,10 +29,7 @@ def read_workbook(filename: str):
 def get_worksheet_rows(
     worksheet, min_row: int, max_row: int, min_col: int, max_col: int
 ) -> list:
-    """Function to generate a list of header values
-
-    Args:
-        worksheet (openpyxl.worksheet.worksheet.Worksheet): worksheet"""
+    """Function to generate a list of header values"""
     return list(
         worksheet.iter_rows(min_row, max_row, min_col, max_col, values_only=True)
     )
@@ -50,15 +47,17 @@ def convert_rows(header: list, rows: list) -> list:
     return [_convert_row_to_dict(header, row) for row in rows]
 
 
-def get_header(config, worksheet_name: str, worksheet_rows: list[list]) -> list[str]:
-    """_summary_
+def get_sheet_annotation(config, worksheet_name: str) -> dict:
+    """Function to return the details of a worksheet structure
 
     Args:
         config (hexkit...<locals>.ModSettings): config object created from config yaml
-        worksheet_rows (list[list]): worksheet rows
-        worksheet_name (str): worksheet name
     """
-    annotation_dict = getattr(config, worksheet_name)
-    if annotation_dict["header"]:
+    return getattr(config, worksheet_name)
+
+
+def get_header(sheet_annotation: dict, worksheet_rows: list[list]) -> list[str]:
+    """Function to return the header of a worksheet"""
+    if sheet_annotation["header"]:
         return worksheet_rows[0]
     raise HeaderNotFound("Worksheet does not have a header")
