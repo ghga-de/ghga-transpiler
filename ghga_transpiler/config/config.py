@@ -13,11 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""FastAPI dependencies (used with the `Depends` feature)"""
+"""Config Parameter Modeling and Parsing"""
+from hexkit.config import config_from_yaml
+from pydantic import BaseSettings, Extra
 
-from ..config import CONFIG
+
+@config_from_yaml(prefix="ghga_transpiler")
+class Config(BaseSettings, extra=Extra.allow):  # type: ignore
+    """Config parameters and their defaults."""
+
+    service_name: str = "ghga_transpiler"
 
 
-def get_config():
-    """Get runtime configuration."""
-    return CONFIG
+CONFIG = Config()

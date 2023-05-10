@@ -80,7 +80,7 @@ SequencingProcesses:
   start_row: 1
   end_row: 2
   start_column: 1
-  end_column: 8
+  end_column: 7
   header: True
 SequencingProtocolls:
   name: "sequencing_protocols"
@@ -95,4 +95,11 @@ LibraryPreparationProtocolls:
   end_row: 1
   start_column: 1
   end_column: 14
+  header: True
+Enums:
+  name: "enums"
+  start_row: 1
+  end_row: 17
+  start_column: 1
+  end_column: 1
   header: True

@@ -14,22 +14,51 @@
 # limitations under the License.
 
 """Entrypoint of the package"""
+import json
 from pathlib import Path
 
 import typer
+from config.config import CONFIG
+from core.convert import convert_rows, get_header, get_worksheet_rows, read_workbook
 from typing_extensions import Annotated
+
+
+def convert_workbook(filename: Path) -> dict:
+    """Function to run steps for conversion
+
+    Args:
+        filename (Path): _description_
+
+    Returns:
+        dict: dictionary of worksheet names as keys and list of sheet row values as values.
+    """
+    converted_workbook = {}
+    workbook = read_workbook(str(filename))
+    for sheet_name in workbook.sheetnames:
+        worksheet = workbook[sheet_name]
+        sheet_annotation = getattr(CONFIG, sheet_name)
+        rows = get_worksheet_rows(
+            worksheet,
+            sheet_annotation["start_row"],
+            sheet_annotation["end_row"],
+            sheet_annotation["start_column"],
+            sheet_annotation["end_column"],
+        )
+        header = get_header(CONFIG, sheet_name, rows)
+        converted_workbook[sheet_annotation["name"]] = convert_rows(header, rows[1:])
+    return converted_workbook
 
 
 def main(
     spread_sheet: Annotated[
-        Path, typer.Option(None, exists=True, help="The path to the excel spread sheet")
+        Path, typer.Option(None, exists=True, help="The path to input file")
     ],
     config: Annotated[
         Path,
         typer.Option(
             None,
             envvar="GHGA_TRANSPILER_CONFIG_YAML",
-            help="Environmental variable for the config file pointing to the config file",
+            help="Variable pointing config file",
         ),
     ],
 ):
@@ -45,6 +74,9 @@ def main(
     if config is None:
         print("No input spread sheet is provided")
         raise typer.Abort()
+
+    with open("metadata.json", "w", encoding="utf-8") as file:
+        json.dump(convert_workbook(spread_sheet), file, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":

@@ -12,18 +12,4 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""Config Parameter Modeling and Parsing"""
-from hexkit.config import config_from_yaml
-from pydantic import BaseSettings, Extra
-
-
-@config_from_yaml(prefix="ghga_transpiler")
-class Config(BaseSettings):
-    """Config parameters and their defaults."""
-
-    extra = Extra.allow
-    service_name: str = "ghga_transpiler"
-
-
-CONFIG = Config()
+#

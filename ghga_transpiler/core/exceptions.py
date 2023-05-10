@@ -12,18 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""Defines dataclasses for holding business-logic data"""
-
-from datetime import datetime
-
-from pydantic import BaseModel, Field
+#
+"""Module to collect custom exceptions"""
 
 
-class MessageBase(BaseModel):
-    """A message base container"""
-
-    message: str = Field(..., description="The message content.")
-    created_at: datetime = Field(
-        ..., description="The date/time when the message was created"
-    )
+class HeaderNotFound(RuntimeError):
+    """Raised when header is given as false in the yaml for a worksheet"""

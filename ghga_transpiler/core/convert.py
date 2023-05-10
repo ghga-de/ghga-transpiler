@@ -16,6 +16,8 @@
 """This module contains functionalities for processing excel sheets into json object."""
 from openpyxl import load_workbook
 
+from .exceptions import HeaderNotFound
+
 
 def read_workbook(filename: str):
     """
@@ -24,16 +26,19 @@ def read_workbook(filename: str):
     return load_workbook(filename)
 
 
-def get_worksheet_row(
+def get_worksheet_rows(
     worksheet, min_row: int, max_row: int, min_col: int, max_col: int
 ) -> list:
-    """Function to generate a list of header values"""
+    """Function to generate a list of header values
+
+    Args:
+        worksheet (openpyxl.worksheet.worksheet.Worksheet): worksheet"""
     return list(
         worksheet.iter_rows(min_row, max_row, min_col, max_col, values_only=True)
     )
 
 
-def convert_row_to_dict(header: list, row: list) -> dict:
+def _convert_row_to_dict(header: list, row: list) -> dict:
     """
     Function to convert a row into a dictionary with the header as keys.
     """
@@ -42,4 +47,18 @@ def convert_row_to_dict(header: list, row: list) -> dict:
 
 def convert_rows(header: list, rows: list) -> list:
     """Function to return list of dictionaries, rows as values and header as keys"""
-    return [convert_row_to_dict(header, row) for row in rows]
+    return [_convert_row_to_dict(header, row) for row in rows]
+
+
+def get_header(config, worksheet_name: str, worksheet_rows: list[list]) -> list[str]:
+    """_summary_
+
+    Args:
+        config (hexkit...<locals>.ModSettings): config object created from config yaml
+        worksheet_rows (list[list]): worksheet rows
+        worksheet_name (str): worksheet name
+    """
+    annotation_dict = getattr(config, worksheet_name)
+    if annotation_dict["header"]:
+        return worksheet_rows[0]
+    raise HeaderNotFound("Worksheet does not have a header")
