@@ -65,7 +65,7 @@ def input_files(
         raise typer.Abort()
 
     if output_file is None:
-        print("No input spread sheet is provided")
+        print(f"Output file will be saved to default location: {DEFAULT_OUTPUT_FILE}")
         output_file = DEFAULT_OUTPUT_FILE
 
     with open(output_file, "w", encoding="utf-8") as file:
