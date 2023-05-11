@@ -14,3 +14,14 @@
 # limitations under the License.
 
 """Entrypoint of the package"""
+
+from ghga_transpiler.cli import cli
+
+
+def run():
+    """Run the application."""
+    cli()
+
+
+if __name__ == "__main__":
+    run()
