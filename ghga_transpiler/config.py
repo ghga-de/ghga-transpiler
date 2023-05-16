@@ -15,15 +15,9 @@
 
 """Config Parameter Modeling and Parsing"""
 
-from hexkit.config import config_from_yaml
-from pydantic import BaseSettings
+import yaml
 
 
-@config_from_yaml(prefix="ghga_transpiler")
-class Config(BaseSettings):
-    """Config parameters and their defaults."""
-
-    service_name: str = "ghga_transpiler"
-
-
-CONFIG = Config()
+def load_config(filename):
+    """Function to load config yaml"""
+    return yaml.safe_load(filename)
