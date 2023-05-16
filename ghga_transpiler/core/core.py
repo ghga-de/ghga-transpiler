@@ -14,6 +14,43 @@
 # limitations under the License.
 #
 
-"Module including functions to transpile a worksheet"
+"""This module contains functionalities for processing excel sheets into json object."""
+
+from openpyxl import load_workbook
 
 VERSION = "v1.0"
+
+
+def read_workbook(filename: str):
+    """
+    Function to read-in spreadsheet
+    """
+    return load_workbook(filename)
+
+
+def get_worksheet_rows(
+    worksheet, min_row: int, max_row: int, min_col: int, max_col: int
+) -> list:
+    """Function to generate a list of header values"""
+    return list(
+        worksheet.iter_rows(min_row, max_row, min_col, max_col, values_only=True)
+    )
+
+
+def convert_rows(header: list, rows: list) -> list:
+    """Function to return list of dictionaries, rows as values and header as keys"""
+    return [dict(zip(header, row)) for row in rows]
+
+
+def get_sheet_annotation(config, worksheet_name: str) -> dict:
+    """Function to return the details of a worksheet structure
+
+    Args:
+        config: config object created from config yaml
+    """
+    return getattr(config, worksheet_name)
+
+
+def get_header(worksheet_rows: list[list]) -> list[str]:
+    """Function to return the header of a worksheet"""
+    return worksheet_rows[0]

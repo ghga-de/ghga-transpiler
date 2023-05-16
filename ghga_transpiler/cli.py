@@ -20,20 +20,33 @@ from pathlib import Path
 import typer
 from typing_extensions import Annotated
 
+from .core.core import convert_rows, get_header, get_worksheet_rows, read_workbook
+
 HERE = Path(__file__).parent.resolve()
 DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
 
 cli = typer.Typer()
 
+CONFIG = ""
+
 
 def convert_workbook(filename: Path):
-    """Function to run steps for conversion
-
-    Args:
-        filename: Path to input spread sheet
-
-    """
-    return filename
+    """Function to run steps for conversion"""
+    converted_workbook = {}
+    workbook = read_workbook(str(filename))
+    for sheet_name in workbook.sheetnames:
+        sheet_annotation = getattr(CONFIG, sheet_name)
+        rows = get_worksheet_rows(
+            workbook[sheet_name],
+            sheet_annotation["start_row"],
+            sheet_annotation["end_row"],
+            sheet_annotation["start_column"],
+            sheet_annotation["end_column"],
+        )
+        converted_workbook[sheet_annotation["name"]] = convert_rows(
+            get_header(rows), rows[1:]
+        )
+    return converted_workbook
 
 
 @cli.command()
