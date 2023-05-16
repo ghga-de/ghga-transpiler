@@ -41,26 +41,10 @@ def input_files(
     spread_sheet: Annotated[
         Path, typer.Option(None, exists=True, help="The path to input file")
     ],
-    config: Annotated[
-        Path,
-        typer.Option(
-            None,
-            envvar="GHGA_TRANSPILER_CONFIG_YAML",
-            help="Variable pointing config file",
-        ),
-    ],
     output_file: Annotated[Path, typer.Option(None, help="The path to output file")],
 ):
-    """Function to convert excel spread sheet to JSON
-
-    Args:
-        spread_sheet (Annotated[str, typer.Argument): The path to the excel spread sheet
-    """
+    """Function to convert excel spread sheet to JSON"""
     if spread_sheet is None:
-        print("No input spread sheet is provided")
-        raise typer.Abort()
-
-    if config is None:
         print("No input spread sheet is provided")
         raise typer.Abort()
 
