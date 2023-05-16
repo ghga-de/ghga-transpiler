@@ -1,0 +1,55 @@
+Global:
+  version: 1.0
+  header_row: 1
+  start_row: 1
+  start_column: 1
+StudyFiles:
+  name: "study_files"
+  start_column: 2
+  end_column: 8
+Datasets:
+  name: "datasets"
+  start_column: 2
+  end_column: 6
+Studies:
+  name: "studies"
+  start_column: 2
+  end_column: 7
+Publications:
+  name: "publications"
+  start_column: 2
+  end_column: 8
+SampleFiles:
+  name: "sample_files"
+  start_column: 2
+  end_column: 8
+Samples:
+  name: "samples"
+  start_column: 2
+  end_column: 16
+Conditions:
+  name: "conditions"
+  start_column: 2
+  end_column: 4
+Biospecimens:
+  name: "biospecimens"
+  start_column: 2
+  end_column: 9
+Individuals:
+  name: "individuals"
+  start_column: 2
+  end_column: 9
+SequencingProcessFiles:
+  name: "sequencing_process_files"
+  start_column: 2
+  end_column: 8
+SequencingExperiments:
+  name: "sequencing_experiments"
+SequencingProcesses:
+  name: "sequencing_processes"
+SequencingProtocolls:
+  name: "sequencing_protocols"
+LibraryPreparationProtocolls:
+  name: "library_preparation_protocols"
+Enums:
+  name: "enums"
