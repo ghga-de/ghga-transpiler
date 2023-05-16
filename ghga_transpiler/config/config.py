@@ -20,8 +20,8 @@ from os.path import exists
 from pathlib import Path
 
 import yaml
-from core.core import VERSION
 
+from ..core.core import VERSION
 from .exceptions import MissingConfigFile
 
 HERE = Path(__file__).parent.resolve()
