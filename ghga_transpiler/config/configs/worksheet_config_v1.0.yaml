@@ -1,8 +1,8 @@
 Global:
   version: 1.0
-  header_row: 1
   start_row: 1
   start_column: 1
+  end_column: 1
 StudyFiles:
   name: "study_files"
   start_column: 2
@@ -45,11 +45,15 @@ SequencingProcessFiles:
   end_column: 8
 SequencingExperiments:
   name: "sequencing_experiments"
+  end_column: 6
 SequencingProcesses:
   name: "sequencing_processes"
+  end_column: 7
 SequencingProtocolls:
   name: "sequencing_protocols"
+  end_column: 18
 LibraryPreparationProtocolls:
   name: "library_preparation_protocols"
+  end_column: 14
 Enums:
   name: "enums"

@@ -20,14 +20,20 @@ from pathlib import Path
 import typer
 from typing_extensions import Annotated
 
-from .core.core import convert_rows, get_header, get_worksheet_rows, read_workbook
+from ghga_transpiler.config.config import Config, read_config
+from ghga_transpiler.core.core import (
+    convert_rows,
+    get_header,
+    get_worksheet_rows,
+    read_workbook,
+)
 
 HERE = Path(__file__).parent.resolve()
 DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
 
 cli = typer.Typer()
 
-CONFIG = ""
+CONFIG = Config(config=read_config()).from_dict
 
 
 def convert_workbook(filename: Path):
@@ -38,10 +44,10 @@ def convert_workbook(filename: Path):
         sheet_annotation = getattr(CONFIG, sheet_name)
         rows = get_worksheet_rows(
             workbook[sheet_name],
-            sheet_annotation["start_row"],
-            sheet_annotation["end_row"],
-            sheet_annotation["start_column"],
-            sheet_annotation["end_column"],
+            CONFIG.get_param(sheet_name, "start_row"),
+            workbook[sheet_name].max_row,
+            CONFIG.get_param(sheet_name, "start_column"),
+            CONFIG.get_param(sheet_name, "end_column"),
         )
         converted_workbook[sheet_annotation["name"]] = convert_rows(
             get_header(rows), rows[1:]

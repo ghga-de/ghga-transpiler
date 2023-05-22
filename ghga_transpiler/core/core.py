@@ -33,7 +33,11 @@ def get_worksheet_rows(
 ) -> list:
     """Function to generate a list of header values"""
     return list(
-        worksheet.iter_rows(min_row, max_row, min_col, max_col, values_only=True)
+        row
+        for row in worksheet.iter_rows(
+            min_row, max_row, min_col, max_col, values_only=True
+        )
+        if not all(cell is None for cell in row)
     )
 
 

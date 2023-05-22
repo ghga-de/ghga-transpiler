@@ -16,6 +16,7 @@
 
 """Module to process config file"""
 
+from dataclasses import dataclass
 from os.path import exists
 from pathlib import Path
 
@@ -34,3 +35,24 @@ def read_config():
         with open(CONFIG_LOCATION, "r", encoding="utf-8") as file:
             return yaml.safe_load(file)
     raise MissingConfigFile(f"Config file for version {VERSION} cannot be found.")
+
+
+@dataclass
+class Config:
+    """Class to create config object"""
+
+    config: dict
+
+    @property
+    def from_dict(self):
+        """Config constructor from dictionary"""
+        for key, value in self.config.items():
+            setattr(self, key, value)
+        return self
+
+    def get_param(self, worksheet_name, key):
+        """Function to manage parameters of global and worksheet specific configuration"""
+        try:
+            return getattr(self, worksheet_name)[key]
+        except KeyError:
+            return getattr(self, "Global")[key]
