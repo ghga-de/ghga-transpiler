@@ -37,7 +37,7 @@ def convert_workbook(filename: Path):
 
 
 @cli.command()
-def input_files(
+def cli_main(
     spread_sheet: Annotated[
         Path, typer.Option(None, exists=True, help="The path to input file")
     ],
