@@ -39,7 +39,7 @@ def convert_workbook(filename: Path):
 @cli.command()
 def cli_main(
     spread_sheet: Annotated[
-        Path, typer.Option(None, exists=True, help="The path to input file")
+        Path, typer.Option(None, exists=True, help="The path to input file", dir_okay=False, readable=True)
     ],
     output_file: Annotated[Path, typer.Option(None, help="The path to output file")],
 ):
