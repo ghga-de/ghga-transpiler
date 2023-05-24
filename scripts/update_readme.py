@@ -17,11 +17,13 @@
 
 """Generate documentation for this package using different sources."""
 
+import json
 import subprocess  # nosec
 import sys
 from pathlib import Path
 from string import Template
 
+import jsonschema2md
 from pydantic import BaseModel, Field
 from script_utils.cli import echo_failure, echo_success, run
 from setuptools.config.setupcfg import read_configuration
@@ -32,6 +34,8 @@ SETUP_CFG_PATH = ROOT_DIR / "setup.cfg"
 DESCRIPTION_PATH = ROOT_DIR / ".description.md"
 DESIGN_PATH = ROOT_DIR / ".design.md"
 README_TEMPLATE_PATH = ROOT_DIR / ".readme_template.md"
+CONFIG_SCHEMA_PATH = ROOT_DIR / "config_schema.json"
+OPENAPI_YAML_REL_PATH = "./openapi.yaml"
 README_PATH = ROOT_DIR / "README.md"
 
 
@@ -68,6 +72,19 @@ class PackageDetails(PackageHeader, PackageName):
         description=(
             "A markdown-formatted description of overall architecture and design of"
             + " the package."
+        ),
+    )
+    config_description: str = Field(
+        ...,
+        description=(
+            "A markdown-formatted list of all configuration parameters of this package."
+        ),
+    )
+    openapi_doc: str = Field(
+        ...,
+        description=(
+            "A markdown-formatted description rendering or linking to an OpenAPI"
+            " specification of the package."
         ),
     )
 
@@ -116,17 +133,61 @@ def read_design_description() -> str:
     return DESIGN_PATH.read_text()
 
 
+def generate_config_docs() -> str:
+    """Generate markdown-formatted documentation for the configration parameters
+    listed in the config schema."""
+
+    parser = jsonschema2md.Parser(
+        examples_as_yaml=False,
+        show_examples="all",
+    )
+
+    if not CONFIG_SCHEMA_PATH.exists():
+        return ""
+
+    with open(CONFIG_SCHEMA_PATH, "r", encoding="utf-8") as json_file:
+        config_schema = json.load(json_file)
+
+    md_lines = parser.parse_schema(config_schema)
+
+    # ignore everything before the properites header:
+    properties_index = md_lines.index("## Properties\n\n")
+    md_lines = md_lines[properties_index + 1 :]
+
+    return "\n".join(md_lines)
+
+
+def generate_openapi_docs() -> str:
+    """Generate markdown-formatted documentation linking to or rendering an OpenAPI
+    specification of the package. If no OpenAPI specification is present, return an
+    empty string."""
+
+    open_api_yaml_path = ROOT_DIR / OPENAPI_YAML_REL_PATH
+
+    if not open_api_yaml_path.exists():
+        return ""
+
+    return (
+        "## HTTP API\n"
+        + "An OpenAPI specification for this service can be found"
+        + f" [here]({OPENAPI_YAML_REL_PATH})."
+    )
+
+
 def get_package_details() -> PackageDetails:
     """Get details required to build documentation for the package."""
 
     header = read_package_header()
     name = read_package_name()
     description = read_package_description()
+    config_description = generate_config_docs()
     return PackageDetails(
         **header.dict(),
         **name.dict(),
         description=description,
-        design_description=read_design_description()
+        config_description=config_description,
+        design_description=read_design_description(),
+        openapi_doc=generate_openapi_docs(),
     )
 
 
