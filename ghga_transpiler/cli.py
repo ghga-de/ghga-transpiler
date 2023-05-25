@@ -16,9 +16,9 @@
 """ CLI-specific wrappers around core functions."""
 import json
 from pathlib import Path
+from typing import Optional
 
 import typer
-from typing_extensions import Annotated
 
 HERE = Path(__file__).parent.resolve()
 DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
@@ -26,31 +26,36 @@ DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
 cli = typer.Typer()
 
 
-def convert_workbook(filename: Path):
+def convert_workbook(filename):
     """Function to run steps for conversion
 
-    Args:
-        filename: Path to input spread sheet
+    This is a place holder
 
     """
+
     return filename
 
 
 @cli.command()
-def input_files(
-    spread_sheet: Annotated[
-        Path, typer.Option(None, exists=True, help="The path to input file")
-    ],
-    output_file: Annotated[Path, typer.Option(None, help="The path to output file")],
+def cli_main(
+    spread_sheet: Path = typer.Argument(
+        ...,
+        exists=True,
+        help="The path to input file",
+        dir_okay=False,
+        readable=True,
+    ),
+    output_file: Optional[Path] = typer.Argument(None, help="The path to output file."),
 ):
     """Function to convert excel spread sheet to JSON"""
-    if spread_sheet is None:
-        print("No input spread sheet is provided")
-        raise typer.Abort()
 
     if output_file is None:
-        print(f"Output file will be saved to default location: {DEFAULT_OUTPUT_FILE}")
-        output_file = DEFAULT_OUTPUT_FILE
-
-    with open(output_file, "w", encoding="utf-8") as file:
-        json.dump(convert_workbook(spread_sheet), file, ensure_ascii=False, indent=4)
+        print(convert_workbook(spread_sheet))
+    elif output_file.exists():
+        print(f"{output_file} exits.")
+        raise typer.Abort()
+    else:
+        with open(output_file, "w", encoding="utf-8") as file:
+            json.dump(
+                convert_workbook(spread_sheet), file, ensure_ascii=False, indent=4
+            )
