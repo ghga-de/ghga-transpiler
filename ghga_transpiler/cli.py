@@ -19,7 +19,6 @@ from pathlib import Path
 from typing import Optional
 
 import typer
-from typing_extensions import Annotated
 
 HERE = Path(__file__).parent.resolve()
 DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
