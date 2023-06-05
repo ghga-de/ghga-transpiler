@@ -19,3 +19,7 @@
 
 class MissingConfigFile(FileNotFoundError):
     """Raised when the config file does not exist for a given config file version"""
+
+
+class MissingWorkbookContent(KeyError):
+    """Raised when the config.worksheet do not exists in the spreadsheet input"""

@@ -21,6 +21,7 @@ from typing import Optional
 import typer
 
 from ghga_transpiler.config.config import Config, read_config
+from ghga_transpiler.config.exceptions import MissingWorkbookContent
 from ghga_transpiler.core.core import (
     convert_rows,
     get_header,
@@ -33,26 +34,30 @@ DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
 
 cli = typer.Typer()
 
-CONFIG = Config(config=read_config()).from_dict
+CONFIG = Config.parse_obj(read_config())
 
 
 def convert_workbook(filename: Path):
     """Function to run steps for conversion"""
     converted_workbook = {}
     workbook = read_workbook(str(filename))
-    for sheet_name in workbook.sheetnames:
-        sheet_annotation = getattr(CONFIG, sheet_name)
-        rows = get_worksheet_rows(
-            workbook[sheet_name],
-            CONFIG.get_param(sheet_name, "start_row"),
-            workbook[sheet_name].max_row,
-            CONFIG.get_param(sheet_name, "start_column"),
-            CONFIG.get_param(sheet_name, "end_column"),
-        )
-        converted_workbook[sheet_annotation["name"]] = convert_rows(
-            get_header(rows), rows[1:]
-        )
-    return converted_workbook
+    for sheet in CONFIG.worksheets:
+        try:
+            rows = get_worksheet_rows(
+                workbook[sheet.sheet_name],
+                sheet.settings.start_row,
+                workbook[sheet.sheet_name].max_row,
+                sheet.settings.start_column,
+                sheet.settings.end_column,
+            )
+            converted_workbook[sheet.sheet_name] = convert_rows(
+                get_header(rows), rows[1:]
+            )
+            return converted_workbook
+        except KeyError as exc:
+            raise MissingWorkbookContent(
+                f"Workbook does not contain {sheet.sheet_name} worksheet."
+            ) from exc
 
 
 @cli.command()

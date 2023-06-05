@@ -46,15 +46,6 @@ def convert_rows(header: list, rows: list) -> list:
     return [dict(zip(header, row)) for row in rows]
 
 
-def get_sheet_annotation(config, worksheet_name: str) -> dict:
-    """Function to return the details of a worksheet structure
-
-    Args:
-        config: config object created from config yaml
-    """
-    return getattr(config, worksheet_name)
-
-
 def get_header(worksheet_rows: list[list]) -> list[str]:
     """Function to return the header of a worksheet"""
     return worksheet_rows[0]
