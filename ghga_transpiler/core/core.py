@@ -15,6 +15,7 @@
 #
 
 """This module contains functionalities for processing excel sheets into json object."""
+from typing import Union
 
 from openpyxl import load_workbook
 
@@ -29,7 +30,11 @@ def read_workbook(filename: str):
 
 
 def get_worksheet_rows(
-    worksheet, min_row: int, max_row: int, min_col: int, max_col: int
+    worksheet,
+    min_row: Union[int, None],
+    max_row: int,
+    min_col: Union[int, None],
+    max_col: Union[int, None],
 ) -> list:
     """Function to generate a list of header values"""
     return list(

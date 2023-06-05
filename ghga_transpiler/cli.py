@@ -50,14 +50,13 @@ def convert_workbook(filename: Path):
                 sheet.settings.start_column,
                 sheet.settings.end_column,
             )
-            converted_workbook[sheet.sheet_name] = convert_rows(
-                get_header(rows), rows[1:]
-            )
-            return converted_workbook
         except KeyError as exc:
             raise MissingWorkbookContent(
                 f"Workbook does not contain {sheet.sheet_name} worksheet."
             ) from exc
+
+        converted_workbook[sheet.sheet_name] = convert_rows(get_header(rows), rows[1:])
+    return converted_workbook
 
 
 @cli.command()
