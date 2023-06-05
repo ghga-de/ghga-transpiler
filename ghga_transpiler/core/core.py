@@ -19,14 +19,20 @@ from typing import Union
 
 from openpyxl import load_workbook
 
-VERSION = "v1.0"
-
 
 def read_workbook(filename: str):
     """
     Function to read-in spreadsheet
     """
     return load_workbook(filename)
+
+
+def get_version(workbook):
+    """Function to get workbook version"""
+    if "__properties" in workbook.sheetnames:
+        return workbook["__properties"].cell(1, 1).value
+    print("Using default value: v1.0")
+    return "v1.0"
 
 
 def get_worksheet_rows(

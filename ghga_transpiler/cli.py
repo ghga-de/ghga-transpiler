@@ -25,23 +25,20 @@ from ghga_transpiler.config.exceptions import MissingWorkbookContent
 from ghga_transpiler.core.core import (
     convert_rows,
     get_header,
+    get_version,
     get_worksheet_rows,
     read_workbook,
 )
 
-HERE = Path(__file__).parent.resolve()
-DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
-
 cli = typer.Typer()
-
-CONFIG = Config.parse_obj(read_config())
 
 
 def convert_workbook(filename: Path):
     """Function to run steps for conversion"""
     converted_workbook = {}
     workbook = read_workbook(str(filename))
-    for sheet in CONFIG.worksheets:
+    config = Config.parse_obj(read_config(get_version(workbook)))
+    for sheet in config.worksheets:
         try:
             rows = get_worksheet_rows(
                 workbook[sheet.sheet_name],
