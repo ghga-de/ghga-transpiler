@@ -28,8 +28,3 @@ services:
 
     # Uncomment the next line to use a non-root user for all processes.
     user: vscode
-
-    # define environment variables
-    environment:
-      # Please adapt to package name:
-      ghga_transpiler_CONFIG_YAML: /workspace/.devcontainer/.dev_config.yaml
