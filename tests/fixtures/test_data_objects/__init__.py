@@ -13,11 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Utils for Fixture handling"""
-
-from pathlib import Path
-
-
-def get_project_root() -> Path:
-    """Function to get project root dir"""
-    return Path(__file__).absolute().parent.parent.parent
+"""Data that are used in unit tests"""

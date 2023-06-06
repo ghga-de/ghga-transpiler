@@ -12,12 +12,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+from openpyxl import load_workbook
 
-"""Utils for Fixture handling"""
+from ghga_transpiler.cli import convert_workbook
+from ghga_transpiler.config.config import Config
 
-from pathlib import Path
+from .fixtures.test_data_objects.test_data_objects import (
+    config_dict,
+    expected_conversion_result,
+)
+from .fixtures.utils import get_project_root
 
 
-def get_project_root() -> Path:
-    """Function to get project root dir"""
-    return Path(__file__).absolute().parent.parent.parent
+def test_convert_workbook():
+    """Test convert functionality"""
+
+    workbook_path = get_project_root() / "example_data" / "a_workbook.xlsx"
+    workbook = load_workbook(workbook_path)
+    config = Config.parse_obj(config_dict())
+
+    assert convert_workbook(workbook, config) == expected_conversion_result()

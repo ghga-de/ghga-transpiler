@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Optional
 
 import typer
+from openpyxl import Workbook
 
 from ghga_transpiler.config.config import Config, read_config
 from ghga_transpiler.config.exceptions import MissingWorkbookContent
@@ -33,11 +34,16 @@ from ghga_transpiler.core.core import (
 cli = typer.Typer()
 
 
-def convert_workbook(filename: Path):
-    """Function to run steps for conversion"""
-    converted_workbook = {}
+def _params(filename: Path):
+    """Helper function to return workbook, config"""
     workbook = read_workbook(str(filename))
     config = Config.parse_obj(read_config(get_version(workbook)))
+    return workbook, config
+
+
+def convert_workbook(workbook: Workbook, config: Config) -> dict:
+    """Function to run steps for conversion"""
+    converted_workbook = {}
     for sheet in config.worksheets:
         try:
             rows = get_worksheet_rows(
@@ -70,12 +76,15 @@ def cli_main(
     """Function to convert excel spread sheet to JSON"""
 
     if output_file is None:
-        print(convert_workbook(spread_sheet))
+        print(convert_workbook(_params(spread_sheet)[0], _params(spread_sheet)[1]))
     elif output_file.exists():
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:
         with open(output_file, "w", encoding="utf-8") as file:
             json.dump(
-                convert_workbook(spread_sheet), file, ensure_ascii=False, indent=4
+                convert_workbook(_params(spread_sheet)[0], _params(spread_sheet)[1]),
+                file,
+                ensure_ascii=False,
+                indent=4,
             )
