@@ -47,17 +47,20 @@ class DefaultSettings(BaseModel):
     end_column: int = 0
 
 
-class WorksheetSettings(DefaultSettings):
+class WorksheetSettings(BaseModel):
     """Class to create worksheet setting"""
 
-    name: str = "default_settings"
+    name: Optional[str]
+    start_row: Optional[int]
+    start_column: Optional[int]
+    end_column: Optional[int]
 
 
 class Worksheet(BaseModel):
     """class"""
 
     sheet_name: Optional[str]
-    settings: WorksheetSettings
+    settings: Optional[WorksheetSettings]
 
 
 class Config(BaseModel):
