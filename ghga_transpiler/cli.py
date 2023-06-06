@@ -42,6 +42,7 @@ def convert_workbook(filename: Path):
     converted_workbook = {}
     workbook = read_workbook(str(filename))
     for sheet in CONFIG.worksheets:
+        assert sheet.settings is not None  # nosec
         try:
             rows = get_worksheet_rows(
                 workbook[sheet.sheet_name],
