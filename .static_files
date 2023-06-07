@@ -37,9 +37,7 @@ example_data/README.md
 .flake8
 .gitattributes
 .gitignore
-.pre-commit-config.yaml
 .pylintrc
-.mypy.ini
 pytest.ini
 
 LICENSE

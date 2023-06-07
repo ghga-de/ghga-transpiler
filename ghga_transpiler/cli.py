@@ -45,6 +45,7 @@ def convert_workbook(workbook: Workbook, config: Config) -> dict:
     """Function to run steps for conversion"""
     converted_workbook = {}
     for sheet in config.worksheets:
+        assert sheet.settings is not None  # nosec
         try:
             rows = get_worksheet_rows(
                 workbook[sheet.sheet_name],

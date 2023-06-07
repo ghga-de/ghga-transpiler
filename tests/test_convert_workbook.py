@@ -18,10 +18,7 @@ from openpyxl import load_workbook
 from ghga_transpiler.cli import convert_workbook
 from ghga_transpiler.config.config import Config
 
-from .fixtures.test_data_objects.test_data_objects import (
-    config_dict,
-    expected_conversion_result,
-)
+from .fixtures.test_data_objects.conversion_data import CONFIG_DICT, EXPECTED_CONVERSION
 from .fixtures.utils import get_project_root
 
 
@@ -30,6 +27,6 @@ def test_convert_workbook():
 
     workbook_path = get_project_root() / "example_data" / "a_workbook.xlsx"
     workbook = load_workbook(workbook_path)
-    config = Config.parse_obj(config_dict())
+    config = Config.parse_obj(CONFIG_DICT)
 
-    assert convert_workbook(workbook, config) == expected_conversion_result()
+    assert convert_workbook(workbook, config) == EXPECTED_CONVERSION
