@@ -16,7 +16,7 @@
 """ CLI-specific wrappers around core functions."""
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 import typer
 from openpyxl import Workbook
@@ -34,7 +34,7 @@ from ghga_transpiler.core.core import (
 cli = typer.Typer()
 
 
-def _params(filename: Path):
+def _params(filename: Path) -> Tuple[Workbook, Config]:
     """Helper function to return workbook, config"""
     workbook = read_workbook(str(filename))
     config = Config.parse_obj(read_config(get_version(workbook)))

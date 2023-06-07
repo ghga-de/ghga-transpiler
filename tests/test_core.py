@@ -12,10 +12,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+"""Unit tests for core functions"""
 
-"""Test dummy."""
+from ghga_transpiler.core.core import get_version
+
+from .fixtures.utils import create_workbook
 
 
-def test_dummy():
-    """Just makes the CI pass."""
-    assert True
+def test_get_version() -> None:
+    """Function to check version"""
+    workbook = create_workbook("__properties")
+    value = workbook["__properties"].cell(row=1, column=1, value="a_string").value
+    assert get_version(workbook) == value
+
+
+def test_get_default_version() -> None:
+    """Function to test default value when condition is not met"""
+    workbook = create_workbook("sheet1", "sheet2")
+    assert get_version(workbook) == "v1.0"

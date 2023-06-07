@@ -22,7 +22,7 @@ from .fixtures.test_data_objects.conversion_data import CONFIG_DICT, EXPECTED_CO
 from .fixtures.utils import get_project_root
 
 
-def test_convert_workbook():
+def test_convert_workbook() -> None:
     """Test convert functionality"""
 
     workbook_path = get_project_root() / "example_data" / "a_workbook.xlsx"

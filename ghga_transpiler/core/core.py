@@ -17,17 +17,17 @@
 """This module contains functionalities for processing excel sheets into json object."""
 from typing import Union
 
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
 
 
-def read_workbook(filename: str):
+def read_workbook(filename: str) -> Workbook:
     """
     Function to read-in spreadsheet
     """
     return load_workbook(filename)
 
 
-def get_version(workbook):
+def get_version(workbook: Workbook) -> str:
     """Function to get workbook version"""
     if "__properties" in workbook.sheetnames:
         return workbook["__properties"].cell(1, 1).value

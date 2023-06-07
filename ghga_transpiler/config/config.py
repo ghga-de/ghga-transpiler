@@ -28,7 +28,7 @@ from .exceptions import MissingConfigFile
 HERE = Path(__file__).parent.resolve()
 
 
-def read_config(version):
+def read_config(version) -> dict:
     """Function to load yaml file"""
 
     config_location = HERE / "configs" / f"worksheet_config_{version}.yaml"

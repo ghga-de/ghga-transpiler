@@ -17,7 +17,17 @@
 
 from pathlib import Path
 
+from openpyxl import Workbook
+
 
 def get_project_root() -> Path:
     """Function to get project root dir"""
     return Path(__file__).absolute().parent.parent.parent
+
+
+def create_workbook(*args) -> Workbook:
+    """Function to create workbook with sheets"""
+    workbook = Workbook()
+    for arg in args:
+        workbook.create_sheet(arg)
+    return workbook
