@@ -40,7 +40,7 @@ def read_config():
 
 
 class DefaultSettings(BaseModel):
-    """Class to create worksheet setting"""
+    """A data model for the defaults of the per-worksheet settings of a transpiler config"""
 
     start_row: int = 0
     start_column: int = 0
@@ -48,7 +48,7 @@ class DefaultSettings(BaseModel):
 
 
 class WorksheetSettings(BaseModel):
-    """Class to create worksheet setting"""
+    """A data model for the per-worksheet settings of a transpiler config"""
 
     name: Optional[str]
     start_row: Optional[int]
@@ -57,14 +57,14 @@ class WorksheetSettings(BaseModel):
 
 
 class Worksheet(BaseModel):
-    """class"""
+    """A data model for worksheets in the transpiler config"""
 
     sheet_name: Optional[str]
     settings: Optional[WorksheetSettings]
 
 
 class Config(BaseModel):
-    """Class to create config object"""
+    """A data model for the transpiler config"""
 
     ghga_version: Optional[str]
     default_settings: DefaultSettings
@@ -75,7 +75,7 @@ class Config(BaseModel):
         """Function to manage parameters of global and worksheet specific configuration"""
         for sheet in values.get("worksheets"):
             for key in values.get("default_settings").__dict__:
-                if not getattr(sheet.settings, key):
+                if getattr(sheet.settings, key) is None:
                     val = getattr(values.get("default_settings"), key)
                     setattr(sheet.settings, key, val)
         return values

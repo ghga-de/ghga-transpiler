@@ -62,7 +62,7 @@ worksheets:
   - sheet_name: SequencingProtocols
     settings:
       name: "sequencing_protocols"
-  - sheet_name: "library_preparation_protocols"
+  - sheet_name: "LibraryPreparationProtocols"
     settings:
       name: "library_preparation_protocols"
   - sheet_name: Enums
