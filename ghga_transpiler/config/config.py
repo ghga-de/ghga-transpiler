@@ -83,12 +83,15 @@ class Config(BaseModel):
     @root_validator(pre=True)
     def check_name(cls, values):  # pylint: disable=no-self-argument
         """Function to manage parameters of global and worksheet specific configuration"""
-        names = []
-        for sheet in values.get("worksheets"):
-            if sheet["settings"]["name"] not in names:
-                names.append(sheet["settings"]["name"])
-            else:
-                raise DuplicatedName(
-                    "worksheet.settings name field must be unique in config"
-                )
+        # Check for duplicate attribute names
+        attrs_counter = Counter(ws.settings.name for ws in values["worksheets"])
+        dup_attrs = [ name for name, count in attrs_counter.items() if count > 1 ]
+        if dup_attrs:
+            raise DuplicatedName("Duplicate target attribute names: " + ", ".join(dup_attrs))
+
+        # Check for duplicate worksheet names
+        attrs_counter = Counter(ws.sheet_name for ws in values["worksheets"])
+        dup_ws_names = [ name for name, count in attrs_counter.items() if count > 1 ]
+        if dup_ws_names:
+            raise DuplicatedName("Duplicate worksheet names: " + ", ".join(dup_ws_names))
         return values
