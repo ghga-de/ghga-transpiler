@@ -50,7 +50,7 @@ class DefaultSettings(BaseModel):
 class WorksheetSettings(BaseModel):
     """A data model for the per-worksheet settings of a transpiler config"""
 
-    name: Optional[str]
+    name: str
     start_row: Optional[int]
     start_column: Optional[int]
     end_column: Optional[int]
