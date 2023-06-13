@@ -40,7 +40,7 @@ def read_config():
 
 
 class DefaultSettings(BaseModel):
-    """Class to create worksheet setting"""
+    """A data model for the defaults of the per-worksheet settings of a transpiler config"""
 
     start_row: int = 0
     start_column: int = 0
