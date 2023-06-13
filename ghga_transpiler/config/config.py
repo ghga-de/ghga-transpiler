@@ -64,7 +64,7 @@ class Worksheet(BaseModel):
 
 
 class Config(BaseModel):
-    """Class to create config object"""
+    """A data model for the transpiler config"""
 
     ghga_version: Optional[str]
     default_settings: DefaultSettings
