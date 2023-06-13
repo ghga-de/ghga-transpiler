@@ -75,7 +75,7 @@ class Config(BaseModel):
         """Function to manage parameters of global and worksheet specific configuration"""
         for sheet in values.get("worksheets"):
             for key in values.get("default_settings").__dict__:
-                if not getattr(sheet.settings, key):
+                if getattr(sheet.settings, key) is None:
                     val = getattr(values.get("default_settings"), key)
                     setattr(sheet.settings, key, val)
         return values
