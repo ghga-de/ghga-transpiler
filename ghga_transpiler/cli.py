@@ -54,7 +54,7 @@ def cli_main(
 
     if output_file is None:
         print(convert_workbook(spread_sheet))
-    elif output_file.exists():
+    elif output_file.exists() and not force:
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:
