@@ -16,4 +16,4 @@
 
 "Module including functions to transpile a worksheet"
 
-VERSION = "v1.0"
+VERSION = "1.0.0"
