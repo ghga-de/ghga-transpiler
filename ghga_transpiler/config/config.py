@@ -80,7 +80,7 @@ class Config(BaseModel):
                     setattr(sheet.settings, key, val)
         return values
 
-    @root_validator(pre=True)
+    @root_validator(pre=False)
     def check_name(cls, values):  # pylint: disable=no-self-argument
         """Function to manage parameters of global and worksheet specific configuration"""
         # Check for duplicate attribute names
