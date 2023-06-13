@@ -15,4 +15,3 @@
 #
 
 "Module including functions to transpile a worksheet"
-
