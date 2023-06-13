@@ -55,7 +55,7 @@ class Config(BaseModel):
 
     ghga_version: Optional[str]
     default_settings: DefaultSettings
-    worksheets: List[Worksheet]
+    worksheets: list[Worksheet]
 
     @root_validator(pre=False)
     def get_param(cls, values):  # pylint: disable=no-self-argument
