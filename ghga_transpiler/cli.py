@@ -46,12 +46,15 @@ def cli_main(
         readable=True,
     ),
     output_file: Optional[Path] = typer.Argument(None, help="The path to output file."),
+    force: bool = typer.Option(
+        False, "--force", "-f", help="Override output file if it exists."
+    ),
 ):
     """Function to convert excel spread sheet to JSON"""
 
     if output_file is None:
         print(convert_workbook(spread_sheet))
-    elif output_file.exists():
+    elif output_file.exists() and not force:
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:
