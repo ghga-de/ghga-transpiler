@@ -24,7 +24,7 @@ import yaml
 from pydantic import BaseModel, root_validator
 
 from ..core.core import VERSION
-from .exceptions import MissingConfigFile
+from .exceptions import DuplicatedName, MissingConfigFile
 
 HERE = Path(__file__).parent.resolve()
 CONFIG_LOCATION = HERE / "configs" / f"worksheet_config_{VERSION}.yaml"
@@ -78,4 +78,17 @@ class Config(BaseModel):
                 if getattr(sheet.settings, key) is None:
                     val = getattr(values.get("default_settings"), key)
                     setattr(sheet.settings, key, val)
+        return values
+
+    @root_validator(pre=True)
+    def check_name(cls, values):  # pylint: disable=no-self-argument
+        """Function to manage parameters of global and worksheet specific configuration"""
+        names = []
+        for sheet in values.get("worksheets"):
+            if sheet["settings"]["name"] not in names:
+                names.append(sheet["settings"]["name"])
+            else:
+                raise DuplicatedName(
+                    "worksheet.settings name field must be unique in config"
+                )
         return values

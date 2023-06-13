@@ -19,3 +19,7 @@
 
 class MissingConfigFile(FileNotFoundError):
     """Raised when the config file does not exist for a given config file version"""
+
+
+class DuplicatedName(ValueError):
+    """Raised when worksheet names are not unique in the config file"""
