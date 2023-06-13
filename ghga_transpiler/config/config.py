@@ -23,7 +23,6 @@ from typing import List, Optional
 import yaml
 from pydantic import BaseModel, root_validator
 
-from ..core.core import VERSION
 from .exceptions import DuplicatedName, MissingConfigFile
 
 
