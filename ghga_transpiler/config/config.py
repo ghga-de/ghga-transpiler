@@ -18,7 +18,7 @@
 
 from collections import Counter
 from importlib import resources
-from typing import List, Optional
+from typing import Optional
 
 import yaml
 from pydantic import BaseModel, root_validator
@@ -69,7 +69,7 @@ class Config(BaseModel):
 
     @root_validator(pre=False)
     def check_name(cls, values):  # pylint: disable=no-self-argument
-        """Function to manage parameters of global and worksheet specific configuration"""
+        """Function to ensure that each worksheets has a unique sheet_name and name attributes."""
         # Check for duplicate attribute names
         attrs_counter = Counter(ws.settings.name for ws in values["worksheets"])
         dup_attrs = [name for name, count in attrs_counter.items() if count > 1]
@@ -89,7 +89,7 @@ class Config(BaseModel):
 
 
 def load_config(version: str) -> Config:
-    """Reads yaml file from default location and creates config object"""
+    """Reads configuration yaml file from default location and creates a Config object"""
 
     config_resource = resources.files("ghga_transpiler.configs").joinpath(
         f"{version}.yaml"
