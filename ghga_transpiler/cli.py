@@ -30,9 +30,6 @@ from ghga_transpiler.core.core import (
 from .config import load_config
 from .config.exceptions import MissingWorkbookContent
 
-HERE = Path(__file__).parent.resolve()
-DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.json"
-
 cli = typer.Typer()
 
 CONFIG = load_config("0.0.1")
