@@ -13,13 +13,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-"""Module to collect custom exceptions"""
-
-
-class DuplicatedName(ValueError):
-    """Raised when worksheet names are not unique in the config file"""
-
-
-class MissingWorkbookContent(KeyError):
-    """Raised when any worksheet given in the config yaml does not exist in the spreadsheet"""
