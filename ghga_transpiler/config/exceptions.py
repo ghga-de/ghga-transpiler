@@ -17,9 +17,9 @@
 """Module to collect custom exceptions"""
 
 
-class MissingConfigFile(FileNotFoundError):
-    """Raised when the config file does not exist for a given config file version"""
+class DuplicatedName(ValueError):
+    """Raised when worksheet names are not unique in the config file"""
 
 
 class MissingWorkbookContent(KeyError):
-    """Raised when the config.worksheet do not exists in the spreadsheet input"""
+    """Raised when any worksheet given in the config yaml does not exist in the spreadsheet"""

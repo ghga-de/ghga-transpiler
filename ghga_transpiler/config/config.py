@@ -16,31 +16,18 @@
 
 """Module to process config file"""
 
-from os.path import exists
-from pathlib import Path
-from typing import List, Optional
+from collections import Counter
+from importlib import resources
+from typing import Optional
 
 import yaml
 from pydantic import BaseModel, root_validator
 
-from .exceptions import MissingConfigFile
-
-HERE = Path(__file__).parent.resolve()
-
-
-def read_config(version):
-    """Function to load yaml file"""
-
-    config_location = HERE / "configs" / f"worksheet_config_{version}.yaml"
-
-    if exists(config_location):
-        with open(config_location, "r", encoding="utf-8") as file:
-            return yaml.safe_load(file)
-    raise MissingConfigFile(f"Config file for version {version} cannot be found.")
+from .exceptions import DuplicatedName
 
 
 class DefaultSettings(BaseModel):
-    """Class to create worksheet setting"""
+    """A data model for the defaults of the per-worksheet settings of a transpiler config"""
 
     start_row: int = 0
     start_column: int = 0
@@ -48,34 +35,64 @@ class DefaultSettings(BaseModel):
 
 
 class WorksheetSettings(BaseModel):
-    """Class to create worksheet setting"""
+    """A data model for the per-worksheet settings of a transpiler config"""
 
-    name: Optional[str]
+    name: str
     start_row: Optional[int]
     start_column: Optional[int]
     end_column: Optional[int]
 
 
 class Worksheet(BaseModel):
-    """class"""
+    """A data model for worksheets in the transpiler config"""
 
     sheet_name: Optional[str]
     settings: Optional[WorksheetSettings]
 
 
 class Config(BaseModel):
-    """Class to create config object"""
+    """A data model for the transpiler config"""
 
     ghga_version: Optional[str]
     default_settings: DefaultSettings
-    worksheets: List[Worksheet]
+    worksheets: list[Worksheet]
 
     @root_validator(pre=False)
     def get_param(cls, values):  # pylint: disable=no-self-argument
         """Function to manage parameters of global and worksheet specific configuration"""
         for sheet in values.get("worksheets"):
             for key in values.get("default_settings").__dict__:
-                if not getattr(sheet.settings, key):
+                if getattr(sheet.settings, key) is None:
                     val = getattr(values.get("default_settings"), key)
                     setattr(sheet.settings, key, val)
         return values
+
+    @root_validator(pre=False)
+    def check_name(cls, values):  # pylint: disable=no-self-argument
+        """Function to ensure that each worksheets has a unique sheet_name and name attributes."""
+        # Check for duplicate attribute names
+        attrs_counter = Counter(ws.settings.name for ws in values["worksheets"])
+        dup_attrs = [name for name, count in attrs_counter.items() if count > 1]
+        if dup_attrs:
+            raise DuplicatedName(
+                "Duplicate target attribute names: " + ", ".join(dup_attrs)
+            )
+
+        # Check for duplicate worksheet names
+        attrs_counter = Counter(ws.sheet_name for ws in values["worksheets"])
+        dup_ws_names = [name for name, count in attrs_counter.items() if count > 1]
+        if dup_ws_names:
+            raise DuplicatedName(
+                "Duplicate worksheet names: " + ", ".join(dup_ws_names)
+            )
+        return values
+
+
+def load_config(version: str) -> Config:
+    """Reads configuration yaml file from default location and creates a Config object"""
+
+    config_resource = resources.files("ghga_transpiler.configs").joinpath(
+        f"{version}.yaml"
+    )
+    config_str = config_resource.read_text(encoding="utf8")
+    return Config.parse_obj(yaml.full_load(config_str))

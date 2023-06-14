@@ -17,22 +17,22 @@
 """This module contains functionalities for processing excel sheets into json object."""
 from typing import Union
 
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
 
 
-def read_workbook(filename: str):
+def read_workbook(filename: str) -> Workbook:
     """
-    Function to read-in spreadsheet
+    Function to read-in a workbook (aka spreadsheet)
     """
     return load_workbook(filename)
 
 
 def get_version(workbook):
-    """Function to get workbook version"""
+    """Function to get workbook version from the worksheet _properties"""
     if "__properties" in workbook.sheetnames:
         return workbook["__properties"].cell(1, 1).value
-    print("Using default value: v1.0")
-    return "v1.0"
+    print("Using default value: 0.0.1")
+    return "0.0.1"
 
 
 def get_worksheet_rows(
@@ -42,7 +42,7 @@ def get_worksheet_rows(
     min_col: Union[int, None],
     max_col: Union[int, None],
 ) -> list:
-    """Function to generate a list of header values"""
+    """Function to create a list of rows of a worksheet"""
     return list(
         row
         for row in worksheet.iter_rows(
@@ -53,10 +53,10 @@ def get_worksheet_rows(
 
 
 def convert_rows(header: list, rows: list) -> list:
-    """Function to return list of dictionaries, rows as values and header as keys"""
+    """Function to return list of dictionaries, rows as values and column names as keys"""
     return [dict(zip(header, row)) for row in rows]
 
 
 def get_header(worksheet_rows: list[list]) -> list[str]:
-    """Function to return the header of a worksheet"""
+    """Function to return a list column names of a worksheet"""
     return worksheet_rows[0]

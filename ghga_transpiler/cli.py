@@ -20,9 +20,9 @@ from typing import Optional
 
 import typer
 
-from ghga_transpiler.config.config import Config, read_config
-from ghga_transpiler.config.exceptions import MissingWorkbookContent
-from ghga_transpiler.core.core import (
+from .config import load_config
+from .config.exceptions import MissingWorkbookContent
+from .core import (
     convert_rows,
     get_header,
     get_version,
@@ -34,10 +34,10 @@ cli = typer.Typer()
 
 
 def convert_workbook(filename: Path):
-    """Function to run steps for conversion"""
+    """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
     workbook = read_workbook(str(filename))
-    config = Config.parse_obj(read_config(get_version(workbook)))
+    config = load_config(get_version(workbook))
     for sheet in config.worksheets:
         assert sheet.settings is not None  # nosec
         try:
@@ -67,12 +67,15 @@ def cli_main(
         readable=True,
     ),
     output_file: Optional[Path] = typer.Argument(None, help="The path to output file."),
+    force: bool = typer.Option(
+        False, "--force", "-f", help="Override output file if it exists."
+    ),
 ):
-    """Function to convert excel spread sheet to JSON"""
+    """Function to get options and channel those to the convert workbook functionality"""
 
     if output_file is None:
         print(convert_workbook(spread_sheet))
-    elif output_file.exists():
+    elif output_file.exists() and not force:
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:
