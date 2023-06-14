@@ -21,9 +21,9 @@ from typing import Optional, Tuple
 import typer
 from openpyxl import Workbook
 
-from ghga_transpiler.config.config import Config, read_config
-from ghga_transpiler.config.exceptions import MissingWorkbookContent
-from ghga_transpiler.core.core import (
+from .config import Config, load_config
+from .config.exceptions import MissingWorkbookContent
+from .core import (
     convert_rows,
     get_header,
     get_version,
@@ -37,12 +37,12 @@ cli = typer.Typer()
 def _params(filename: Path) -> Tuple[Workbook, Config]:
     """Helper function to return workbook, config"""
     workbook = read_workbook(str(filename))
-    config = Config.parse_obj(read_config(get_version(workbook)))
+    config = load_config(get_version(workbook))
     return workbook, config
 
 
 def convert_workbook(workbook: Workbook, config: Config) -> dict:
-    """Function to run steps for conversion"""
+    """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
     for sheet in config.worksheets:
         assert sheet.settings is not None  # nosec
@@ -74,12 +74,15 @@ def cli_main(
         readable=True,
     ),
     output_file: Optional[Path] = typer.Argument(None, help="The path to output file."),
+    force: bool = typer.Option(
+        False, "--force", "-f", help="Override output file if it exists."
+    ),
 ):
-    """Function to convert excel spread sheet to JSON"""
+    """Function to get options and channel those to the convert workbook functionality"""
 
     if output_file is None:
         print(convert_workbook(_params(spread_sheet)[0], _params(spread_sheet)[1]))
-    elif output_file.exists():
+    elif output_file.exists() and not force:
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:

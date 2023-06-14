@@ -12,12 +12,4 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""Module to load core functions for workbook processing"""
-from .core import (  # noqa
-    convert_rows,
-    get_header,
-    get_version,
-    get_worksheet_rows,
-    read_workbook,
-)
+#
