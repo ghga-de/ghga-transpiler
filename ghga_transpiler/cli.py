@@ -31,7 +31,7 @@ from .config import load_config
 from .config.exceptions import MissingWorkbookContent
 
 HERE = Path(__file__).parent.resolve()
-DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.yaml"
+DEFAULT_OUTPUT_FILE = HERE / "transpiled_metadata.json"
 
 cli = typer.Typer()
 
