@@ -17,7 +17,7 @@
 """This module contains functionalities for processing excel sheets into json object."""
 from typing import Union
 
-from openpyxl import Workbook, load_workbook, worksheet
+from openpyxl import Workbook, load_workbook
 
 
 def read_workbook(filename: str) -> Workbook:
@@ -28,7 +28,7 @@ def read_workbook(filename: str) -> Workbook:
 
 
 def get_worksheet_rows(
-    sheet: worksheet,
+    worksheet,
     min_row: Union[int, None],
     max_row: int,
     min_col: Union[int, None],
@@ -37,7 +37,9 @@ def get_worksheet_rows(
     """Function to create a list of rows of a worksheet"""
     return list(
         row
-        for row in sheet.iter_rows(min_row, max_row, min_col, max_col, values_only=True)
+        for row in worksheet.iter_rows(
+            min_row, max_row, min_col, max_col, values_only=True
+        )
         if not all(cell is None for cell in row)
     )
 
