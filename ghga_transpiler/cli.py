@@ -36,7 +36,7 @@ CONFIG = load_config("0.0.1")
 
 
 def convert_workbook(filename: Path):
-    """Function to run steps for conversion"""
+    """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
     workbook = read_workbook(str(filename))
     for sheet in CONFIG.worksheets:
@@ -72,7 +72,7 @@ def cli_main(
         False, "--force", "-f", help="Override output file if it exists."
     ),
 ):
-    """Function to convert excel spread sheet to JSON"""
+    """Function to get options and channel those to the convert workbook functionality"""
 
     if output_file is None:
         print(convert_workbook(spread_sheet))
