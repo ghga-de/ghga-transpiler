@@ -20,15 +20,9 @@ from typing import Optional
 
 import typer
 
-from ghga_transpiler.core.core import (
-    convert_rows,
-    get_header,
-    get_worksheet_rows,
-    read_workbook,
-)
-
 from .config import load_config
 from .config.exceptions import MissingWorkbookContent
+from .core import convert_rows, get_header, get_worksheet_rows, read_workbook
 
 cli = typer.Typer()
 
