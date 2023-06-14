@@ -30,4 +30,4 @@ def test_get_version() -> None:
 def test_get_default_version() -> None:
     """Function to test default value when condition is not met"""
     workbook = create_workbook("sheet1", "sheet2")
-    assert get_version(workbook) == "v1.0"
+    assert get_version(workbook) == "0.0.1"
