@@ -21,13 +21,13 @@ from .fixtures.utils import create_workbook
 
 
 def test_get_version() -> None:
-    """Function to check version"""
+    """Function to check if it correctly gets workbook version from _properties worksheet"""
     workbook = create_workbook("__properties")
     value = workbook["__properties"].cell(row=1, column=1, value="a_string").value
     assert get_version(workbook) == value
 
 
 def test_get_default_version() -> None:
-    """Function to test default value when condition is not met"""
+    """Function to test if it returns default value when version is not coming from the workbook"""
     workbook = create_workbook("sheet1", "sheet2")
     assert get_version(workbook) == "0.0.1"

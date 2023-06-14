@@ -23,7 +23,7 @@ from .fixtures.utils import get_project_root
 
 
 def test_convert_workbook() -> None:
-    """Test convert functionality"""
+    """Function to test workbook to json conversion"""
 
     workbook_path = get_project_root() / "example_data" / "a_workbook.xlsx"
     workbook = load_workbook(workbook_path)
