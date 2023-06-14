@@ -19,8 +19,6 @@ from typing import Union
 
 from openpyxl import load_workbook
 
-VERSION = "v1.0"
-
 
 def read_workbook(filename: str):
     """
