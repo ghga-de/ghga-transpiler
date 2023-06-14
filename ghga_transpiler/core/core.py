@@ -17,38 +17,36 @@
 """This module contains functionalities for processing excel sheets into json object."""
 from typing import Union
 
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook, worksheet
 
 
-def read_workbook(filename: str):
+def read_workbook(filename: str) -> Workbook:
     """
-    Function to read-in spreadsheet
+    Function to read-in a workbook (aka spreadsheet)
     """
     return load_workbook(filename)
 
 
 def get_worksheet_rows(
-    worksheet,
+    sheet: worksheet,
     min_row: Union[int, None],
     max_row: int,
     min_col: Union[int, None],
     max_col: Union[int, None],
 ) -> list:
-    """Function to generate a list of header values"""
+    """Function to create a list of rows of a worksheet"""
     return list(
         row
-        for row in worksheet.iter_rows(
-            min_row, max_row, min_col, max_col, values_only=True
-        )
+        for row in sheet.iter_rows(min_row, max_row, min_col, max_col, values_only=True)
         if not all(cell is None for cell in row)
     )
 
 
 def convert_rows(header: list, rows: list) -> list:
-    """Function to return list of dictionaries, rows as values and header as keys"""
+    """Function to return list of dictionaries, rows as values and column names as keys"""
     return [dict(zip(header, row)) for row in rows]
 
 
 def get_header(worksheet_rows: list[list]) -> list[str]:
-    """Function to return the header of a worksheet"""
+    """Function to return a list column names of a worksheet"""
     return worksheet_rows[0]
