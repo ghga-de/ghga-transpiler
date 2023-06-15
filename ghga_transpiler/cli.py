@@ -20,46 +20,9 @@ from typing import Optional
 
 import typer
 
-from .config import load_config
-from .config.exceptions import MissingWorkbookContent
-from .process_workbook import (
-    convert_rows,
-    get_header,
-    get_worksheet_rows,
-    read_workbook,
-)
+from .process_workbook import convert_workbook, params
 
 cli = typer.Typer()
-
-CONFIG = load_config("0.0.1")
-
-
-def convert_workbook(filename: Path):
-    """Function to convert an input spreadsheet into JSON"""
-    converted_workbook = {}
-    workbook = read_workbook(str(filename))
-    for sheet in CONFIG.worksheets:
-        assert sheet.settings is not None  # nosec
-        try:
-            rows = get_worksheet_rows(
-                workbook[sheet.sheet_name],
-                sheet.settings.start_row,
-                workbook[sheet.sheet_name].max_row,
-                sheet.settings.start_column,
-                sheet.settings.end_column,
-            )
-        except KeyError as exc:
-            raise MissingWorkbookContent(
-                f"Workbook does not contain {sheet.sheet_name} worksheet."
-            ) from exc
-        header = get_header(
-            workbook[sheet.sheet_name],
-            sheet.settings.header_row,
-            sheet.settings.start_column,
-            sheet.settings.end_column,
-        )
-        converted_workbook[sheet.sheet_name] = convert_rows(header, rows)
-    return converted_workbook
 
 
 @cli.command()
@@ -77,14 +40,17 @@ def cli_main(
     ),
 ):
     """Function to get options and channel those to the convert workbook functionality"""
-
+    workbook, config = params(spread_sheet)
     if output_file is None:
-        print(convert_workbook(spread_sheet))
+        print(convert_workbook(workbook, config))
     elif output_file.exists() and not force:
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:
         with open(output_file, "w", encoding="utf-8") as file:
             json.dump(
-                convert_workbook(spread_sheet), file, ensure_ascii=False, indent=4
+                convert_workbook(workbook, config),
+                file,
+                ensure_ascii=False,
+                indent=4,
             )
