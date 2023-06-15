@@ -14,4 +14,9 @@
 # limitations under the License.
 
 """Module to load core functions for workbook processing"""
-from .core import convert_rows, get_header, get_worksheet_rows, read_workbook  # noqa
+from .core import (  # noqa: F401
+    convert_rows,
+    get_header,
+    get_worksheet_rows,
+    read_workbook,
+)
