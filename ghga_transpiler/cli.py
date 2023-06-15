@@ -42,24 +42,22 @@ def cli_main(
 ):
     """Function to get options and channel those to the convert workbook functionality"""
     workbook, config = params(spread_sheet)
+    try:
+        conversion = convert_workbook(workbook, config)
+    except MissingWorkbookContent as exc:
+        print(exc)
+        raise typer.Abort()
+
     if output_file is None:
-        try:
-            print(convert_workbook(workbook, config))
-        except MissingWorkbookContent as exc:
-            print(exc)
-            raise typer.Abort()
+        print(conversion)
     elif output_file.exists() and not force:
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:
-        try:
-            with open(output_file, "w", encoding="utf-8") as file:
-                json.dump(
-                    convert_workbook(workbook, config),
-                    file,
-                    ensure_ascii=False,
-                    indent=4,
-                )
-        except MissingWorkbookContent as exc:
-            print(exc)
-            raise typer.Abort()
+        with open(output_file, "w", encoding="utf-8") as file:
+            json.dump(
+                conversion,
+                file,
+                ensure_ascii=False,
+                indent=4,
+            )
