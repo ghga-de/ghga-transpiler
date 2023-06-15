@@ -15,7 +15,7 @@
 #
 
 """This module contains functionalities for processing excel sheets into json object."""
-from typing import Optional
+from typing import Union
 
 from openpyxl import Workbook, load_workbook
 
@@ -29,10 +29,10 @@ def read_workbook(filename: str) -> Workbook:
 
 def get_worksheet_rows(
     worksheet,
-    min_row: Optional[int],
+    min_row: Union[int, None],
     max_row: int,
-    min_col: Optional[int],
-    max_col: Optional[int],
+    min_col: Union[int, None],
+    max_col: Union[int, None],
 ) -> list:
     """Function to create a list of rows of a worksheet"""
     return list(
