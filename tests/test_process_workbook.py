@@ -15,7 +15,7 @@
 #
 """Unit tests for core functions"""
 
-from ghga_transpiler.core.core import get_version
+from ghga_transpiler.process_workbook import get_version
 
 from .fixtures.utils import create_workbook
 

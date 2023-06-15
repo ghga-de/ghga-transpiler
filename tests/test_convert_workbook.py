@@ -15,8 +15,8 @@
 #
 from openpyxl import load_workbook
 
-from ghga_transpiler.cli import convert_workbook
-from ghga_transpiler.config.config import Config
+from ghga_transpiler.config import Config
+from ghga_transpiler.process_workbook import convert_workbook
 
 from .fixtures.test_data_objects.conversion_data import CONFIG_DICT, EXPECTED_CONVERSION
 from .fixtures.utils import get_project_root

@@ -18,7 +18,12 @@
 
 CONFIG_DICT = {
     "library_version": 1.0,
-    "default_settings": {"start_row": 1, "start_column": 1, "end_column": 2},
+    "default_settings": {
+        "header_row": 1,
+        "start_row": 2,
+        "start_column": 1,
+        "end_column": 2,
+    },
     "worksheets": [
         {"sheet_name": "books", "settings": {"name": "books", "end_column": 3}},
         {
