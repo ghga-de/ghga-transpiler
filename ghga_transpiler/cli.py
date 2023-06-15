@@ -20,6 +20,7 @@ from typing import Optional
 
 import typer
 
+from .config.exceptions import MissingWorkbookContent
 from .process_workbook import convert_workbook, params
 
 cli = typer.Typer()
@@ -42,15 +43,23 @@ def cli_main(
     """Function to get options and channel those to the convert workbook functionality"""
     workbook, config = params(spread_sheet)
     if output_file is None:
-        print(convert_workbook(workbook, config))
+        try:
+            print(convert_workbook(workbook, config))
+        except MissingWorkbookContent as exc:
+            print(exc)
+            raise typer.Abort()
     elif output_file.exists() and not force:
         print(f"{output_file} exits.")
         raise typer.Abort()
     else:
-        with open(output_file, "w", encoding="utf-8") as file:
-            json.dump(
-                convert_workbook(workbook, config),
-                file,
-                ensure_ascii=False,
-                indent=4,
-            )
+        try:
+            with open(output_file, "w", encoding="utf-8") as file:
+                json.dump(
+                    convert_workbook(workbook, config),
+                    file,
+                    ensure_ascii=False,
+                    indent=4,
+                )
+        except MissingWorkbookContent as exc:
+            print(exc)
+            raise typer.Abort()

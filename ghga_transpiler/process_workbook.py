@@ -58,25 +58,26 @@ def get_worksheet_rows(
 
 def get_header(
     worksheet,
-    min_row: Union[int, None],
+    header_row: Union[int, None],
     min_col: Union[int, None],
     max_col: Union[int, None],
 ) -> list[str]:
     """Function to return a list column names of a worksheet"""
     return list(
         cell.value
-        for row in worksheet.iter_rows(min_row, min_row, min_col, max_col)
+        for row in worksheet.iter_rows(header_row, header_row, min_col, max_col)
         for cell in row
     )
 
 
 def convert_rows(header, rows: list) -> list:
-    """Function to return list of dictionaries, rows as values and column names as keys"""
+    """Function to return list of dictionaries, rows as worksheet row values and
+    column names as keys"""
     return [dict(zip(header, row)) for row in rows]
 
 
 def params(filename: Path) -> Tuple[Workbook, Config]:
-    """Helper function to create workbook, config and channel them into convert_workbook function"""
+    """Helper function to create workbook, config and channel them into convert_workbook"""
     workbook = read_workbook(str(filename))
     config = load_config(get_version(workbook))
     return workbook, config
@@ -100,7 +101,7 @@ def convert_workbook(workbook: Workbook, config: Config):
                     f"Workbook does not contain {sheet.sheet_name} worksheet."
                 ) from exc
         else:
-            raise ValueError(f"{sheet.settings} cannot be None")
+            raise ValueError(f"{sheet.settings} will never be None")
         header = get_header(
             workbook[sheet.sheet_name],
             sheet.settings.header_row,
