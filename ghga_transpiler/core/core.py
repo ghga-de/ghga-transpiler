@@ -29,10 +29,10 @@ def read_workbook(filename: str) -> Workbook:
 
 def get_worksheet_rows(
     worksheet,
-    min_row: Union[int, None],
+    min_row: Optional[int],
     max_row: int,
-    min_col: Union[int, None],
-    max_col: Union[int, None],
+    min_col: Optional[int],
+    max_col: Optional[int],
 ) -> list:
     """Function to create a list of rows of a worksheet"""
     return list(
