@@ -12,10 +12,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+from openpyxl import load_workbook
 
-"""Test dummy."""
+from ghga_transpiler.cli import convert_workbook
+from ghga_transpiler.config.config import Config
+
+from .fixtures.test_data_objects.conversion_data import CONFIG_DICT, EXPECTED_CONVERSION
+from .fixtures.utils import get_project_root
 
 
-def test_dummy():
-    """Just makes the CI pass."""
-    assert True
+def test_convert_workbook() -> None:
+    """Function to test workbook to json conversion"""
+
+    workbook_path = get_project_root() / "example_data" / "a_workbook.xlsx"
+    workbook = load_workbook(workbook_path)
+    config = Config.parse_obj(CONFIG_DICT)
+
+    assert convert_workbook(workbook, config) == EXPECTED_CONVERSION

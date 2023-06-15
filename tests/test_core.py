@@ -12,22 +12,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+"""Unit tests for core functions"""
 
-"""Utils for Fixture handling"""
+from ghga_transpiler.core.core import get_version
 
-from pathlib import Path
-
-from openpyxl import Workbook
-
-
-def get_project_root() -> Path:
-    """Function to get project root dir"""
-    return Path(__file__).absolute().parent.parent.parent
+from .fixtures.utils import create_workbook
 
 
-def create_workbook(*args) -> Workbook:
-    """Function to create workbook with sheets"""
-    workbook = Workbook()
-    for arg in args:
-        workbook.create_sheet(arg)
-    return workbook
+def test_get_version() -> None:
+    """Function to check if it correctly gets workbook version from _properties worksheet"""
+    workbook = create_workbook("__properties")
+    value = workbook["__properties"].cell(row=1, column=1, value="a_string").value
+    assert get_version(workbook) == value
+
+
+def test_get_default_version() -> None:
+    """Function to test if it returns default value when version is not coming from the workbook"""
+    workbook = create_workbook("sheet1", "sheet2")
+    assert get_version(workbook) == "0.0.1"
