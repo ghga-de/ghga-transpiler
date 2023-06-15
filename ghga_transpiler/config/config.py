@@ -29,6 +29,7 @@ from .exceptions import DuplicatedName
 class DefaultSettings(BaseModel):
     """A data model for the defaults of the per-worksheet settings of a transpiler config"""
 
+    header_row: int = 0
     start_row: int = 0
     start_column: int = 0
     end_column: int = 0
@@ -38,6 +39,7 @@ class WorksheetSettings(BaseModel):
     """A data model for the per-worksheet settings of a transpiler config"""
 
     name: str
+    header_row: Optional[int]
     start_row: Optional[int]
     start_column: Optional[int]
     end_column: Optional[int]

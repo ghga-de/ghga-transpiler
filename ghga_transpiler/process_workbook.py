@@ -44,11 +44,20 @@ def get_worksheet_rows(
     )
 
 
-def convert_rows(header: list, rows: list) -> list:
+def convert_rows(header, rows: list) -> list:
     """Function to return list of dictionaries, rows as values and column names as keys"""
     return [dict(zip(header, row)) for row in rows]
 
 
-def get_header(worksheet_rows: list[list]) -> list[str]:
+def get_header(
+    worksheet,
+    min_row: Union[int, None],
+    min_col: Union[int, None],
+    max_col: Union[int, None],
+) -> list[str]:
     """Function to return a list column names of a worksheet"""
-    return worksheet_rows[0]
+    return list(
+        cell.value
+        for row in worksheet.iter_rows(min_row, min_row, min_col, max_col)
+        for cell in row
+    )

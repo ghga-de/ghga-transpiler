@@ -52,8 +52,13 @@ def convert_workbook(filename: Path):
             raise MissingWorkbookContent(
                 f"Workbook does not contain {sheet.sheet_name} worksheet."
             ) from exc
-
-        converted_workbook[sheet.sheet_name] = convert_rows(get_header(rows), rows[1:])
+        header = get_header(
+            workbook[sheet.sheet_name],
+            sheet.settings.header_row,
+            sheet.settings.start_column,
+            sheet.settings.end_column,
+        )
+        converted_workbook[sheet.sheet_name] = convert_rows(header, rows)
     return converted_workbook
 
 
