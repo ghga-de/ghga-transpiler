@@ -55,7 +55,7 @@ class Worksheet(BaseModel):
 class Config(BaseModel):
     """A data model for the transpiler config"""
 
-    ghga_version: Optional[str]
+    ghga_metadata_version: str
     default_settings: DefaultSettings
     worksheets: list[Worksheet]
 
@@ -90,11 +90,13 @@ class Config(BaseModel):
         return values
 
 
-def load_config(version: str) -> Config:
+def load_config(version: str, package: resources.Package) -> Config:
     """Reads configuration yaml file from default location and creates a Config object"""
 
-    config_resource = resources.files("ghga_transpiler.configs").joinpath(
-        f"{version}.yaml"
-    )
-    config_str = config_resource.read_text(encoding="utf8")
+    config_resource = resources.files(package).joinpath(f"{version}.yaml")
+    try:
+        config_str = config_resource.read_text(encoding="utf8")
+    except FileNotFoundError:
+        # pylint: disable=raise-missing-from
+        raise ValueError(f"Unknown metadata version: {version}")
     return Config.parse_obj(yaml.full_load(config_str))

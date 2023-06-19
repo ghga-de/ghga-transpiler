@@ -15,19 +15,28 @@
 #
 """Unit tests for core functions"""
 
-from ghga_transpiler.process_workbook import get_version
+import pytest
+
+from ghga_transpiler.process_workbook import GHGAWorkbook
 
 from .fixtures.utils import create_workbook
 
 
-def test_get_version() -> None:
-    """Function to check if it correctly gets workbook version from _properties worksheet"""
+def test_extract_good_version() -> None:
+    """Function to check if the version extraction correctly gets workbook
+    version from _properties worksheet"""
     workbook = create_workbook("__properties")
-    value = workbook["__properties"].cell(row=1, column=1, value="a_string").value
-    assert get_version(workbook) == value
+    value = workbook["__properties"].cell(row=1, column=1, value="10.3.1-rc2").value
+    # pylint: disable=protected-access
+    version = GHGAWorkbook._get_version(workbook)
+    assert version == value
 
 
-def test_get_default_version() -> None:
-    """Function to test if it returns default value when version is not coming from the workbook"""
-    workbook = create_workbook("sheet1", "sheet2")
-    assert get_version(workbook) == "0.0.1"
+def test_extract_bad_version() -> None:
+    """Function to check if the version extraction correctly fails when an non
+    semver string is specified in the _properties worksheet"""
+    workbook = create_workbook("__properties")
+    workbook["__properties"].cell(row=1, column=1, value="20.10.3.1")
+    with pytest.raises(SyntaxError):
+        # pylint: disable=protected-access
+        GHGAWorkbook._get_version(workbook)

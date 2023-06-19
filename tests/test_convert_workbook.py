@@ -13,20 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from openpyxl import load_workbook
-
-from ghga_transpiler.config import Config
+from ghga_transpiler import io
 from ghga_transpiler.process_workbook import convert_workbook
 
-from .fixtures.test_data_objects.conversion_data import CONFIG_DICT, EXPECTED_CONVERSION
+from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 from .fixtures.utils import get_project_root
 
 
 def test_convert_workbook() -> None:
     """Function to test workbook to json conversion"""
 
-    workbook_path = get_project_root() / "example_data" / "a_workbook.xlsx"
-    workbook = load_workbook(workbook_path)
-    config = Config.parse_obj(CONFIG_DICT)
+    workbook_path = (
+        get_project_root() / "tests" / "fixtures" / "workbooks" / "a_workbook.xlsx"
+    )
+    ghga_workbook = io.read_workbook(workbook_path, "tests.fixtures.configs")
 
-    assert convert_workbook(workbook, config) == EXPECTED_CONVERSION
+    assert convert_workbook(ghga_workbook=ghga_workbook) == EXPECTED_CONVERSION
