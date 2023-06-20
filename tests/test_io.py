@@ -32,7 +32,7 @@ def test_write_json_file(tmp_path):
 
     with open(file=out_path, mode="r", encoding="utf8") as in_file:
         data = json.load(fp=in_file)
-        assert data == EXPECTED_CONVERSION
+    assert data == EXPECTED_CONVERSION
 
 
 def test_write_json_file_force(tmp_path):
