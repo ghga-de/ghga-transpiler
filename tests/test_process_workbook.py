@@ -17,7 +17,7 @@
 
 import pytest
 
-from ghga_transpiler.process_workbook import GHGAWorkbook
+from ghga_transpiler.core import GHGAWorkbook
 
 from .fixtures.utils import create_workbook
 

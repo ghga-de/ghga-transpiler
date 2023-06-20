@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 from ghga_transpiler import io
-from ghga_transpiler.process_workbook import convert_workbook
+from ghga_transpiler.core import convert_workbook
 
 from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 from .fixtures.utils import get_project_root

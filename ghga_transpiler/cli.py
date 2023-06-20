@@ -23,7 +23,7 @@ import typer
 from ghga_transpiler import io
 
 from .config.exceptions import MissingWorkbookContent, UnknownVersionError
-from .process_workbook import convert_workbook
+from .core import convert_workbook
 
 cli = typer.Typer()
 
