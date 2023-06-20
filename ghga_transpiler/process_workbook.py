@@ -15,28 +15,39 @@
 #
 
 """This module contains functionalities for processing excel sheets into json object."""
-from pathlib import Path
-from typing import Tuple, Union
+import re
+from importlib import resources
+from typing import Union
 
-from openpyxl import Workbook, load_workbook
+from openpyxl import Workbook
 
-from .config import Config, load_config
+from ghga_transpiler import config
+
 from .config.exceptions import MissingWorkbookContent
 
-
-def read_workbook(filename: str) -> Workbook:
-    """
-    Function to read-in a workbook (aka spreadsheet)
-    """
-    return load_workbook(filename)
+# pylint: disable=line-too-long
+SEMVER_REGEX = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
 
-def get_version(workbook):
-    """Function to get workbook version from the worksheet _properties"""
-    if "__properties" in workbook.sheetnames:
-        return workbook["__properties"].cell(1, 1).value
-    print("Using default value: 0.0.1")
-    return "0.0.1"
+class GHGAWorkbook:
+    """A GHGA metadata XLSX workbook"""
+
+    def __init__(self, workbook: Workbook, configs_package: resources.Package):
+        """Create a new GHGAWorkbook object from an XLSX workbook"""
+        self.workbook = workbook
+        self.version = GHGAWorkbook._get_version(workbook)
+        self.config = config.load_config(self.version, configs_package)
+
+    @staticmethod
+    def _get_version(workbook):
+        """Function to get workbook version from the worksheet _properties"""
+        if "__properties" in workbook.sheetnames:
+            version = str(workbook["__properties"].cell(1, 1).value)
+            if re.fullmatch(SEMVER_REGEX, version):
+                return version
+        raise SyntaxError(
+            "Unable to extract metadata version from the provided workbook."
+        )
 
 
 def get_worksheet_rows(
@@ -70,29 +81,22 @@ def get_header(
     )
 
 
-def convert_rows(header, rows: list) -> list:
+def convert_rows(header, rows: list) -> list[dict]:
     """Function to return list of dictionaries, rows as worksheet row values and
     column names as keys"""
     return [dict(zip(header, row)) for row in rows]
 
 
-def params(filename: Path) -> Tuple[Workbook, Config]:
-    """Helper function to create workbook, config and channel them into convert_workbook"""
-    workbook = read_workbook(str(filename))
-    config = load_config(get_version(workbook))
-    return workbook, config
-
-
-def convert_workbook(workbook: Workbook, config: Config):
+def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
     """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
-    for sheet in config.worksheets:
+    for sheet in ghga_workbook.config.worksheets:
         if sheet.settings is not None:
             try:
                 rows = get_worksheet_rows(
-                    workbook[sheet.sheet_name],
+                    ghga_workbook.workbook[sheet.sheet_name],
                     sheet.settings.start_row,
-                    workbook[sheet.sheet_name].max_row,
+                    ghga_workbook.workbook[sheet.sheet_name].max_row,
                     sheet.settings.start_column,
                     sheet.settings.end_column,
                 )
@@ -103,7 +107,7 @@ def convert_workbook(workbook: Workbook, config: Config):
         else:
             raise ValueError(f"{sheet.settings} will never be None")
         header = get_header(
-            workbook[sheet.sheet_name],
+            ghga_workbook.workbook[sheet.sheet_name],
             sheet.settings.header_row,
             sheet.settings.start_column,
             sheet.settings.end_column,

@@ -34,6 +34,7 @@ def test_config_params() -> None:
     config = Config(
         default_settings=DefaultSettings(start_row=1, start_column=1, end_column=2),
         worksheets=[books_sheet, publisher_sheet],
+        ghga_metadata_version="0.0.0",
     )
     assert config.worksheets[1].settings is not None  # nosec
     assert config.worksheets[1].settings.end_column == 2
