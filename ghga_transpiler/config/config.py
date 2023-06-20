@@ -44,7 +44,7 @@ class WorksheetSettings(BaseModel):
     start_row: Optional[int]
     start_column: Optional[int]
     end_column: Optional[int]
-    transformations: dict[str, Callable] = {}
+    transformations: Optional[dict[str, Callable]]
 
 
 class Worksheet(BaseModel):

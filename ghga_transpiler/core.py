@@ -17,7 +17,7 @@
 """This module contains functionalities for processing excel sheets into json object."""
 import re
 from importlib import resources
-from typing import Callable, Union
+from typing import Callable, Optional, Union
 
 from openpyxl import Workbook
 
@@ -93,14 +93,14 @@ def convert_rows(header, rows) -> list[dict]:
 
 
 def transform_rows(
-    rows: list[dict], transformations: dict[str, Callable]
+    rows: list[dict], transformations: Optional[dict[str, Callable]]
 ) -> list[dict]:
     """Transforms row values if it is applicable with a given function"""
     transformed = []
     for row in rows:
         transformed_row = {}
         for key, value in row.items():
-            if key in transformations:
+            if transformations and key in transformations:
                 transformed_row[key] = transformations[key](value)
             else:
                 transformed_row[key] = value
