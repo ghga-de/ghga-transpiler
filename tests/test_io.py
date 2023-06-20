@@ -46,9 +46,6 @@ def test_write_json_file_no_force(tmp_path):
     """Test write_json abort if output exists"""
     out_path = tmp_path.joinpath("out.json")
     out_path.touch()
-    io.write_json(data=EXPECTED_CONVERSION, path=out_path, force=True)
-    out_path = tmp_path.joinpath("out.json")
-    out_path.touch()
     with pytest.raises(FileExistsError):
         io.write_json(data=EXPECTED_CONVERSION, path=out_path, force=False)
 
