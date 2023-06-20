@@ -33,7 +33,6 @@ worksheets:
   - settings:
       end_column: 3
       name: data_access_committees
-
     sheet_name: DataAccessCommittee
   - settings:
       end_column: 8
@@ -59,6 +58,7 @@ worksheets:
       name: library_preparation_protocols
       transformations:
         target_regions: !!python/object/apply:ghga_transpiler.transformations.to_list []
+        attributes: !!python/object/apply:ghga_transpiler.transformations.to_attributes []
     sheet_name: LibraryPreparationProtocol
   - settings:
       end_column: 9
@@ -97,6 +97,7 @@ worksheets:
       name: studies
       transformations:
         affiliations: !!python/object/apply:ghga_transpiler.transformations.to_list []
+        attributes: !!python/object/apply:ghga_transpiler.transformations.to_attributes []
     sheet_name: Study
   - settings:
       end_column: 8
