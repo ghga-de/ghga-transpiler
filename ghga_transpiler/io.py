@@ -17,9 +17,9 @@
 """IO related functionality"""
 
 import json
+import sys
 from importlib import resources
 from pathlib import Path
-from sys import stdout
 from typing import Optional, TextIO
 
 from openpyxl import load_workbook
@@ -45,7 +45,7 @@ def write_json(data: dict, path: Optional[Path], force: bool) -> None:
     """Write the data provided as a dictionary to the specified output path or
     to stdout if the path is None."""
     if path is None:
-        _write_json(data, stdout)
+        _write_json(data, sys.stdout)
     elif path.exists() and not force:
         raise FileExistsError(f"File already exists: {path}")
     else:

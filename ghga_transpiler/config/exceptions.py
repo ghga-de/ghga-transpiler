@@ -23,3 +23,7 @@ class DuplicatedName(ValueError):
 
 class MissingWorkbookContent(KeyError):
     """Raised when any worksheet given in the config yaml does not exist in the spreadsheet"""
+
+
+class UnknownVersionError(RuntimeError):
+    """Raised when the version encountered in the workbook is unknown"""

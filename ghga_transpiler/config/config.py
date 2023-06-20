@@ -23,7 +23,7 @@ from typing import Optional
 import yaml
 from pydantic import BaseModel, root_validator
 
-from .exceptions import DuplicatedName
+from .exceptions import DuplicatedName, UnknownVersionError
 
 
 class DefaultSettings(BaseModel):
@@ -98,5 +98,5 @@ def load_config(version: str, package: resources.Package) -> Config:
         config_str = config_resource.read_text(encoding="utf8")
     except FileNotFoundError:
         # pylint: disable=raise-missing-from
-        raise ValueError(f"Unknown metadata version: {version}")
+        raise UnknownVersionError(f"Unknown metadata version: {version}")
     return Config.parse_obj(yaml.full_load(config_str))

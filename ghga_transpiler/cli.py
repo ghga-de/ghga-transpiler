@@ -22,7 +22,7 @@ import typer
 
 from ghga_transpiler import io
 
-from .config.exceptions import MissingWorkbookContent
+from .config.exceptions import MissingWorkbookContent, UnknownVersionError
 from .process_workbook import convert_workbook
 
 cli = typer.Typer()
@@ -47,7 +47,7 @@ def cli_main(
     """Function to get options and channel those to the convert workbook functionality"""
     try:
         ghga_workbook = io.read_workbook(spread_sheet)
-    except SyntaxError as exc:
+    except (SyntaxError, UnknownVersionError) as exc:
         sys.exit(f"Unable to parse input file '{spread_sheet}': {exc}")
 
     try:
@@ -58,4 +58,4 @@ def cli_main(
     try:
         io.write_json(data=converted, path=output_file, force=force)
     except FileExistsError as exc:
-        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(f"ERROR: {exc}")
