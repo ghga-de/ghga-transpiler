@@ -51,8 +51,6 @@ repos:
     hooks:
       - id: mypy
         args: [--no-warn-unused-ignores]
-        additional_dependencies:
-          - pydantic
   - repo: https://github.com/PyCQA/pylint
     rev: v2.16.4
     hooks:
