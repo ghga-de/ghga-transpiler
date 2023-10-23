@@ -81,7 +81,8 @@ def get_header(
 
 def convert_rows(header, rows) -> list[dict]:
     """Function to return list of dictionaries, rows as worksheet row values and
-    column names as keys"""
+    column names as keys
+    """
     return [
         {
             key: value
