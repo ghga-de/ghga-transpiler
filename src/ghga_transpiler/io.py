@@ -24,7 +24,7 @@ from typing import Optional, TextIO
 
 from openpyxl import load_workbook
 
-from ghga_transpiler.core import GHGAWorkbook
+from .core import GHGAWorkbook
 
 
 def read_workbook(

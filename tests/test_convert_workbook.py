@@ -16,8 +16,8 @@
 
 """Tests for converting the workbook"""
 
-from src.ghga_transpiler import io
-from src.ghga_transpiler.core import convert_workbook
+from ghga_transpiler import io
+from ghga_transpiler.core import convert_workbook
 
 from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 from .fixtures.utils import get_project_root

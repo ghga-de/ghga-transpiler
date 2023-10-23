@@ -16,7 +16,8 @@
 """Unit tests for core functions"""
 
 import pytest
-from src.ghga_transpiler.core import GHGAWorkbook
+
+from ghga_transpiler.core import GHGAWorkbook
 
 from .fixtures.utils import create_workbook
 

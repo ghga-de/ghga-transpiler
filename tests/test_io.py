@@ -19,7 +19,8 @@
 import json
 
 import pytest
-from src.ghga_transpiler import io
+
+from ghga_transpiler import io
 
 from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 

@@ -20,8 +20,7 @@ from typing import Optional
 
 import typer
 
-from ghga_transpiler import io
-
+from . import io
 from .config.exceptions import UnknownVersionError
 from .core import convert_workbook
 
