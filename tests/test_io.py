@@ -19,8 +19,7 @@
 import json
 
 import pytest
-
-from ghga_transpiler import io
+from src.ghga_transpiler import io
 
 from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 
@@ -30,7 +29,7 @@ def test_write_json_file(tmp_path):
     out_path = tmp_path.joinpath("out.json")
     io.write_json(data=EXPECTED_CONVERSION, path=out_path, force=False)
 
-    with open(file=out_path, mode="r", encoding="utf8") as in_file:
+    with open(file=out_path, encoding="utf8") as in_file:
         data = json.load(fp=in_file)
     assert data == EXPECTED_CONVERSION
 

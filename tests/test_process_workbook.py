@@ -16,15 +16,15 @@
 """Unit tests for core functions"""
 
 import pytest
-
-from ghga_transpiler.core import GHGAWorkbook
+from src.ghga_transpiler.core import GHGAWorkbook
 
 from .fixtures.utils import create_workbook
 
 
 def test_extract_good_version() -> None:
     """Function to check if the version extraction correctly gets workbook
-    version from _properties worksheet"""
+    version from _properties worksheet
+    """
     workbook = create_workbook("__properties")
     value = workbook["__properties"].cell(row=1, column=1, value="10.3.1-rc2").value
     # pylint: disable=protected-access
@@ -34,7 +34,8 @@ def test_extract_good_version() -> None:
 
 def test_extract_bad_version() -> None:
     """Function to check if the version extraction correctly fails when an non
-    semver string is specified in the _properties worksheet"""
+    semver string is specified in the _properties worksheet
+    """
     workbook = create_workbook("__properties")
     workbook["__properties"].cell(row=1, column=1, value="20.10.3.1")
     with pytest.raises(SyntaxError):
