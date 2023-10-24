@@ -15,4 +15,6 @@
 
 """Short description of package"""  # Please adapt to package
 
-__version__ = "1.2.0"
+from importlib.metadata import version
+
+__version__ = version(__package__)
