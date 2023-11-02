@@ -47,7 +47,7 @@ worksheets:
       end_column: 8
       name: data_access_policies
       transformations:
-        data_use_modifiers: !!python/object/apply:ghga_transpiler.transformations.to_list []
+        data_use_modifiers: !!python/object/apply:ghga_transpiler.transformations.to_snake_case_list []
         data_use_permission: !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
     sheet_name: DataAccessPolicy
   - settings:

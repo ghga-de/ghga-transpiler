@@ -44,11 +44,22 @@ def to_attributes() -> Callable:
     return split_mult
 
 
-def convert_case(cv: str) -> str:
+def snake_case(cv: str) -> str:
     """Converts format of a string to SNAKE_CASE"""
     return cv.replace(" ", "_").upper()
 
 
 def to_snake_case() -> Callable:
     """Returns a function that converts a string to SNAKE_CASE"""
-    return convert_case
+    return snake_case
+
+
+def snake_case_list(value: str) -> list[str]:
+    """Combines the functions to split_by_semicolon and convert_to_snake_case"""
+    list_to_convert = split_by_semicolon(value)
+    return [snake_case(elem) for elem in list_to_convert]
+
+
+def to_snake_case_list() -> Callable:
+    """Returns a function that converts a semicolon separated string into a list of snake-cased strings"""
+    return snake_case_list
