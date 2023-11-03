@@ -18,7 +18,7 @@
 
 import json
 import sys
-from importlib import resources
+from importlib import resources, util
 from pathlib import Path
 from typing import Optional, TextIO
 
@@ -27,11 +27,24 @@ from openpyxl import load_workbook
 from .core import GHGAWorkbook
 
 
+def _check_security_dependency():
+    """Checks if defusedxml is found in the loaded modules"""
+    return util.find_spec("defusedxml")
+
+
+class NoGuardToAttacks(Exception):
+    """Custom exception to raise when defusedxml fails to be imported."""
+
+
 def read_workbook(
-    path: Path, configs_package: resources.Package = "ghga_transpiler.configs"
+    path: Path,
+    configs_package: resources.Package = "ghga_transpiler.configs",
+    _dependency=_check_security_dependency(),
 ) -> GHGAWorkbook:
     """Function to read-in a workbook"""
-    return GHGAWorkbook(load_workbook(path), configs_package=configs_package)
+    if _dependency:
+        return GHGAWorkbook(load_workbook(path), configs_package=configs_package)
+    raise NoGuardToAttacks("Install defusedxml")
 
 
 def _write_json(data: dict, file: TextIO):
