@@ -1,0 +1,102 @@
+{
+  "title": "Config",
+  "description": "A data model for the transpiler config",
+  "type": "object",
+  "properties": {
+    "ghga_metadata_version": {
+      "title": "Ghga Metadata Version",
+      "type": "string"
+    },
+    "default_settings": {
+      "$ref": "#/definitions/DefaultSettings"
+    },
+    "worksheets": {
+      "title": "Worksheets",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Worksheet"
+      }
+    }
+  },
+  "required": [
+    "ghga_metadata_version",
+    "default_settings",
+    "worksheets"
+  ],
+  "definitions": {
+    "DefaultSettings": {
+      "title": "DefaultSettings",
+      "description": "A data model for the defaults of the per-worksheet settings of a transpiler config",
+      "type": "object",
+      "properties": {
+        "header_row": {
+          "title": "Header Row",
+          "default": 0,
+          "type": "integer"
+        },
+        "start_row": {
+          "title": "Start Row",
+          "default": 0,
+          "type": "integer"
+        },
+        "start_column": {
+          "title": "Start Column",
+          "default": 0,
+          "type": "integer"
+        },
+        "end_column": {
+          "title": "End Column",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "WorksheetSettings": {
+      "title": "WorksheetSettings",
+      "description": "A data model for the per-worksheet settings of a transpiler config",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "header_row": {
+          "title": "Header Row",
+          "type": "integer"
+        },
+        "start_row": {
+          "title": "Start Row",
+          "type": "integer"
+        },
+        "start_column": {
+          "title": "Start Column",
+          "type": "integer"
+        },
+        "end_column": {
+          "title": "End Column",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "Worksheet": {
+      "title": "Worksheet",
+      "description": "A data model for worksheets in the transpiler config",
+      "type": "object",
+      "properties": {
+        "sheet_name": {
+          "title": "Sheet Name",
+          "type": "string"
+        },
+        "settings": {
+          "$ref": "#/definitions/WorksheetSettings"
+        }
+      },
+      "required": [
+        "sheet_name"
+      ]
+    }
+  }
+}
