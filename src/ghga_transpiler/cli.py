@@ -20,18 +20,11 @@ from typing import Optional
 
 import typer
 
-from . import __version__, io
+from . import io
 from .config.exceptions import UnknownVersionError
 from .core import convert_workbook
 
 cli = typer.Typer()
-
-
-def version_callback(value: bool):
-    """Prints the package version"""
-    if value:
-        print(f"ghga-transpiler version: {__version__}")
-        raise typer.Exit()
 
 
 @cli.command()
@@ -48,14 +41,6 @@ def transpile(
     ),
     force: bool = typer.Option(
         False, "--force", "-f", help="Override output file if it exists."
-    ),
-    version: bool = typer.Option(
-        False,
-        "--version",
-        "-v",
-        callback=version_callback,
-        is_eager=True,
-        help="Print package version",
     ),
 ):
     """ghga-transpiler is a command line utility to transpile the official GHGA
