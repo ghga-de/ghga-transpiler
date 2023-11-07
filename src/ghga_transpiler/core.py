@@ -15,16 +15,17 @@
 #
 
 """This module contains functionalities for processing excel sheets into json object."""
-import re
 from importlib import resources
 from typing import Callable, Optional, Union
 
 from openpyxl import Workbook
+from packaging import version
 
 from . import config
 
-# pylint: disable=line-too-long
-SEMVER_REGEX = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+
+class InvalidVersion(Exception):
+    """Raised when a version string is invalid."""
 
 
 class GHGAWorkbook:
@@ -33,19 +34,27 @@ class GHGAWorkbook:
     def __init__(self, workbook: Workbook, configs_package: resources.Package):
         """Create a new GHGAWorkbook object from an XLSX workbook"""
         self.workbook = workbook
-        self.version = GHGAWorkbook._get_version(workbook)
-        self.config = config.load_config(self.version, configs_package)
+        self.wb_version = GHGAWorkbook._get_version(workbook)
+        self.config = config.load_config(self.major_minor_version, configs_package)
 
     @staticmethod
     def _get_version(workbook):
         """Function to get workbook version from the worksheet _properties"""
         if "__properties" in workbook.sheetnames:
-            version = str(workbook["__properties"].cell(1, 1).value)
-            if re.fullmatch(SEMVER_REGEX, version):
-                return version
+            try:
+                return version.parse(workbook["__properties"].cell(1, 1).value)
+            except version.InvalidVersion:
+                raise InvalidVersion(
+                    "Not a valid version following semantic versioning"
+                ) from None
         raise SyntaxError(
             "Unable to extract metadata version from the provided workbook."
         )
+
+    @property
+    def major_minor_version(self):
+        """Returns only major and minor version numbers"""
+        return f"{self.wb_version.major}.{self.wb_version.minor}"
 
 
 def get_worksheet_rows(
