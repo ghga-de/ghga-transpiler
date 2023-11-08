@@ -31,7 +31,9 @@ dependencies = [
     "hexkit[akafka,s3,mongodb] ~= 0.11.1",
     "openpyxl >= 3.1.2, == 3.*",
     "defusedxml ~= 0.7.1",
-    "PyYAML == 6.*"
+    "PyYAML == 6.*",
+    "packaging == 23.*",
+    "pydantic >=2, <3"
 ]
 
 [project.urls]
