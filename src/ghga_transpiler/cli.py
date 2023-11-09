@@ -30,7 +30,7 @@ cli = typer.Typer()
 def version_callback(value: bool):
     """Prints the package version"""
     if value:
-        print(f"ghga-transpiler version: {__version__}")
+        print(__version__)
         raise typer.Exit()
 
 
