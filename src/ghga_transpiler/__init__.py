@@ -17,6 +17,4 @@
 
 from importlib.metadata import version
 
-from openpyxl.xml import DEFUSEDXML  # noqa
-
 __version__ = version(__package__)
