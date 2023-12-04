@@ -23,7 +23,6 @@ from pathlib import Path
 from typing import Optional, TextIO
 
 from openpyxl import load_workbook
-from openpyxl.xml import DEFUSEDXML
 
 from .core import GHGAWorkbook
 
@@ -32,10 +31,6 @@ def read_workbook(
     path: Path, configs_package: resources.Package = "ghga_transpiler.configs"
 ) -> GHGAWorkbook:
     """Function to read-in a workbook"""
-    if not DEFUSEDXML:
-        raise RuntimeError(
-            "The 'defusedxml' package must be present to safely run ghga-transpiler."
-        )
     return GHGAWorkbook(load_workbook(path), configs_package=configs_package)
 
 
