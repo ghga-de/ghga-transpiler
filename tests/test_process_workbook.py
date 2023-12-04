@@ -16,7 +16,7 @@
 """Unit tests for core functions"""
 
 import pytest
-from packaging.version import Version
+import semver
 
 from ghga_transpiler.core import GHGAWorkbook, InvalidSematicVersion
 
@@ -31,7 +31,7 @@ def test_extract_good_version() -> None:
     value = workbook["__properties"].cell(row=1, column=1, value="10.3.1-rc2").value
     # pylint: disable=protected-access
     version = GHGAWorkbook._get_version(workbook)
-    assert version == Version(str(value))
+    assert version == semver.Version.parse(str(value))
 
 
 def test_extract_bad_version() -> None:

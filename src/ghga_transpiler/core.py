@@ -15,34 +15,17 @@
 #
 
 """This module contains functionalities for processing excel sheets into json object."""
-import re
 from importlib import resources
 from typing import Callable, Optional, Union
 
+import semver
 from openpyxl import Workbook
-from packaging.version import InvalidVersion, Version
 
 from . import config
 
 
 class InvalidSematicVersion(Exception):
     """Raised when a version string is invalid."""
-
-
-SEMVER_PATTERN = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
-
-
-class SemanticVersion(Version):
-    """Extends Version class to check if a version follows the rules of semantic versioning"""
-
-    _semver = re.compile(r"^\s*" + SEMVER_PATTERN + r"\s*$", re.VERBOSE | re.IGNORECASE)
-
-    def __init__(self, wb_version):
-        super().__init__(wb_version)
-
-        semver_match = self._semver.search(wb_version)
-        if not semver_match:
-            raise InvalidVersion(f"Invalid version: '{wb_version}'")
 
 
 class GHGAWorkbook:
@@ -59,8 +42,8 @@ class GHGAWorkbook:
         """Function to get workbook version from the worksheet _properties"""
         if "__properties" in workbook.sheetnames:
             try:
-                return SemanticVersion(workbook["__properties"].cell(1, 1).value)
-            except InvalidVersion:
+                return semver.Version.parse(workbook["__properties"].cell(1, 1).value)
+            except ValueError:
                 raise InvalidSematicVersion(
                     "Not a valid version following semantic versioning"
                 ) from None
