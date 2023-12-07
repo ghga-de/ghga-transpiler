@@ -45,7 +45,7 @@ class GHGAWorkbook:
                 return semver.Version.parse(workbook["__properties"].cell(1, 1).value)
             except ValueError:
                 raise InvalidSematicVersion(
-                    "Not a valid version following semantic versioning"
+                    "Unable to extract metadata model version from the provided workbook (not a valid semantic version)."
                 ) from None
         raise SyntaxError(
             "Unable to extract metadata version from the provided workbook."
