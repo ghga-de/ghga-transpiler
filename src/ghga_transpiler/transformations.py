@@ -18,6 +18,8 @@
 
 from typing import Callable
 
+from stringcase import snakecase
+
 
 def split_by_semicolon(value: str) -> list[str]:
     """Splits a string by semicolon"""
@@ -46,7 +48,7 @@ def to_attributes() -> Callable:
 
 def snake_case(cv: str) -> str:
     """Converts format of a string to SNAKE_CASE"""
-    return cv.replace(" ", "_").upper()
+    return snakecase(cv.lower()).upper()
 
 
 def to_snake_case() -> Callable:
