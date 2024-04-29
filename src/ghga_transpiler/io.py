@@ -18,7 +18,6 @@
 
 import json
 import sys
-from importlib import resources
 from pathlib import Path
 from typing import Optional, TextIO
 
@@ -27,11 +26,9 @@ from openpyxl import load_workbook
 from .core import GHGAWorkbook
 
 
-def read_workbook(
-    path: Path, configs_package: resources.Package = "ghga_transpiler.configs"
-) -> GHGAWorkbook:
+def read_workbook(path: Path) -> GHGAWorkbook:
     """Function to read-in a workbook"""
-    return GHGAWorkbook(load_workbook(path), configs_package=configs_package)
+    return GHGAWorkbook(load_workbook(path))
 
 
 def _write_json(data: dict, file: TextIO):

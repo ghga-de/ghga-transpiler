@@ -28,6 +28,6 @@ def test_convert_workbook() -> None:
     workbook_path = (
         get_project_root() / "tests" / "fixtures" / "workbooks" / "a_workbook.xlsx"
     )
-    ghga_workbook = io.read_workbook(workbook_path, "tests.fixtures.configs")
+    ghga_workbook = io.read_workbook(workbook_path)
 
     assert convert_workbook(ghga_workbook=ghga_workbook) == EXPECTED_CONVERSION

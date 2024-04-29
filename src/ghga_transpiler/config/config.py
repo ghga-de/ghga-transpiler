@@ -17,65 +17,36 @@
 """Module to process config file"""
 
 from collections import Counter
-from importlib import resources
 from typing import Callable, Optional
 
-import yaml
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from .exceptions import DuplicatedName, UnknownVersionError
-
-
-class DefaultSettings(BaseModel):
-    """A data model for the defaults of the per-worksheet settings of a transpiler config"""
-
-    header_row: int = 0
-    start_row: int = 0
-    start_column: int = 0
-    end_column: int = 0
-    transformations: dict[str, Callable] = {}
-
-
-class WorksheetSettings(BaseModel):
-    """A data model for the per-worksheet settings of a transpiler config"""
-
-    name: str
-    header_row: Optional[int] = None
-    start_row: Optional[int] = None
-    start_column: Optional[int] = None
-    end_column: Optional[int] = None
-    transformations: Optional[dict[str, Callable]] = None
+from .exceptions import DuplicatedName
 
 
 class Worksheet(BaseModel):
-    """A data model for worksheets in the transpiler config"""
+    """A data model for a worksheet"""
 
-    sheet_name: str
-    settings: Optional[WorksheetSettings]
+    model_config = ConfigDict(populate_by_name=True)
+
+    name: str = Field(..., alias="sheet")
+    header_row: int
+    start_row: int = Field(..., alias="data_start")
+    start_column: int = 1
+    end_column: int = Field(..., alias="n_cols")
+    transformations: Optional[dict[str, Callable]] = None
 
 
 class Config(BaseModel):
     """A data model for the transpiler config"""
 
-    ghga_metadata_version: str
-    default_settings: DefaultSettings
     worksheets: list[Worksheet]
-
-    @model_validator(mode="after")
-    def get_param(cls, values):  # noqa
-        """Function to manage parameters of global and worksheet specific configuration"""
-        for sheet in values.worksheets:
-            for key in values.default_settings.__dict__:
-                if getattr(sheet.settings, key) is None:
-                    val = getattr(values.default_settings, key)
-                    setattr(sheet.settings, key, val)
-        return values
 
     @model_validator(mode="after")
     def check_name(cls, values):  # noqa
         """Function to ensure that each worksheets has a unique sheet_name and name attributes."""
         # Check for duplicate attribute names
-        attrs_counter = Counter(ws.settings.name for ws in values.worksheets)
+        attrs_counter = Counter(ws.name for ws in values.worksheets)
         dup_attrs = [name for name, count in attrs_counter.items() if count > 1]
         if dup_attrs:
             raise DuplicatedName(
@@ -83,21 +54,10 @@ class Config(BaseModel):
             )
 
         # Check for duplicate worksheet names
-        attrs_counter = Counter(ws.sheet_name for ws in values.worksheets)
+        attrs_counter = Counter(ws.name for ws in values.worksheets)
         dup_ws_names = [name for name, count in attrs_counter.items() if count > 1]
         if dup_ws_names:
             raise DuplicatedName(
                 "Duplicate worksheet names: " + ", ".join(dup_ws_names)
             )
         return values
-
-
-def load_config(version: str, package: resources.Package) -> Config:
-    """Reads configuration yaml file from default location and creates a Config object"""
-    config_resource = resources.files(package).joinpath(f"{version}.yaml")
-    try:
-        config_str = config_resource.read_text(encoding="utf8")
-    except FileNotFoundError:
-        # pylint: disable=raise-missing-from
-        raise UnknownVersionError(f"Unknown metadata version: {version}") from None
-    return Config.model_validate(yaml.load(config_str, yaml.Loader))  # noqa # nosec

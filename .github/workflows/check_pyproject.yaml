@@ -1,10 +1,10 @@
-name: Check if the README file is up to date
+name: Check if pyproject.toml file is up to date
 
 on: push
 
 jobs:
   static-code-analysis:
-    name: Check README file
+    name: Check pyproject file
 
     runs-on: ubuntu-latest
 
@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Check README
-        id: check-readme
+      - name: Check pyproject.toml
+        id: check-pyproject
         run: |
-          ./scripts/update_readme.py --check
+          ./scripts/update_pyproject.py --check

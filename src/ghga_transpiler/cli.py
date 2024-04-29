@@ -49,7 +49,7 @@ def transpile(
     force: bool = typer.Option(
         False, "--force", "-f", help="Override output file if it exists."
     ),
-    version: bool = typer.Option(
+    transpiler_protocol: bool = typer.Option(
         False,
         "--version",
         "-v",

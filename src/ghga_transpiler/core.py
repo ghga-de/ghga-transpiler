@@ -15,7 +15,7 @@
 #
 
 """This module contains functionalities for processing excel sheets into json object."""
-from importlib import resources
+
 from typing import Callable, Optional, Union
 
 import semver
@@ -31,18 +31,20 @@ class InvalidSematicVersion(Exception):
 class GHGAWorkbook:
     """A GHGA metadata XLSX workbook"""
 
-    def __init__(self, workbook: Workbook, configs_package: resources.Package):
+    def __init__(self, workbook: Workbook):
         """Create a new GHGAWorkbook object from an XLSX workbook"""
         self.workbook = workbook
-        self.wb_version = GHGAWorkbook._get_version(workbook)
-        self.config = config.load_config(self.major_minor_version, configs_package)
+        self.wb_version = GHGAWorkbook._get_transpiler_protocol(workbook)
+        self.config = GHGAWorkbook._get_sheet_meta(self.workbook)
 
     @staticmethod
-    def _get_version(workbook):
-        """Function to get workbook version from the worksheet _properties"""
-        if "__properties" in workbook.sheetnames:
+    def _get_transpiler_protocol(workbook):
+        """Gets workbook version from the worksheet "__transpiler_protocol"""
+        if "__transpiler_protocol" in workbook.sheetnames:
             try:
-                return semver.Version.parse(workbook["__properties"].cell(1, 1).value)
+                return semver.Version.parse(
+                    workbook["__transpiler_protocol"].cell(1, 1).value
+                )
             except ValueError:
                 raise InvalidSematicVersion(
                     "Unable to extract metadata model version from the provided workbook (not a valid semantic version)."
@@ -51,10 +53,18 @@ class GHGAWorkbook:
             "Unable to extract metadata model version from the provided workbook (missing)."
         )
 
-    @property
-    def major_minor_version(self):
-        """Returns only major and minor version numbers"""
-        return f"{self.wb_version.major}.{self.wb_version.minor}"
+    @staticmethod
+    def _get_sheet_meta(workbook):
+        """Gets workbook configurations from the worksheet __sheet_meta"""
+        if "__sheet_meta" in workbook.sheetnames:
+            sheet_meta_header = [cell.value for cell in workbook["__sheet_meta"][1]]
+            sheet_meta_values = list(
+                workbook["__sheet_meta"].iter_rows(min_row=2, values_only=True)
+            )
+            values = [dict(zip(sheet_meta_header, val)) for val in sheet_meta_values]
+            return config.Config.model_validate({"worksheets": values})
+
+        raise SyntaxError("Unable to extract the sheet metadata from the workbook.")
 
 
 def get_worksheet_rows(
@@ -122,30 +132,25 @@ def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
     """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
     for sheet in ghga_workbook.config.worksheets:
-        if sheet.settings is not None:
-            if sheet.sheet_name in ghga_workbook.workbook:
-                rows = get_worksheet_rows(
-                    ghga_workbook.workbook[sheet.sheet_name],
-                    sheet.settings.start_row,
-                    ghga_workbook.workbook[sheet.sheet_name].max_row,
-                    sheet.settings.start_column,
-                    sheet.settings.end_column,
-                )
+        if sheet.name in ghga_workbook.workbook:
+            rows = get_worksheet_rows(
+                ghga_workbook.workbook[sheet.name],
+                sheet.start_row,
+                ghga_workbook.workbook[sheet.name].max_row,
+                sheet.start_column,
+                sheet.end_column,
+            )
 
-                header = get_header(
-                    ghga_workbook.workbook[sheet.sheet_name],
-                    sheet.settings.header_row,
-                    sheet.settings.start_column,
-                    sheet.settings.end_column,
-                )
-                converted_rows = convert_rows(header, rows)
-                transformed_rows = transform_rows(
-                    converted_rows, sheet.settings.transformations
-                )
-                converted_workbook[sheet.settings.name] = transformed_rows
-            else:
-                converted_workbook[sheet.settings.name] = []
-
+            header = get_header(
+                ghga_workbook.workbook[sheet.name],
+                sheet.header_row,
+                sheet.start_column,
+                sheet.end_column,
+            )
+            converted_rows = convert_rows(header, rows)
+            transformed_rows = transform_rows(converted_rows, sheet.transformations)
+            converted_workbook[sheet.name] = transformed_rows
         else:
-            raise ValueError(f"{sheet.settings} will never be None")
+            converted_workbook[sheet.name] = []
+
     return converted_workbook
