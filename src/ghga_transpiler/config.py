@@ -60,11 +60,11 @@ class WorksheetSettings(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    name: str = Field(..., alias="sheet")
+    name: str = Field(..., validation_alias="sheet")
     header_row: int
-    start_row: int = Field(..., alias="data_start")
+    start_row: int = Field(..., validation_alias="data_start")
     start_column: int = 1
-    end_column: int = Field(..., alias="n_cols")
+    end_column: int = Field(..., validation_alias="n_cols")
 
 
 class Worksheet(BaseModel):

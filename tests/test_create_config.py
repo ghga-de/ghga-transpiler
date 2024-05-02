@@ -32,18 +32,18 @@ def test_config_params() -> None:
     workbook_config = GHGAWorkbook._get_sheet_meta(load_workbook(workbook_path))
 
     books_settings = WorksheetSettings(
-        name="books",  # type: ignore
+        name="books",
         header_row=1,
-        start_row=2,  # type: ignore
+        start_row=2,
         start_column=1,
-        end_column=5,  # type: ignore
+        end_column=5,
     )
     publisher_settings = WorksheetSettings(
-        name="publisher",  # type: ignore
+        name="publisher",
         header_row=1,
-        start_row=2,  # type: ignore
+        start_row=2,
         start_column=1,
-        end_column=3,  # type: ignore
+        end_column=3,
     )
     expected_settings = {"books": books_settings, "publisher": publisher_settings}
     for worksheet_name, worksheet in workbook_config.worksheets.items():
