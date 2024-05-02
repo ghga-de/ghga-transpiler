@@ -25,7 +25,9 @@ def read_meta_information(workbook: Workbook, meta_sheet_name: str):
         sheet_meta_values = list(
             workbook[meta_sheet_name].iter_rows(min_row=2, values_only=True)
         )
-        return [dict(zip(sheet_meta_header, val)) for val in sheet_meta_values]
+        return [
+            dict(zip(sheet_meta_header, val, strict=True)) for val in sheet_meta_values
+        ]
     raise SyntaxError(
         f"Unable to extract the sheet {meta_sheet_name} from the workbook."
     )

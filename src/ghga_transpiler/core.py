@@ -16,7 +16,7 @@
 
 """This module contains functionalities for processing excel sheets into json object."""
 
-from typing import Callable, Optional, Union
+from collections.abc import Callable
 
 import semver
 from openpyxl import Workbook
@@ -66,10 +66,10 @@ class GHGAWorkbook:
 
 def get_worksheet_rows(
     worksheet,
-    min_row: Union[int, None],
+    min_row: int | None,
     max_row: int,
-    min_col: Union[int, None],
-    max_col: Union[int, None],
+    min_col: int | None,
+    max_col: int | None,
 ) -> list:
     """Function to create a list of rows of a worksheet"""
     return list(
@@ -83,9 +83,9 @@ def get_worksheet_rows(
 
 def get_header(
     worksheet,
-    header_row: Union[int, None],
-    min_col: Union[int, None],
-    max_col: Union[int, None],
+    header_row: int | None,
+    min_col: int | None,
+    max_col: int | None,
 ) -> list[str]:
     """Function to return a list column names of a worksheet"""
     return list(
@@ -102,7 +102,7 @@ def convert_rows(header, rows) -> list[dict]:
     return [
         {
             key: value
-            for key, value in zip(header, row)
+            for key, value in zip(header, row, strict=True)
             if value is not None and value != ""
         }
         for row in rows
@@ -110,7 +110,7 @@ def convert_rows(header, rows) -> list[dict]:
 
 
 def transform_rows(
-    rows: list[dict], transformations: Optional[dict[str, Callable]]
+    rows: list[dict], transformations: dict[str, Callable] | None
 ) -> list[dict]:
     """Transforms row values if it is applicable with a given function"""
     transformed = []

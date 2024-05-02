@@ -17,7 +17,7 @@
 """Module to process config file"""
 
 from collections import Counter
-from typing import Callable, Optional, Union
+from collections.abc import Callable
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
 
@@ -34,13 +34,13 @@ class ColumnProperties(BaseModel):
     column_name: str = Field(..., alias="column")
     multivalued: bool
     type: str
-    ref_class: Optional[str]
-    ref_id: Optional[str] = Field(..., alias="ref_class_id_property")
+    ref_class: str | None
+    ref_id: str | None = Field(..., alias="ref_class_id_property")
     enum: bool
     required: bool
 
     @computed_field
-    def transformation(self) -> Union[Callable, None]:
+    def transformation(self) -> Callable | None:
         """Assigns transformation function based on column properties"""
         if self.multivalued and self.enum:
             return to_snake_case_list()
@@ -73,7 +73,7 @@ class Worksheet(BaseModel):
     columns: list[ColumnProperties]
 
     @computed_field
-    def transformations(self) -> Optional[dict[str, Callable]]:
+    def transformations(self) -> dict[str, Callable] | None:
         """Merges the transformation of a worksheet"""
         return {
             column.column_name: column.transformation

@@ -19,7 +19,7 @@
 import json
 import sys
 from pathlib import Path
-from typing import Optional, TextIO
+from typing import TextIO
 
 from openpyxl import load_workbook
 
@@ -36,7 +36,7 @@ def _write_json(data: dict, file: TextIO):
     json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
 
 
-def write_json(data: dict, path: Optional[Path], force: bool) -> None:
+def write_json(data: dict, path: Path | None, force: bool) -> None:
     """Write the data provided as a dictionary to the specified output path or
     to stdout if the path is None.
     """
