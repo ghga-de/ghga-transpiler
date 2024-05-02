@@ -72,8 +72,8 @@ class Worksheet(BaseModel):
     settings: WorksheetSettings
     columns: list[ColumnProperties]
 
-    @computed_field
-    def transformations(self) -> dict[str, Callable] | None:
+    @property
+    def transformations(self) -> dict[str, Callable]:
         """Merges the transformation of a worksheet"""
         return {
             column.column_name: column.transformation

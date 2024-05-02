@@ -110,7 +110,7 @@ def convert_rows(header, rows) -> list[dict]:
 
 
 def transform_rows(
-    rows: list[dict], transformations: dict[str, Callable] | None
+    rows: list[dict], transformations: dict[str, Callable]
 ) -> list[dict]:
     """Transforms row values if it is applicable with a given function"""
     transformed = []
