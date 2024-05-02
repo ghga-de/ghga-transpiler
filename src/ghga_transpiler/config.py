@@ -39,7 +39,8 @@ class ColumnProperties(BaseModel):
     enum: bool
     required: bool
 
-    @computed_field
+    @computed_field  # type: ignore [misc]
+    @property
     def transformation(self) -> Callable | None:
         """Assigns transformation function based on column properties"""
         if self.multivalued and self.enum:
@@ -73,7 +74,7 @@ class Worksheet(BaseModel):
     columns: list[ColumnProperties]
 
     @property
-    def transformations(self) -> dict[str, Callable]:
+    def transformations(self) -> dict:
         """Merges the transformation of a worksheet"""
         return {
             column.column_name: column.transformation

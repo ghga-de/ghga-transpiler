@@ -21,7 +21,7 @@ from collections.abc import Callable
 import semver
 from openpyxl import Workbook
 
-from . import config
+from .config import WorkbookConfig
 from .utils import read_meta_information, worksheet_meta_information
 
 
@@ -61,7 +61,7 @@ class GHGAWorkbook:
             read_meta_information(workbook, "__column_meta"),
             read_meta_information(workbook, "__sheet_meta"),
         )
-        return config.WorkbookConfig.model_validate({"worksheets": worksheet_meta})
+        return WorkbookConfig.model_validate({"worksheets": worksheet_meta})
 
 
 def get_worksheet_rows(
