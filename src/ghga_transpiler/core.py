@@ -22,6 +22,7 @@ import semver
 from openpyxl import Workbook
 
 from . import config
+from .utils import read_meta_information, worksheet_meta_information
 
 
 class InvalidSematicVersion(Exception):
@@ -56,15 +57,11 @@ class GHGAWorkbook:
     @staticmethod
     def _get_sheet_meta(workbook):
         """Gets workbook configurations from the worksheet __sheet_meta"""
-        if "__sheet_meta" in workbook.sheetnames:
-            sheet_meta_header = [cell.value for cell in workbook["__sheet_meta"][1]]
-            sheet_meta_values = list(
-                workbook["__sheet_meta"].iter_rows(min_row=2, values_only=True)
-            )
-            values = [dict(zip(sheet_meta_header, val)) for val in sheet_meta_values]
-            return config.Config.model_validate({"worksheets": values})
-
-        raise SyntaxError("Unable to extract the sheet metadata from the workbook.")
+        worksheet_meta = worksheet_meta_information(
+            read_meta_information(workbook, "__column_meta"),
+            read_meta_information(workbook, "__sheet_meta"),
+        )
+        return config.WorkbookConfig.model_validate({"worksheets": worksheet_meta})
 
 
 def get_worksheet_rows(
@@ -131,26 +128,26 @@ def transform_rows(
 def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
     """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
-    for sheet in ghga_workbook.config.worksheets:
-        if sheet.name in ghga_workbook.workbook:
+    for name, worksheet in ghga_workbook.config.worksheets.items():
+        if name in ghga_workbook.workbook:
             rows = get_worksheet_rows(
-                ghga_workbook.workbook[sheet.name],
-                sheet.start_row,
-                ghga_workbook.workbook[sheet.name].max_row,
-                sheet.start_column,
-                sheet.end_column,
+                ghga_workbook.workbook[name],
+                worksheet.settings.start_row,
+                ghga_workbook.workbook[name].max_row,
+                worksheet.settings.start_column,
+                worksheet.settings.end_column,
             )
 
             header = get_header(
-                ghga_workbook.workbook[sheet.name],
-                sheet.header_row,
-                sheet.start_column,
-                sheet.end_column,
+                ghga_workbook.workbook[name],
+                worksheet.settings.header_row,
+                worksheet.settings.start_column,
+                worksheet.settings.end_column,
             )
             converted_rows = convert_rows(header, rows)
-            transformed_rows = transform_rows(converted_rows, sheet.transformations)
-            converted_workbook[sheet.name] = transformed_rows
+            transformed_rows = transform_rows(converted_rows, worksheet.transformations)
+            converted_workbook[name] = transformed_rows
         else:
-            converted_workbook[sheet.name] = []
+            converted_workbook[name] = []
 
     return converted_workbook

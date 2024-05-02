@@ -18,10 +18,7 @@
 
 from openpyxl import load_workbook
 
-from ghga_transpiler.config.config import (
-    Config,
-    Worksheet,
-)
+from ghga_transpiler.config import WorksheetSettings
 from ghga_transpiler.core import GHGAWorkbook
 
 from .fixtures.utils import get_project_root
@@ -34,20 +31,20 @@ def test_config_params() -> None:
     )
     workbook_config = GHGAWorkbook._get_sheet_meta(load_workbook(workbook_path))
 
-    books_sheet = Worksheet(
+    books_settings = WorksheetSettings(
         name="books",  # pyright: ignore
         header_row=1,
         start_row=2,  # pyright: ignore
         start_column=1,
         end_column=5,  # pyright: ignore
     )
-    publisher_sheet = Worksheet(
+    publisher_settings = WorksheetSettings(
         name="publisher",  # pyright: ignore
         header_row=1,
         start_row=2,  # pyright: ignore
         start_column=1,
         end_column=3,  # pyright: ignore
     )
-
-    expected_config = Config(worksheets=[books_sheet, publisher_sheet])
-    assert workbook_config == expected_config
+    expected_settings = {"books": books_settings, "publisher": publisher_settings}
+    for worksheet_name, worksheet in workbook_config.worksheets.items():
+        assert worksheet.settings == expected_settings[worksheet_name]

@@ -21,8 +21,8 @@ from typing import Optional
 import typer
 
 from . import __version__, io
-from .config.exceptions import UnknownVersionError
 from .core import InvalidSematicVersion, convert_workbook
+from .exceptions import UnknownVersionError
 
 cli = typer.Typer()
 
