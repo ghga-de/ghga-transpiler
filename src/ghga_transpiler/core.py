@@ -125,7 +125,7 @@ def transform_rows(
     return transformed
 
 
-def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
+def convert_workbook_to_json(ghga_workbook: GHGAWorkbook) -> dict[str, list[dict]]:
     """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
     for name, worksheet in ghga_workbook.config.worksheets.items():

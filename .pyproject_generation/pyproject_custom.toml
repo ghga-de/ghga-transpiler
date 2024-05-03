@@ -8,7 +8,8 @@ dependencies = [
     "defusedxml >= 0.7, == 0.*",
     "pydantic >=2, <3",
     "PyYAML ~= 6.0",
-    "semver == 3.*"
+    "semver == 3.*",
+    "schemapack == 2.0.0-alpha.3"
 ]
 
 [project.urls]

@@ -16,7 +16,7 @@
 
 """Module to process config file"""
 
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Callable
 
 from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
@@ -54,6 +54,14 @@ class ColumnProperties(BaseModel):
         else:
             return None
 
+    @computed_field  # type: ignore [misc]
+    @property
+    def relation(self) -> bool:
+        """If a column is a relation column"""
+        if self.ref_class:
+            return True
+        return False
+
 
 class WorksheetSettings(BaseModel):
     """A data model for worksheet settings"""
@@ -65,6 +73,7 @@ class WorksheetSettings(BaseModel):
     start_row: int = Field(..., validation_alias="data_start")
     start_column: int = 1
     end_column: int = Field(..., validation_alias="n_cols")
+    primary_key: str
 
 
 class Worksheet(BaseModel):
@@ -81,6 +90,15 @@ class Worksheet(BaseModel):
             for column in self.columns
             if column.transformation != None
         }
+
+    @property
+    def relations(self) -> defaultdict:
+        """Returns relations of a worksheet where column name is considered as the relation name"""
+        relations = defaultdict(list)
+        for column in self.columns:
+            if column.relation:
+                relations[column.sheet_name].append(column.column_name)
+        return relations
 
 
 class WorkbookConfig(BaseModel):
