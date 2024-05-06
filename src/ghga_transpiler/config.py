@@ -73,7 +73,7 @@ class Worksheet(BaseModel):
     settings: WorksheetSettings
     columns: list[ColumnProperties]
 
-    @property
+    @cached_property
     def transformations(self) -> dict:
         """Merges the transformation of a worksheet"""
         return {
