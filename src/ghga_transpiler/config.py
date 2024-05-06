@@ -18,8 +18,15 @@
 
 from collections import Counter
 from collections.abc import Callable
+from functools import cached_property
 
-from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    computed_field,
+    model_validator,
+)
 
 from .exceptions import DuplicatedName
 from .transformations import to_attributes, to_list, to_snake_case, to_snake_case_list
@@ -52,7 +59,7 @@ class ColumnProperties(BaseModel):
         elif self.multivalued:
             return to_list()
         else:
-            return lambda value : value
+            return lambda value: value
 
 
 class WorksheetSettings(BaseModel):
@@ -70,8 +77,10 @@ class WorksheetSettings(BaseModel):
 class Worksheet(BaseModel):
     """A data model for a worksheet"""
 
+    model_config = ConfigDict(frozen=True)
+
     settings: WorksheetSettings
-    columns: list[ColumnProperties]
+    columns: tuple[ColumnProperties, ...]
 
     @cached_property
     def transformations(self) -> dict:
