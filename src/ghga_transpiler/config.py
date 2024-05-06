@@ -52,7 +52,7 @@ class ColumnProperties(BaseModel):
         elif self.multivalued:
             return to_list()
         else:
-            return None
+            return lambda value : value
 
 
 class WorksheetSettings(BaseModel):
