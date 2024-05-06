@@ -35,7 +35,7 @@ from .transformations import to_attributes, to_list, to_snake_case, to_snake_cas
 class ColumnProperties(BaseModel):
     """A data model for column properties"""
 
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, frozen=True)
 
     sheet_name: str = Field(..., alias="sheet")
     column_name: str = Field(..., alias="column")
@@ -65,7 +65,7 @@ class ColumnProperties(BaseModel):
 class WorksheetSettings(BaseModel):
     """A data model for worksheet settings"""
 
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, frozen=True)
 
     name: str = Field(..., validation_alias="sheet")
     header_row: int
