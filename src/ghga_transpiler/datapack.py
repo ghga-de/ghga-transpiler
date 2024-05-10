@@ -26,7 +26,7 @@ class PrimaryKeyNotFoundError(Exception):
 
 
 def _get_content(row, primary_key, relations):
-    """Function to create content json"""
+    """Creates content json"""
     return {
         key: value
         for key, value in row.items()
@@ -35,12 +35,12 @@ def _get_content(row, primary_key, relations):
 
 
 def _get_relations(row, relations):
-    """Function to get relations"""
+    """Gets relations"""
     return {relation: row[relation] for relation in relations if relation in row}
 
 
-def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook):
-    """Function"""
+def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> FrozenDict:
+    """Converts workbook to a dictionary that is compatible with DataPack definition"""
     json_workbook = convert_workbook_to_json(ghga_workbook)
     datapack_resources: dict = {}
     for worksheet_name, worksheet_data in json_workbook.items():
