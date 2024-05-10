@@ -18,8 +18,15 @@
 
 from collections import Counter, defaultdict
 from collections.abc import Callable
+from functools import cached_property
 
-from pydantic import BaseModel, ConfigDict, Field, computed_field, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    computed_field,
+    model_validator,
+)
 
 from .exceptions import DuplicatedName
 from .transformations import to_attributes, to_list, to_snake_case, to_snake_case_list
@@ -28,7 +35,7 @@ from .transformations import to_attributes, to_list, to_snake_case, to_snake_cas
 class ColumnProperties(BaseModel):
     """A data model for column properties"""
 
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, frozen=True)
 
     sheet_name: str = Field(..., alias="sheet")
     column_name: str = Field(..., alias="column")
@@ -52,7 +59,7 @@ class ColumnProperties(BaseModel):
         elif self.multivalued:
             return to_list()
         else:
-            return None
+            return lambda value: value
 
     @computed_field  # type: ignore [misc]
     @property
@@ -66,7 +73,7 @@ class ColumnProperties(BaseModel):
 class WorksheetSettings(BaseModel):
     """A data model for worksheet settings"""
 
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, frozen=True)
 
     name: str = Field(..., validation_alias="sheet")
     header_row: int
@@ -79,10 +86,12 @@ class WorksheetSettings(BaseModel):
 class Worksheet(BaseModel):
     """A data model for a worksheet"""
 
-    settings: WorksheetSettings
-    columns: list[ColumnProperties]
+    model_config = ConfigDict(frozen=True)
 
-    @property
+    settings: WorksheetSettings
+    columns: tuple[ColumnProperties, ...]
+
+    @cached_property
     def transformations(self) -> dict:
         """Merges the transformation of a worksheet"""
         return {
