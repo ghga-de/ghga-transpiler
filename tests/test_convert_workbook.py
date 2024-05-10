@@ -18,8 +18,10 @@
 
 import json
 
+from schemapack._internals.dump import dumps_datapack
+
 from ghga_transpiler import io
-from ghga_transpiler.datapack import create_datapack, dumps_datapack
+from ghga_transpiler.datapack import create_datapack
 
 from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 from .fixtures.utils import get_project_root

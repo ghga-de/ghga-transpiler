@@ -19,10 +19,11 @@ import sys
 from pathlib import Path
 
 import typer
+from schemapack._internals.dump import dumps_datapack
 
 from . import __version__, io
 from .core import InvalidSematicVersion
-from .datapack import create_datapack, dumps_datapack
+from .datapack import create_datapack
 from .exceptions import UnknownVersionError
 
 cli = typer.Typer()

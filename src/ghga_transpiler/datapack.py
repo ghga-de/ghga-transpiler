@@ -15,17 +15,10 @@
 
 """Script to create datapack"""
 
-import json
-from io import StringIO
-from typing import Any
-
-import ruamel.yaml
-from pydantic import BaseModel
+from arcticfreeze import FrozenDict
 from schemapack.spec.datapack import DataPack
 
 from .core import GHGAWorkbook, convert_workbook_to_json
-
-yaml = ruamel.yaml.YAML(typ="rt")
 
 
 class PrimaryKeyNotFoundError(Exception):
@@ -46,7 +39,7 @@ def _get_relations(row, relations):
     return {relation: row[relation] for relation in relations if relation in row}
 
 
-def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> dict:
+def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook):
     """Function"""
     json_workbook = convert_workbook_to_json(ghga_workbook)
     datapack_resources: dict = {}
@@ -66,7 +59,7 @@ def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> dict:
                 raise PrimaryKeyNotFoundError(
                     f"Primary key column is not found in {worksheet_name} worksheet"
                 ) from err
-    return datapack_resources
+    return FrozenDict(datapack_resources)
 
 
 def create_datapack(ghga_workbook: GHGAWorkbook):
@@ -76,59 +69,3 @@ def create_datapack(ghga_workbook: GHGAWorkbook):
         resources=convert_workbook_to_datapack(ghga_workbook),
         rootResource=None,
     )
-
-
-def model_to_serializable_dict(
-    model: BaseModel,
-) -> dict[str, Any]:
-    """Converts the provided pydantic model to a JSON-serializable dictionary.
-
-    Returns:
-        A dictionary representation of the provided model.
-
-    Function is taken from schemapack's main branch since it is not a part of the alpha-3 release
-    """
-    return json.loads(model.model_dump_json(exclude_defaults=True))
-
-
-def dumps_model(
-    model: BaseModel,
-    *,
-    yaml_format: bool = True,
-) -> str:
-    """Dumps the provided pydantic model as a JSON or YAML-formatted string.
-
-    Args:
-        model:
-            The model to dump.
-        yaml_format:
-            Whether to dump as YAML (`True`) or JSON (`False`).
-
-    Function is taken from schemapack's main branch since it is not a part of the alpha-3 release
-    """
-    model_dict = model_to_serializable_dict(model)
-
-    if yaml_format:
-        with StringIO() as buffer:
-            yaml.dump(model_dict, buffer)
-            return buffer.getvalue().strip()
-
-    return json.dumps(model_dict, indent=2)
-
-
-def dumps_datapack(
-    datapack: DataPack,
-    *,
-    yaml_format: bool = True,
-) -> str:
-    """Dumps the provided datapack as a JSON or YAML-formatted string.
-
-    Args:
-        datapack:
-            The datapack to dump.
-        yaml_format:
-            Whether to dump as YAML (`True`) or JSON (`False`).
-
-    Function is taken from schemapack's main branch since it is not a part of the alpha-3 release
-    """
-    return dumps_model(datapack, yaml_format=yaml_format)

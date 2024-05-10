@@ -29,7 +29,8 @@ dependencies = [
     "pydantic >=2, <3",
     "PyYAML ~= 6.0",
     "semver == 3.*",
-    "schemapack == 2.0.0-alpha.3",
+    "schemapack == 2.0.0-alpha.4",
+    "arcticfreeze ~=0.1.1",
 ]
 
 [project.license]
