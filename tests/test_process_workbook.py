@@ -1,4 +1,4 @@
-# Copyright 2021 - 2023 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,10 +27,14 @@ def test_extract_good_version() -> None:
     """Function to check if the version extraction correctly gets workbook
     version from _properties worksheet
     """
-    workbook = create_workbook("__properties")
-    value = workbook["__properties"].cell(row=1, column=1, value="10.3.1-rc2").value
+    workbook = create_workbook("__transpiler_protocol")
+    value = (
+        workbook["__transpiler_protocol"]
+        .cell(row=1, column=1, value="10.3.1-rc2")
+        .value
+    )
     # pylint: disable=protected-access
-    version = GHGAWorkbook._get_version(workbook)
+    version = GHGAWorkbook._get_transpiler_protocol(workbook)
     assert version == semver.Version.parse(str(value))
 
 
@@ -38,9 +42,9 @@ def test_extract_bad_version() -> None:
     """Function to check if the version extraction correctly fails when an non
     semver string is specified in the _properties worksheet
     """
-    workbook = create_workbook("__properties")
-    workbook["__properties"].cell(row=1, column=1, value="20.10.3.1")
+    workbook = create_workbook("__transpiler_protocol")
+    workbook["__transpiler_protocol"].cell(row=1, column=1, value="20.10.3.1")
 
     with pytest.raises(InvalidSematicVersion):
         # pylint: disable=protected-access
-        GHGAWorkbook._get_version(workbook)
+        GHGAWorkbook._get_transpiler_protocol(workbook)

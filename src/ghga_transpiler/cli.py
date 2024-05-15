@@ -1,4 +1,4 @@
-# Copyright 2021 - 2023 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,15 @@
 # limitations under the License.
 #
 """CLI-specific wrappers around core functions."""
+
 import sys
 from pathlib import Path
-from typing import Optional
 
 import typer
 
 from . import __version__, io
-from .config.exceptions import UnknownVersionError
 from .core import InvalidSematicVersion, convert_workbook
+from .exceptions import UnknownVersionError
 
 cli = typer.Typer()
 
@@ -43,13 +43,13 @@ def transpile(
         dir_okay=False,
         readable=True,
     ),
-    output_file: Optional[Path] = typer.Argument(
+    output_file: Path | None = typer.Argument(
         None, help="The path to output file (JSON).", dir_okay=False
     ),
     force: bool = typer.Option(
         False, "--force", "-f", help="Override output file if it exists."
     ),
-    version: bool = typer.Option(
+    transpiler_protocol: bool = typer.Option(
         False,
         "--version",
         "-v",

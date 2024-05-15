@@ -1,4 +1,4 @@
-# Copyright 2021 - 2023 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,5 +14,16 @@
 # limitations under the License.
 #
 
-"""Module to load workbook configurations and convert it to transpiler config """
-from .config import Config, load_config  # noqa
+"""Module to collect custom exceptions"""
+
+
+class DuplicatedName(ValueError):
+    """Raised when worksheet names are not unique in the config file"""
+
+
+class MissingWorkbookContent(KeyError):
+    """Raised when any worksheet given in the config yaml does not exist in the spreadsheet"""
+
+
+class UnknownVersionError(RuntimeError):
+    """Raised when the version encountered in the workbook is unknown"""

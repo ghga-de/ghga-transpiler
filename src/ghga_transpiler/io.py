@@ -1,4 +1,4 @@
-# Copyright 2021 - 2023 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,20 +18,17 @@
 
 import json
 import sys
-from importlib import resources
 from pathlib import Path
-from typing import Optional, TextIO
+from typing import TextIO
 
 from openpyxl import load_workbook
 
 from .core import GHGAWorkbook
 
 
-def read_workbook(
-    path: Path, configs_package: resources.Package = "ghga_transpiler.configs"
-) -> GHGAWorkbook:
+def read_workbook(path: Path) -> GHGAWorkbook:
     """Function to read-in a workbook"""
-    return GHGAWorkbook(load_workbook(path), configs_package=configs_package)
+    return GHGAWorkbook(load_workbook(path))
 
 
 def _write_json(data: dict, file: TextIO):
@@ -39,7 +36,7 @@ def _write_json(data: dict, file: TextIO):
     json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
 
 
-def write_json(data: dict, path: Optional[Path], force: bool) -> None:
+def write_json(data: dict, path: Path | None, force: bool) -> None:
     """Write the data provided as a dictionary to the specified output path or
     to stdout if the path is None.
     """

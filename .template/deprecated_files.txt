@@ -13,13 +13,33 @@
 .github/workflows/cd.yaml
 
 scripts/check_mandatory_and_static_files.py
+scripts/license_checker.py
 scripts/update_static_files.py
 
 docs
 
 setup.py
 setup.cfg
+requirements-dev-common.in
+requirements-dev.in
+requirements-dev.txt
+requirements.txt
+pytest.ini
+readme_generation.md
 
 .pylintrc
 .flake8
+.mypy.ini
+.ruff.toml
+.coveragerc
 .editorconfig
+.deprecated_files
+.deprecated_files_ignore
+.mandatory_files
+.mandatory_files_ignore
+.static_files
+.static_files_ignore
+.description.md
+.design.md
+.readme_template.md
+.readme_generation.md
