@@ -25,7 +25,7 @@ from ghga_transpiler import io
 from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 
 
-def test_write_json_file(tmp_path: io.Path):
+def test_write_yaml_file(tmp_path: io.Path):
     """Test write_json"""
     out_path = tmp_path.joinpath("out.json")
     io.write_yaml(data=json.dumps(EXPECTED_CONVERSION), path=out_path, force=False)
@@ -35,14 +35,14 @@ def test_write_json_file(tmp_path: io.Path):
     assert data == EXPECTED_CONVERSION
 
 
-def test_write_json_file_force(tmp_path: io.Path):
+def test_write_yaml_file_force(tmp_path: io.Path):
     """Test write_json overwrite of output"""
     out_path = tmp_path.joinpath("out.json")
     out_path.touch()
     io.write_yaml(data=json.dumps(EXPECTED_CONVERSION), path=out_path, force=True)
 
 
-def test_write_json_file_no_force(tmp_path: io.Path):
+def test_write_yaml_file_no_force(tmp_path: io.Path):
     """Test write_json abort if output exists"""
     out_path = tmp_path.joinpath("out.json")
     out_path.touch()
@@ -50,7 +50,7 @@ def test_write_json_file_no_force(tmp_path: io.Path):
         io.write_yaml(data=json.dumps(EXPECTED_CONVERSION), path=out_path, force=False)
 
 
-def test_write_json_file_stdout(capfd: pytest.CaptureFixture[str]):
+def test_write_yaml_file_stdout(capfd: pytest.CaptureFixture[str]):
     """Test write_json overwrite of output"""
     io.write_yaml(data=json.dumps(EXPECTED_CONVERSION), path=None, force=True)
     captured = capfd.readouterr()

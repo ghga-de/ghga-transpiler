@@ -34,7 +34,9 @@ def read_meta_information(workbook: Workbook, meta_sheet_name: str):
 
 
 def reshape_columns_meta(column_meta: list) -> dict:
-    """Reshapes column metadata into a dictionary where keys are sheet names and values are lists of column metadata dictionaries"""
+    """Reshapes column metadata into a dictionary where keys are sheet names"
+    and values are lists of column metadata dictionaries
+    """
     worksheet_columns: dict = {}
     for item in column_meta:
         sheet_name = item["sheet"]
@@ -43,7 +45,9 @@ def reshape_columns_meta(column_meta: list) -> dict:
 
 
 def reshape_settings_meta(settings_meta: list) -> dict:
-    """Reshapes settings metadata into a dictionary where keys are sheet names and values are worksheet settings dictionaries."""
+    """Reshapes settings metadata into a dictionary where keys are sheet names and
+    values are worksheet settings dictionaries.
+    """
     worksheet_settings: dict = {}
     for item in settings_meta:
         sheet_name = item["sheet"]

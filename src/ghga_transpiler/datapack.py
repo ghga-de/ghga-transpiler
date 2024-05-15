@@ -19,14 +19,13 @@ from arcticfreeze import FrozenDict
 from schemapack.spec.datapack import DataPack
 
 from .core import GHGAWorkbook, convert_workbook_to_json
+from .exceptions import PrimaryKeyNotFoundError
 
 
-class PrimaryKeyNotFoundError(Exception):
-    """Raised when a worksheet does not have an alias column as a primary key."""
-
-
-def _get_content(row, primary_key, relations):
-    """Creates content json"""
+def _content_to_dict(row: dict, primary_key: str, relations: dict) -> dict:
+    """Converts a worksheet row into a dictionary that corresponds to a value
+    of datapack's class content
+    """
     return {
         key: value
         for key, value in row.items()
@@ -34,8 +33,10 @@ def _get_content(row, primary_key, relations):
     }
 
 
-def _get_relations(row, relations):
-    """Gets relations"""
+def _relations_to_dict(row: dict, relations: dict[str, list]) -> dict:
+    """Converts relations to a dictionary that contains relation name as key and the
+    resource that is in the relation as the value
+    """
     return {relation: row[relation] for relation in relations if relation in row}
 
 
@@ -48,9 +49,11 @@ def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> FrozenDict:
         ws_relations = worksheet.get_relations()
         ws_primary_key = worksheet.settings.primary_key
         for row in worksheet_data:
-            content = _get_content(row, ws_primary_key, ws_relations[worksheet_name])
+            content = _content_to_dict(
+                row, ws_primary_key, ws_relations[worksheet_name]
+            )
 
-            relations = _get_relations(row, ws_relations[worksheet_name])
+            relations = _relations_to_dict(row, ws_relations[worksheet_name])
             try:
                 datapack_resources.setdefault(worksheet_name, {}).setdefault(
                     row[ws_primary_key], {"content": content, "relations": relations}
@@ -62,7 +65,7 @@ def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> FrozenDict:
     return FrozenDict(datapack_resources)
 
 
-def create_datapack(ghga_workbook: GHGAWorkbook):
+def create_datapack(ghga_workbook: GHGAWorkbook) -> DataPack:
     """Returns a DataPack object"""
     return DataPack(
         datapack="0.3.0",

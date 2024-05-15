@@ -23,7 +23,6 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    computed_field,
     model_validator,
 )
 
@@ -58,8 +57,6 @@ class ColumnProperties(BaseModel):
         else:
             return lambda value: value
 
-    @computed_field  # type: ignore [misc]
-    @property
     def relation(self) -> bool:
         """If a column is a relation column"""
         if self.ref_class:
@@ -97,10 +94,12 @@ class Worksheet(BaseModel):
         }
 
     def get_relations(self) -> defaultdict:
-        """Returns relations of a worksheet where column name is considered as the relation name"""
+        """Returns relations of a worksheet where column name is considered as the
+        relation name
+        """
         relations = defaultdict(list)
         for column in self.columns:
-            if column.relation:
+            if column.relation():
                 relations[column.sheet_name].append(column.column_name)
         return relations
 
@@ -112,7 +111,9 @@ class WorkbookConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_name(cls, values):  # noqa
-        """Function to ensure that each worksheets has a unique sheet_name and name attributes."""
+        """Function to ensure that each worksheets has a unique sheet_name and
+        name attributes.
+        """
         # Check for duplicate attribute names
         attrs_counter = Counter(ws for ws in values.worksheets)
         dup_attrs = [name for name, count in attrs_counter.items() if count > 1]

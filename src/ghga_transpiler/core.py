@@ -48,7 +48,8 @@ class GHGAWorkbook:
                 )
             except ValueError:
                 raise InvalidSematicVersion(
-                    "Unable to extract metadata model version from the provided workbook (not a valid semantic version)."
+                    "Unable to extract metadata model version from the provided workbook"
+                    "(not a valid semantic version)."
                 ) from None
         raise SyntaxError(
             "Unable to extract metadata model version from the provided workbook (missing)."
