@@ -16,10 +16,8 @@
 
 """IO related functionality"""
 
-import json
 import sys
 from pathlib import Path
-from typing import TextIO
 
 from openpyxl import load_workbook
 
@@ -31,19 +29,14 @@ def read_workbook(path: Path) -> GHGAWorkbook:
     return GHGAWorkbook(load_workbook(path))
 
 
-def _write_json(data: dict, file: TextIO):
-    """Write the data to the specified file in JSON format"""
-    json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
-
-
-def write_json(data: dict, path: Path | None, force: bool) -> None:
+def write_yaml(data: str, path: Path | None, force: bool) -> None:
     """Write the data provided as a dictionary to the specified output path or
     to stdout if the path is None.
     """
     if path is None:
-        _write_json(data, sys.stdout)
+        sys.stdout.write(data)
     elif path.exists() and not force:
         raise FileExistsError(f"File already exists: {path}")
     else:
-        with open(file=path, mode="w", encoding="utf8") as outfile:
-            _write_json(data, outfile)
+        with open(path, "w", encoding="utf8") as outfile:
+            outfile.write(data)
