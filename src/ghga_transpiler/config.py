@@ -96,8 +96,7 @@ class Worksheet(BaseModel):
             if column.transformation() != None
         }
 
-    @property
-    def relations(self) -> defaultdict:
+    def get_relations(self) -> defaultdict:
         """Returns relations of a worksheet where column name is considered as the relation name"""
         relations = defaultdict(list)
         for column in self.columns:

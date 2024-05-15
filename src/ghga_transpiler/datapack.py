@@ -45,7 +45,7 @@ def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> FrozenDict:
     datapack_resources: dict = {}
     for worksheet_name, worksheet_data in json_workbook.items():
         worksheet = ghga_workbook.config.worksheets[worksheet_name]
-        ws_relations = worksheet.relations
+        ws_relations = worksheet.get_relations()
         ws_primary_key = worksheet.settings.primary_key
         for row in worksheet_data:
             content = _get_content(row, ws_primary_key, ws_relations[worksheet_name])
