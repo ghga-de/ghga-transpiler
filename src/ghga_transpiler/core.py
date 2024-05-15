@@ -48,7 +48,8 @@ class GHGAWorkbook:
                 )
             except ValueError:
                 raise InvalidSematicVersion(
-                    "Unable to extract metadata model version from the provided workbook (not a valid semantic version)."
+                    "Unable to extract metadata model version from the provided workbook"
+                    "(not a valid semantic version)."
                 ) from None
         raise SyntaxError(
             "Unable to extract metadata model version from the provided workbook (missing)."
@@ -125,7 +126,7 @@ def transform_rows(
     return transformed
 
 
-def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
+def convert_workbook_to_json(ghga_workbook: GHGAWorkbook) -> dict[str, list[dict]]:
     """Function to convert an input spreadsheet into JSON"""
     converted_workbook = {}
     for name, worksheet in ghga_workbook.config.worksheets.items():

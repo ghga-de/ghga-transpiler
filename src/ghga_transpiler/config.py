@@ -16,7 +16,7 @@
 
 """Module to process config file"""
 
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Callable
 
 from pydantic import (
@@ -57,6 +57,12 @@ class ColumnProperties(BaseModel):
         else:
             return lambda value: value
 
+    def relation(self) -> bool:
+        """If a column is a relation column"""
+        if self.ref_class:
+            return True
+        return False
+
 
 class WorksheetSettings(BaseModel):
     """A data model for worksheet settings"""
@@ -68,6 +74,7 @@ class WorksheetSettings(BaseModel):
     start_row: int = Field(..., validation_alias="data_start")
     start_column: int = 1
     end_column: int = Field(..., validation_alias="n_cols")
+    primary_key: str
 
 
 class Worksheet(BaseModel):
@@ -86,6 +93,16 @@ class Worksheet(BaseModel):
             if column.transformation() != None
         }
 
+    def get_relations(self) -> defaultdict:
+        """Returns relations of a worksheet where column name is considered as the
+        relation name
+        """
+        relations = defaultdict(list)
+        for column in self.columns:
+            if column.relation():
+                relations[column.sheet_name].append(column.column_name)
+        return relations
+
 
 class WorkbookConfig(BaseModel):
     """A data model containing transpiler configurations"""
@@ -94,7 +111,9 @@ class WorkbookConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_name(cls, values):  # noqa
-        """Function to ensure that each worksheets has a unique sheet_name and name attributes."""
+        """Function to ensure that each worksheets has a unique sheet_name and
+        name attributes.
+        """
         # Check for duplicate attribute names
         attrs_counter = Counter(ws for ws in values.worksheets)
         dup_attrs = [name for name, count in attrs_counter.items() if count > 1]

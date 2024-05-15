@@ -27,3 +27,7 @@ class MissingWorkbookContent(KeyError):
 
 class UnknownVersionError(RuntimeError):
     """Raised when the version encountered in the workbook is unknown"""
+
+
+class PrimaryKeyNotFoundError(Exception):
+    """Raised when a worksheet does not have an alias column as a primary key."""

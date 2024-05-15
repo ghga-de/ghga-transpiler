@@ -16,8 +16,12 @@
 
 """Tests for converting the workbook"""
 
+import json
+
+from schemapack._internals.dump import dumps_datapack
+
 from ghga_transpiler import io
-from ghga_transpiler.core import convert_workbook
+from ghga_transpiler.datapack import create_datapack
 
 from .fixtures.test_data_objects.conversion_data import EXPECTED_CONVERSION
 from .fixtures.utils import get_project_root
@@ -30,4 +34,8 @@ def test_convert_workbook() -> None:
     )
     ghga_workbook = io.read_workbook(workbook_path)
 
-    assert convert_workbook(ghga_workbook=ghga_workbook) == EXPECTED_CONVERSION
+    datapack_dump = dumps_datapack(
+        create_datapack(ghga_workbook=ghga_workbook), yaml_format=False
+    )
+
+    assert datapack_dump == json.dumps(EXPECTED_CONVERSION, indent=2)
