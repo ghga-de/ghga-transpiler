@@ -133,7 +133,7 @@ def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
             rows = get_worksheet_rows(
                 ghga_workbook.workbook[name],
                 worksheet.settings.start_row,
-                ghga_workbook.workbook[name].max_row,  # type: ignore[reportArgumentType]
+                ghga_workbook.workbook[name].max_row,
                 worksheet.settings.start_column,
                 worksheet.settings.end_column,
             )
