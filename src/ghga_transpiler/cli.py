@@ -19,9 +19,11 @@ import sys
 from pathlib import Path
 
 import typer
+from schemapack._internals.dump import dumps_datapack
 
 from . import __version__, io
-from .core import InvalidSematicVersion, convert_workbook
+from .core import InvalidSematicVersion
+from .datapack import create_datapack
 from .exceptions import UnknownVersionError
 
 cli = typer.Typer()
@@ -43,7 +45,7 @@ def transpile(
         dir_okay=False,
         readable=True,
     ),
-    output_file: Path | None = typer.Argument(
+    output_file: Path = typer.Argument(
         None, help="The path to output file (JSON).", dir_okay=False
     ),
     force: bool = typer.Option(
@@ -69,9 +71,9 @@ def transpile(
     except (SyntaxError, UnknownVersionError, InvalidSematicVersion) as exc:
         sys.exit(f"Unable to parse input file '{spread_sheet}': {exc}")
 
-    converted = convert_workbook(ghga_workbook)
+    converted = dumps_datapack(create_datapack(ghga_workbook))
 
     try:
-        io.write_json(data=converted, path=output_file, force=force)
+        io.write_yaml(data=converted, path=output_file, force=force)
     except FileExistsError as exc:
         sys.exit(f"ERROR: {exc}")

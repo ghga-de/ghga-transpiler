@@ -33,6 +33,7 @@ def test_config_params() -> None:
 
     books_settings = WorksheetSettings(
         name="books",
+        primary_key="writer_name",
         header_row=1,
         start_row=2,
         start_column=1,
@@ -40,6 +41,7 @@ def test_config_params() -> None:
     )
     publisher_settings = WorksheetSettings(
         name="publisher",
+        primary_key="isbn",
         header_row=1,
         start_row=2,
         start_column=1,
