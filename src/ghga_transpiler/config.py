@@ -18,7 +18,6 @@
 
 from collections import Counter, defaultdict
 from collections.abc import Callable
-from functools import cached_property
 
 from pydantic import (
     BaseModel,
@@ -46,8 +45,6 @@ class ColumnProperties(BaseModel):
     enum: bool
     required: bool
 
-    @computed_field  # type: ignore [misc]
-    @property
     def transformation(self) -> Callable | None:
         """Assigns transformation function based on column properties"""
         if self.multivalued and self.enum:
@@ -91,13 +88,12 @@ class Worksheet(BaseModel):
     settings: WorksheetSettings
     columns: tuple[ColumnProperties, ...]
 
-    @cached_property
-    def transformations(self) -> dict:
+    def get_transformations(self) -> dict:
         """Merges the transformation of a worksheet"""
         return {
-            column.column_name: column.transformation
+            column.column_name: column.transformation()
             for column in self.columns
-            if column.transformation != None
+            if column.transformation() != None
         }
 
     @property
