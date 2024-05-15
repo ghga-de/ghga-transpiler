@@ -66,10 +66,10 @@ class GHGAWorkbook:
 
 def get_worksheet_rows(
     worksheet,
-    min_row: int | None,
+    min_row: int,
     max_row: int,
-    min_col: int | None,
-    max_col: int | None,
+    min_col: int,
+    max_col: int,
 ) -> list:
     """Function to create a list of rows of a worksheet"""
     return list(
@@ -83,9 +83,9 @@ def get_worksheet_rows(
 
 def get_header(
     worksheet,
-    header_row: int | None,
-    min_col: int | None,
-    max_col: int | None,
+    header_row: int,
+    min_col: int,
+    max_col: int,
 ) -> list[str]:
     """Function to return a list column names of a worksheet"""
     return list(
@@ -133,7 +133,7 @@ def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
             rows = get_worksheet_rows(
                 ghga_workbook.workbook[name],
                 worksheet.settings.start_row,
-                ghga_workbook.workbook[name].max_row,
+                ghga_workbook.workbook[name].max_row,  # type: ignore
                 worksheet.settings.start_column,
                 worksheet.settings.end_column,
             )
@@ -145,7 +145,9 @@ def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
                 worksheet.settings.end_column,
             )
             converted_rows = convert_rows(header, rows)
-            transformed_rows = transform_rows(converted_rows, worksheet.transformations)
+            transformed_rows = transform_rows(
+                converted_rows, worksheet.get_transformations()
+            )
             converted_workbook[name] = transformed_rows
         else:
             converted_workbook[name] = []
