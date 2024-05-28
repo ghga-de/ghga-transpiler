@@ -1,4 +1,4 @@
-# Copyright 2021 - 2023 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
+# Copyright 2021 - 2024 Universität Tübingen, DKFZ, EMBL, and Universität zu Köln
 # for the German Human Genome-Phenome Archive (GHGA)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-"""GHGA metadata transpiler"""
+"""Used to define the location of the main FastAPI app object."""
 
-from openpyxl.xml import DEFUSEDXML
+# flake8: noqa
+# pylint: skip-file
 
-__version__ = "1.1.0"
-
-if not DEFUSEDXML:
-    raise RuntimeError(
-        "The 'defusedxml' package must be present to safely run ghga-transpiler."
-    )
+# Please adapt to package structure:
+from my_microservice.api.main import app

@@ -1,0 +1,21 @@
+[project]
+# please adapt to package name
+name = "my_microservice"
+version = "1.1.0"
+description = "My-Microservice - a short description"
+dependencies = [
+    "typer >= 0.12",
+    "openpyxl >= 3.1.2, == 3.*",
+    "defusedxml >= 0.7, == 0.*",
+    "pydantic >=2, <3",
+    "PyYAML ~= 6.0",
+    "semver == 3.*"
+]
+
+[project.urls]
+# please adapt to package name
+Repository = "https://github.com/ghga-de/my-microservice"
+
+[project.scripts]
+# please adapt to package name
+my-microservice = "my_microservice.__main__:run"
