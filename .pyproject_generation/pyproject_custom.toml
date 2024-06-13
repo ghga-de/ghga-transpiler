@@ -1,6 +1,6 @@
 [project]
 name = "ghga_transpiler"
-version = "2.1.2"
+version = "2.1.3"
 description = "GHGA-Transpiler - excel to JSON converter"
 dependencies = [
     "typer >= 0.12",
@@ -13,6 +13,9 @@ dependencies = [
 
 [project.urls]
 Repository = "https://github.com/ghga-de/ghga-transpiler"
+
+[tool.setuptools.package-data]
+configs = ["*.yaml"]
 
 [project.scripts]
 ghga-transpiler = "ghga_transpiler.__main__:run"
