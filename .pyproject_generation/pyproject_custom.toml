@@ -1,5 +1,6 @@
 [project]
 name = "ghga_transpiler"
+
 version = "2.1.4"
 description = "GHGA-Transpiler - excel to JSON converter"
 dependencies = [
