@@ -9,3 +9,5 @@ scripts/update_readme.py
 .github/workflows/check_readme.yaml
 
 .pre-commit-config.yaml
+
+.pyproject_generation/pyproject_template.toml
