@@ -33,7 +33,6 @@ exclude = [
 ]
 line-length = 88
 src = ["src", "tests", "examples", "scripts"]
-target-version = "py39"
 
 [tool.ruff.lint]
 fixable = [
