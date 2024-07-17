@@ -16,22 +16,32 @@
 
 """This module contains functionalities for processing excel sheets into json object."""
 
-from collections.abc import Callable
-
 import semver
 from openpyxl import Workbook
+from pydantic import BaseModel
 
 from .config import WorkbookConfig
 from .utils import read_meta_information, worksheet_meta_information
 
 
-def get_sheet_meta(workbook):
-    """Gets workbook configurations from the worksheet __sheet_meta"""
-    worksheet_meta = worksheet_meta_information(
-        read_meta_information(workbook, "__column_meta"),
-        read_meta_information(workbook, "__sheet_meta"),
-    )
-    return WorkbookConfig.model_validate({"worksheets": worksheet_meta})
+class GHGAWorksheetRow(BaseModel):
+    """Class"""
+
+    relations: dict
+    content: dict
+
+
+class GHGAWorksheet(BaseModel):
+    """Class"""
+
+    name: str
+    worksheet: dict[str, GHGAWorksheetRow]
+
+
+class GHGAWorkbook(BaseModel):
+    """Class"""
+
+    worksheets: tuple[GHGAWorksheet, ...]
 
 
 # class InvalidSematicVersion(Exception):
@@ -57,7 +67,8 @@ def get_sheet_meta(workbook):
 #                 )
 #             except ValueError:
 #                 raise InvalidSematicVersion(
-#                     "Unable to extract metadata model version from the provided workbook (not a valid semantic version)."
+#                     "Unable to extract metadata model version from the provided workbook"
+#                     "(not a valid semantic version)."
 #                 ) from None
 #         raise SyntaxError(
 #             "Unable to extract metadata model version from the provided workbook (missing)."
@@ -73,68 +84,7 @@ def get_sheet_meta(workbook):
 #         return WorkbookConfig.model_validate({"worksheets": worksheet_meta})
 
 
-# def get_worksheet_rows(
-#     worksheet,
-#     min_row: int,
-#     max_row: int,
-#     min_col: int,
-#     max_col: int,
-# ) -> list:
-#     """Function to create a list of rows of a worksheet"""
-#     return list(
-#         row
-#         for row in worksheet.iter_rows(
-#             min_row, max_row, min_col, max_col, values_only=True
-#         )
-#         if not all(cell is None for cell in row)
-#     )
-
-
-# def get_header(
-#     worksheet,
-#     header_row: int,
-#     min_col: int,
-#     max_col: int,
-# ) -> list[str]:
-#     """Function to return a list column names of a worksheet"""
-#     return list(
-#         cell.value
-#         for row in worksheet.iter_rows(header_row, header_row, min_col, max_col)
-#         for cell in row
-#     )
-
-
-# def convert_rows(header, rows) -> list[dict]:
-#     """Function to return list of dictionaries, rows as worksheet row values and
-#     column names as keys
-#     """
-#     return [
-#         {
-#             key: value
-#             for key, value in zip(header, row, strict=True)
-#             if value is not None and value != ""
-#         }
-#         for row in rows
-#     ]
-
-
-# def transform_rows(
-#     rows: list[dict], transformations: dict[str, Callable]
-# ) -> list[dict]:
-#     """Transforms row values if it is applicable with a given function"""
-#     transformed = []
-#     for row in rows:
-#         transformed_row = {}
-#         for key, value in row.items():
-#             if transformations and key in transformations:
-#                 transformed_row[key] = transformations[key](value)
-#             else:
-#                 transformed_row[key] = value
-#         transformed.append(transformed_row)
-#     return transformed
-
-
-# def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
+# def convert_workbook_to_json(ghga_workbook: GHGAWorkbook) -> dict[str, list[dict]]:
 #     """Function to convert an input spreadsheet into JSON"""
 #     converted_workbook = {}
 #     for name, worksheet in ghga_workbook.config.worksheets.items():

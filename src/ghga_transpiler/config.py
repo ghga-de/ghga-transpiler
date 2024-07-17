@@ -30,7 +30,7 @@ from .exceptions import DuplicatedName
 from .transformations import to_attributes, to_list, to_snake_case, to_snake_case_list
 
 
-class ColumnProperties(BaseModel):
+class ColumnMeta(BaseModel):
     """A data model for column properties"""
 
     model_config = ConfigDict(populate_by_name=True, frozen=True)
@@ -57,8 +57,14 @@ class ColumnProperties(BaseModel):
         else:
             return lambda value: value
 
+    def relation(self) -> bool:
+        """If a column is a relation column"""
+        if self.ref_class:
+            return True
+        return False
 
-class WorksheetSettings(BaseModel):
+
+class SheetMeta(BaseModel):
     """A data model for worksheet settings"""
 
     model_config = ConfigDict(populate_by_name=True, frozen=True)
@@ -68,15 +74,16 @@ class WorksheetSettings(BaseModel):
     start_row: int = Field(..., validation_alias="data_start")
     start_column: int = 1
     end_column: int = Field(..., validation_alias="n_cols")
+    primary_key: str
 
 
-class Worksheet(BaseModel):
+class WorksheetSettings(BaseModel):
     """A data model for a worksheet"""
 
     model_config = ConfigDict(frozen=True)
 
-    settings: WorksheetSettings
-    columns: tuple[ColumnProperties, ...]
+    settings: SheetMeta
+    columns: tuple[ColumnMeta, ...]
 
     def get_transformations(self) -> dict:
         """Merges the transformation of a worksheet"""
@@ -86,11 +93,17 @@ class Worksheet(BaseModel):
             if column.transformation() != None
         }
 
+    def get_relations(self) -> list:
+        """Returns relations of a worksheet where column name is considered as the
+        relation name
+        """
+        return [column.column_name for column in self.columns if column.relation()]
+
 
 class WorkbookConfig(BaseModel):
     """A data model containing transpiler configurations"""
 
-    worksheets: dict[str, Worksheet]
+    worksheets: dict[str, WorksheetSettings]
 
     @model_validator(mode="after")
     def check_name(cls, values):  # noqa
