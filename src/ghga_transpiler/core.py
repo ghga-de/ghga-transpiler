@@ -20,18 +20,68 @@ from collections.abc import Callable
 
 import semver
 from openpyxl import Workbook
+from schemapack.spec.datapack import DataPack
+
+from ghga_transpiler.models import GHGAWorkbook
+from ghga_transpiler.parse import GHGAWorkbookParser
 
 from .config import WorkbookConfig
 from .utils import read_meta_information, worksheet_meta_information
 
 
-def get_sheet_meta(workbook):
+def get_workbook_config(workbook):
     """Gets workbook configurations from the worksheet __sheet_meta"""
     worksheet_meta = worksheet_meta_information(
         read_meta_information(workbook, "__column_meta"),
         read_meta_information(workbook, "__sheet_meta"),
     )
     return WorkbookConfig.model_validate({"worksheets": worksheet_meta})
+
+
+def parse_workbook(workbook: Workbook, config: WorkbookConfig) -> GHGAWorkbook:
+    """Converts workbook into GHGAWorkbook"""
+    return GHGAWorkbookParser().parse(workbook=workbook, config=config)
+
+
+def produce_datapack():
+    """Produce datapack from GHGA workbook."""
+    pass
+
+
+# def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> FrozenDict:
+#     """Converts workbook to a dictionary that is compatible with DataPack definition"""
+#     json_workbook = convert_workbook_to_json(ghga_workbook)
+#     datapack_resources: dict = {}
+#     for worksheet_name, worksheet_data in json_workbook.items():
+#         worksheet = ghga_workbook.config.worksheets[worksheet_name]
+#         ws_relations = worksheet.get_relations()
+#         ws_primary_key = worksheet.settings.primary_key
+#         for row in worksheet_data:
+#             content = _content_to_dict(
+#                 row, ws_primary_key, ws_relations[worksheet_name]
+#             )
+
+#             relations = _relations_to_dict(row, ws_relations[worksheet_name])
+#             try:
+#                 datapack_resources.setdefault(worksheet_name, {}).setdefault(
+#                     row[ws_primary_key], {
+#                         "content": content, "relations": relations}
+#                 )
+#             except KeyError as err:
+#                 raise PrimaryKeyNotFoundError(
+#                     f"Primary key column is not found in {
+#                         worksheet_name} worksheet"
+#                 ) from err
+#     return FrozenDict(datapack_resources)
+
+
+# def create_datapack(ghga_workbook: GHGAWorkbook) -> DataPack:
+#     """Returns a DataPack object"""
+#     return DataPack(
+#         datapack="0.3.0",
+#         resources=convert_workbook_to_datapack(ghga_workbook),
+#         rootResource=None,
+#     )
 
 
 # class InvalidSematicVersion(Exception):

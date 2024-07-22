@@ -18,33 +18,32 @@
 
 from openpyxl import load_workbook
 
-from ghga_transpiler.config import WorksheetSettings
-from ghga_transpiler.core import GHGAWorkbook
+from ghga_transpiler.core import get_workbook_config
 
+from .fixtures.test_data_objects.config_objects import (
+    BOOKS_COLUMN_META,
+    BOOKS_SHEET_META,
+    PUBLISHER_COLUMN_META,
+    PUBLISHER_SHEET_META,
+)
 from .fixtures.utils import get_project_root
 
 
-def test_config_params() -> None:
+def test_sheet_meta_configs() -> None:
     """Testing if __sheet_meta contains the correct set of worksheet configurations"""
     workbook_path = (
         get_project_root() / "tests" / "fixtures" / "workbooks" / "a_workbook.xlsx"
     )
-    workbook_config = GHGAWorkbook._get_sheet_meta(load_workbook(workbook_path))
+    workbook_config = get_workbook_config(load_workbook(workbook_path))
 
-    books_settings = WorksheetSettings(
-        name="books",
-        header_row=1,
-        start_row=2,
-        start_column=1,
-        end_column=5,
-    )
-    publisher_settings = WorksheetSettings(
-        name="publisher",
-        header_row=1,
-        start_row=2,
-        start_column=1,
-        end_column=3,
-    )
-    expected_settings = {"books": books_settings, "publisher": publisher_settings}
+    expected_sheet_meta = {"books": BOOKS_SHEET_META, "publisher": PUBLISHER_SHEET_META}
+    expected_column_meta = {
+        "books": BOOKS_COLUMN_META,
+        "publisher": PUBLISHER_COLUMN_META,
+    }
     for worksheet_name, worksheet in workbook_config.worksheets.items():
-        assert worksheet.settings == expected_settings[worksheet_name]
+        assert worksheet.settings == expected_sheet_meta[worksheet_name]
+        assert worksheet.columns == expected_column_meta[worksheet_name]
+
+
+# buraya bi tane unhappy test case olur da sheetname unique degilse bakalim config hata verecek mi
