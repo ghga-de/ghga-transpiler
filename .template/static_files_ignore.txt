@@ -13,3 +13,4 @@ scripts/update_pyproject.py
 .pre-commit-config.yaml
 
 .pyproject_generation/pyproject_template.toml
+.devcontainer/devcontainer.json
