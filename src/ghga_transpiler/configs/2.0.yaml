@@ -1,4 +1,4 @@
-ghga_metadata_version: 1.2.0
+ghga_metadata_version: 2.0.0
 default_settings:
   header_row: 1
   start_row: 7
@@ -43,7 +43,7 @@ worksheets:
           !!python/object/apply:ghga_transpiler.transformations.to_snake_case_list []
     sheet_name: Study
   - settings:
-      end_column: 8
+      end_column: 10
       name: individuals
       transformations:
         phenotypic_features_terms:
@@ -56,13 +56,14 @@ worksheets:
           !!python/object/apply:ghga_transpiler.transformations.to_list []
         sex:
           !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
-        ancestries:
+        ancestry_terms:
+          !!python/object/apply:ghga_transpiler.transformations.to_list []
+        ancestry_ids:
           !!python/object/apply:ghga_transpiler.transformations.to_list []
     sheet_name: Individual
   - settings:
-      end_column: 8
+      end_column: 6
       name: individual_supporting_files
-      transformations:
     sheet_name: IndividualSupportingFile
   - settings:
       end_column: 21
@@ -114,7 +115,7 @@ worksheets:
           !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
     sheet_name: ExperimentMethod
   - settings:
-      end_column: 8
+      end_column: 6
       name: experiment_method_supporting_files
     sheet_name: ExperimentMethodSupportingFile
   - settings:
@@ -122,14 +123,14 @@ worksheets:
       name: experiments
     sheet_name: Experiment
   - settings:
-      end_column: 12
+      end_column: 9
       name: research_data_files
       transformations:
         experiment:
           !!python/object/apply:ghga_transpiler.transformations.to_list []
     sheet_name: ResearchDataFile
   - settings:
-      end_column: 9
+      end_column: 7
       name: process_data_files
     sheet_name: ProcessDataFile
   - settings:
