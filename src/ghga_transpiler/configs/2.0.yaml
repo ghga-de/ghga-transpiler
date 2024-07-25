@@ -8,8 +8,6 @@ default_settings:
       !!python/object/apply:ghga_transpiler.transformations.to_attributes []
     format:
       !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
-    forward_or_reverse:
-      !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
 worksheets:
   - settings:
       end_column: 7
@@ -28,7 +26,7 @@ worksheets:
           !!python/object/apply:ghga_transpiler.transformations.to_attributes []
     sheet_name: AnalysisMethod
   - settings:
-      end_column: 8
+      end_column: 7
       name: analysis_method_supporting_files
     sheet_name: AnalysisMethodSupportingFile
   - settings:
@@ -62,7 +60,7 @@ worksheets:
           !!python/object/apply:ghga_transpiler.transformations.to_list []
     sheet_name: Individual
   - settings:
-      end_column: 6
+      end_column: 7
       name: individual_supporting_files
     sheet_name: IndividualSupportingFile
   - settings:
@@ -113,9 +111,11 @@ worksheets:
           !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
         sample_barcode_read:
           !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
+        sequencing_layout:
+          !!python/object/apply:ghga_transpiler.transformations.to_snake_case []
     sheet_name: ExperimentMethod
   - settings:
-      end_column: 6
+      end_column: 7
       name: experiment_method_supporting_files
     sheet_name: ExperimentMethodSupportingFile
   - settings:
@@ -126,7 +126,7 @@ worksheets:
       end_column: 9
       name: research_data_files
       transformations:
-        experiment:
+        experiments:
           !!python/object/apply:ghga_transpiler.transformations.to_list []
     sheet_name: ResearchDataFile
   - settings:
