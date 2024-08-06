@@ -17,16 +17,18 @@
 """This module contains functionalities for processing excel sheets into json object."""
 
 from collections.abc import Callable
+from pathlib import Path
 
 import semver
+from arcticfreeze import FrozenDict
 from openpyxl import Workbook
 from schemapack.spec.datapack import DataPack
 
+from ghga_transpiler.config import WorkbookConfig
+from ghga_transpiler.io import read_workbook
 from ghga_transpiler.models import GHGAWorkbook
 from ghga_transpiler.parse import GHGAWorkbookParser
-
-from .config import WorkbookConfig
-from .utils import read_meta_information, worksheet_meta_information
+from ghga_transpiler.utils import read_meta_information, worksheet_meta_information
 
 
 def get_workbook_config(workbook):
@@ -39,176 +41,90 @@ def get_workbook_config(workbook):
 
 
 def parse_workbook(workbook: Workbook, config: WorkbookConfig) -> GHGAWorkbook:
-    """Converts workbook into GHGAWorkbook"""
+    """Converts a workbook into GHGAWorkbook"""
     return GHGAWorkbookParser().parse(workbook=workbook, config=config)
 
 
-def produce_datapack():
-    """Produce datapack from GHGA workbook."""
-    pass
+def produce_datapack(workbook: GHGAWorkbook) -> DataPack:
+    """Convert GHAWorkbook into a Datapack instance."""
+    return DataPack(
+        datapack="0.3.0", resources=FrozenDict(workbook.model_dump()), rootResource=None
+    )
 
 
-# def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> FrozenDict:
-#     """Converts workbook to a dictionary that is compatible with DataPack definition"""
-#     json_workbook = convert_workbook_to_json(ghga_workbook)
-#     datapack_resources: dict = {}
-#     for worksheet_name, worksheet_data in json_workbook.items():
-#         worksheet = ghga_workbook.config.worksheets[worksheet_name]
-#         ws_relations = worksheet.get_relations()
-#         ws_primary_key = worksheet.settings.primary_key
-#         for row in worksheet_data:
-#             content = _content_to_dict(
-#                 row, ws_primary_key, ws_relations[worksheet_name]
-#             )
+def convert_workbook(spread_sheet: Path) -> GHGAWorkbook:
+    """Flow to convert a spread_sheet into a GHGA workbook"""
+    workbook = read_workbook(spread_sheet)
+    workbook_config = get_workbook_config(workbook)
+    return GHGAWorkbookParser().parse(workbook=workbook, config=workbook_config)
 
-#             relations = _relations_to_dict(row, ws_relations[worksheet_name])
-#             try:
-#                 datapack_resources.setdefault(worksheet_name, {}).setdefault(
-#                     row[ws_primary_key], {
-#                         "content": content, "relations": relations}
-#                 )
-#             except KeyError as err:
-#                 raise PrimaryKeyNotFoundError(
-#                     f"Primary key column is not found in {
-#                         worksheet_name} worksheet"
-#                 ) from err
-#     return FrozenDict(datapack_resources)
+    # def convert_workbook_to_datapack(ghga_workbook: GHGAWorkbook) -> FrozenDict:
+    #     """Converts workbook to a dictionary that is compatible with DataPack definition"""
+    #     json_workbook = convert_workbook_to_json(ghga_workbook)
+    #     datapack_resources: dict = {}
+    #     for worksheet_name, worksheet_data in json_workbook.items():
+    #         worksheet = ghga_workbook.config.worksheets[worksheet_name]
+    #         ws_relations = worksheet.get_relations()
+    #         ws_primary_key = worksheet.settings.primary_key
+    #         for row in worksheet_data:
+    #             content = _content_to_dict(
+    #                 row, ws_primary_key, ws_relations[worksheet_name]
+    #             )
 
+    #             relations = _relations_to_dict(row, ws_relations[worksheet_name])
+    #             try:
+    #                 datapack_resources.setdefault(worksheet_name, {}).setdefault(
+    #                     row[ws_primary_key], {
+    #                         "content": content, "relations": relations}
+    #                 )
+    #             except KeyError as err:
+    #                 raise PrimaryKeyNotFoundError(
+    #                     f"Primary key column is not found in {
+    #                         worksheet_name} worksheet"
+    #                 ) from err
+    #     return FrozenDict(datapack_resources)
 
-# def create_datapack(ghga_workbook: GHGAWorkbook) -> DataPack:
-#     """Returns a DataPack object"""
-#     return DataPack(
-#         datapack="0.3.0",
-#         resources=convert_workbook_to_datapack(ghga_workbook),
-#         rootResource=None,
-#     )
+    # def create_datapack(ghga_workbook: GHGAWorkbook) -> DataPack:
+    #     """Returns a DataPack object"""
+    #     return DataPack(
+    #         datapack="0.3.0",
+    #         resources=convert_workbook_to_datapack(ghga_workbook),
+    #         rootResource=None,
+    #     )
 
+    # class InvalidSematicVersion(Exception):
+    #     """Raised when a version string is invalid."""
 
-# class InvalidSematicVersion(Exception):
-#     """Raised when a version string is invalid."""
+    # class GHGAWorkbook:
+    #     """A GHGA metadata XLSX workbook"""
 
+    #     def __init__(self, workbook: Workbook):
+    #         """Create a new GHGAWorkbook object from an XLSX workbook"""
+    #         self.workbook = workbook
+    #         self.wb_version = GHGAWorkbook._get_transpiler_protocol(workbook)
+    #         self.config = GHGAWorkbook._get_sheet_meta(self.workbook)
 
-# class GHGAWorkbook:
-#     """A GHGA metadata XLSX workbook"""
+    #     @staticmethod
+    #     def _get_transpiler_protocol(workbook):
+    #         """Gets workbook version from the worksheet "__transpiler_protocol"""
+    #         if "__transpiler_protocol" in workbook.sheetnames:
+    #             try:
+    #                 return semver.Version.parse(
+    #                     workbook["__transpiler_protocol"].cell(1, 1).value
+    #                 )
+    #             except ValueError:
+    #                 raise InvalidSematicVersion(
+    #                     "Unable to extract metadata model version from the provided workbook (not a valid semantic version)."
+    #                 ) from None
+    #         raise SyntaxError(
+    #             "Unable to extract metadata model version from the provided workbook (missing)."
+    #         )
 
-#     def __init__(self, workbook: Workbook):
-#         """Create a new GHGAWorkbook object from an XLSX workbook"""
-#         self.workbook = workbook
-#         self.wb_version = GHGAWorkbook._get_transpiler_protocol(workbook)
-#         self.config = GHGAWorkbook._get_sheet_meta(self.workbook)
-
-#     @staticmethod
-#     def _get_transpiler_protocol(workbook):
-#         """Gets workbook version from the worksheet "__transpiler_protocol"""
-#         if "__transpiler_protocol" in workbook.sheetnames:
-#             try:
-#                 return semver.Version.parse(
-#                     workbook["__transpiler_protocol"].cell(1, 1).value
-#                 )
-#             except ValueError:
-#                 raise InvalidSematicVersion(
-#                     "Unable to extract metadata model version from the provided workbook (not a valid semantic version)."
-#                 ) from None
-#         raise SyntaxError(
-#             "Unable to extract metadata model version from the provided workbook (missing)."
-#         )
-
-#     @staticmethod
-#     def _get_sheet_meta(workbook):
-#         """Gets workbook configurations from the worksheet __sheet_meta"""
-#         worksheet_meta = worksheet_meta_information(
-#             read_meta_information(workbook, "__column_meta"),
-#             read_meta_information(workbook, "__sheet_meta"),
-#         )
-#         return WorkbookConfig.model_validate({"worksheets": worksheet_meta})
-
-
-# def get_worksheet_rows(
-#     worksheet,
-#     min_row: int,
-#     max_row: int,
-#     min_col: int,
-#     max_col: int,
-# ) -> list:
-#     """Function to create a list of rows of a worksheet"""
-#     return list(
-#         row
-#         for row in worksheet.iter_rows(
-#             min_row, max_row, min_col, max_col, values_only=True
-#         )
-#         if not all(cell is None for cell in row)
-#     )
-
-
-# def get_header(
-#     worksheet,
-#     header_row: int,
-#     min_col: int,
-#     max_col: int,
-# ) -> list[str]:
-#     """Function to return a list column names of a worksheet"""
-#     return list(
-#         cell.value
-#         for row in worksheet.iter_rows(header_row, header_row, min_col, max_col)
-#         for cell in row
-#     )
-
-
-# def convert_rows(header, rows) -> list[dict]:
-#     """Function to return list of dictionaries, rows as worksheet row values and
-#     column names as keys
-#     """
-#     return [
-#         {
-#             key: value
-#             for key, value in zip(header, row, strict=True)
-#             if value is not None and value != ""
-#         }
-#         for row in rows
-#     ]
-
-
-# def transform_rows(
-#     rows: list[dict], transformations: dict[str, Callable]
-# ) -> list[dict]:
-#     """Transforms row values if it is applicable with a given function"""
-#     transformed = []
-#     for row in rows:
-#         transformed_row = {}
-#         for key, value in row.items():
-#             if transformations and key in transformations:
-#                 transformed_row[key] = transformations[key](value)
-#             else:
-#                 transformed_row[key] = value
-#         transformed.append(transformed_row)
-#     return transformed
-
-
-# def convert_workbook(ghga_workbook: GHGAWorkbook) -> dict:
-#     """Function to convert an input spreadsheet into JSON"""
-#     converted_workbook = {}
-#     for name, worksheet in ghga_workbook.config.worksheets.items():
-#         if name in ghga_workbook.workbook:
-#             rows = get_worksheet_rows(
-#                 ghga_workbook.workbook[name],
-#                 worksheet.settings.start_row,
-#                 ghga_workbook.workbook[name].max_row,
-#                 worksheet.settings.start_column,
-#                 worksheet.settings.end_column,
-#             )
-
-#             header = get_header(
-#                 ghga_workbook.workbook[name],
-#                 worksheet.settings.header_row,
-#                 worksheet.settings.start_column,
-#                 worksheet.settings.end_column,
-#             )
-#             converted_rows = convert_rows(header, rows)
-#             transformed_rows = transform_rows(
-#                 converted_rows, worksheet.get_transformations()
-#             )
-#             converted_workbook[name] = transformed_rows
-#         else:
-#             converted_workbook[name] = []
-
-#     return converted_workbook
+    #     @staticmethod
+    #     def _get_sheet_meta(workbook):
+    #         """Gets workbook configurations from the worksheet __sheet_meta"""
+    #         worksheet_meta = worksheet_meta_information(
+    #             read_meta_information(workbook, "__column_meta"),
+    #             read_meta_information(workbook, "__sheet_meta"),
+    #         )
+    #         return WorkbookConfig.model_validate({"worksheets": worksheet_meta})

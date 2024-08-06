@@ -21,29 +21,30 @@ import sys
 from pathlib import Path
 from typing import TextIO
 
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
+from schemapack import dumps_datapack
+from schemapack.spec.datapack import DataPack
 
-from .core import GHGAWorkbook
 
-
-def read_workbook(path: Path) -> GHGAWorkbook:
+def read_workbook(path: Path) -> Workbook:
     """Function to read-in a workbook"""
-    return GHGAWorkbook(load_workbook(path))
+    return load_workbook(path)
 
 
-def _write_json(data: dict, file: TextIO):
-    """Write the data to the specified file in JSON format"""
+def _write_json(data: str, file: TextIO):
+    """Writes data to the specified file"""
     json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
 
 
-def write_json(data: dict, path: Path | None, force: bool) -> None:
-    """Write the data provided as a dictionary to the specified output path or
+def write_datapack(data: DataPack, path: Path | None, force: bool) -> None:
+    """Writes data as JSON to the specified output path or
     to stdout if the path is None.
     """
+    datapack = dumps_datapack(data, yaml_format=False)
     if path is None:
-        _write_json(data, sys.stdout)
+        sys.stdout.write(datapack)
     elif path.exists() and not force:
         raise FileExistsError(f"File already exists: {path}")
     else:
         with open(file=path, mode="w", encoding="utf8") as outfile:
-            _write_json(data, outfile)
+            outfile.write(datapack)

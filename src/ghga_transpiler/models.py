@@ -14,34 +14,88 @@
 # limitations under the License.
 #
 
-"""This module contains functionalities for processing excel sheets into json object."""
+"""This module contains the models describing a GHGA Workbook."""
 
-import semver
-from openpyxl import Workbook
-from pydantic import BaseModel
+from collections import Counter
 
-from .config import WorkbookConfig
-from .utils import read_meta_information, worksheet_meta_information
+from pydantic import BaseModel, Field, model_serializer, model_validator
+
+from .exceptions import DuplicatedName
 
 
 class GHGAWorksheetRow(BaseModel):
-    """Class"""
+    """A model defining a row in a worksheet encompassing a content and the relations
+    keeping the references to other classes.
+    """
 
-    relations: dict
-    content: dict
+    relations: dict = Field(
+        ...,
+        description="A dictionary mapping resource identifiers to their"
+        + " corresponding classes. This field details the resources referenced within"
+        + " the worksheet row.",
+    )
+
+    content: dict = Field(
+        ...,
+        description="A dictionary containing key-value pairs where keys"
+        + " represent the properties of the data fields, and values represent"
+        + " the corresponding data. This field does not include information"
+        + " about the relations.",
+    )
 
 
 class GHGAWorksheet(BaseModel):
-    """Class"""
+    """A model defining a GHGA worksheet."""
 
-    name: str
-    worksheet: dict[str, GHGAWorksheetRow]
+    worksheet: dict[str, dict[str, GHGAWorksheetRow]] = Field(
+        ...,
+        description="A nested dictionary representing a GHGA worksheet."
+        + " The outer dictionary maps worksheet names (strings) to inner dictionaries."
+        + " Each inner dictionary maps row primary key values (strings) to their"
+        + " corresponding `GHGAWorksheetRow` instances.",
+    )
+
+    @model_serializer()
+    def serialize_model(self):
+        """Custom serializer method that returns a dictionary representation of the
+        worksheet, omitting the attribute name 'worksheet' from the serialized output.
+        """
+        return {key: value for key, value in self.worksheet.items()}
 
 
 class GHGAWorkbook(BaseModel):
-    """Class"""
+    """A model defining a GHGA workbook consists of multiple worksheets."""
 
-    worksheets: tuple[GHGAWorksheet, ...]
+    workbook: tuple[GHGAWorksheet, ...] = Field(
+        ...,
+        description="A tuple of `GHGAWorksheet` instances."
+        + "Each `GHGAWorksheet` represents a worksheet within the workbook.",
+    )
+
+    @model_validator(mode="after")
+    def check_name(cls, values):  # noqa
+        """Function to ensure that workbook consists of worksheets with unique names."""
+        attrs_counter = Counter(
+            key for ws in values.workbook for key, _ in ws.worksheet.items()
+        )
+        dup_ws_names = [name for name, count in attrs_counter.items() if count > 1]
+        if dup_ws_names:
+            raise DuplicatedName(
+                "Duplicate worksheet names:: " + ", ".join(dup_ws_names)
+            )
+        return values
+
+    @model_serializer()
+    def serialize_model(self):
+        """Custom serializer method that returns a dictionary representation of the
+        workbook, omitting the attribute name 'workbook' from the serialized output and
+        returning a flattened dictionary instead of a tuple of worksheets.
+        """
+        return {
+            key: value
+            for worksheet in self.workbook
+            for key, value in worksheet.worksheet.items()
+        }
 
 
 # class InvalidSematicVersion(Exception):

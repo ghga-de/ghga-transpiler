@@ -88,7 +88,7 @@ class GHGAWorksheetParser(WorksheetParser):
     def parse(self, worksheet):
         """Function"""
         return GHGAWorksheet.model_validate(
-            {"name": self.name, "worksheet": self._parse_worksheet(worksheet)}
+            {"worksheet": {self.name: self._parse_worksheet(worksheet)}}
         )
 
     def _parse_worksheet(self, worksheet) -> dict[str, dict]:
@@ -130,7 +130,7 @@ class GHGAWorkbookParser:
         """Parse a workbook into GHGAWorkbook"""
         return GHGAWorkbook.model_validate(
             {
-                "worksheets": tuple(
+                "workbook": tuple(
                     GHGAWorksheetParser(
                         name=name, config=config.worksheets[name]
                     ).parse(workbook[name])
