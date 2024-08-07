@@ -14,20 +14,22 @@
 # limitations under the License.
 
 
-from openpyxl import Workbook
-from pydantic import BaseModel
+from pathlib import Path
+
+from openpyxl.worksheet.worksheet import Worksheet
+from pydantic import BaseModel, Field
 
 from .config import WorkbookConfig, WorksheetSettings
+from .io import read_workbook
 from .models import GHGAWorkbook, GHGAWorksheet
 
 
 class WorksheetParser(BaseModel):
     """Group worksheet parser functions."""
 
-    name: str
     config: WorksheetSettings
 
-    def _header(self, worksheet):
+    def _header(self, worksheet: Worksheet):
         """Return a list of column names of a worksheet."""
         return list(
             cell.value
@@ -40,7 +42,7 @@ class WorksheetParser(BaseModel):
             for cell in row
         )
 
-    def _rows(self, worksheet) -> list:
+    def _rows(self, worksheet: Worksheet) -> list:
         """Create a list of rows of a worksheet."""
         return list(
             row
@@ -54,7 +56,7 @@ class WorksheetParser(BaseModel):
             if not all(cell is None for cell in row)
         )
 
-    def _content(self, worksheet) -> list[dict]:
+    def _content(self, worksheet: Worksheet) -> list[dict]:
         """Compute and return the content of the worksheet, rows as worksheet row values and
         column names as keys
         """
@@ -67,8 +69,10 @@ class WorksheetParser(BaseModel):
             for row in self._rows(worksheet)
         ]
 
-    def _processed_content(self, worksheet):
-        """Transforms row values if it is applicable with a function stated in config"""
+    def _transformed_content(self, worksheet: Worksheet) -> list:
+        """Processes each row of the provided worksheet, applying transformations to
+        specific fields as defined in the configuration and returns the worksheet content.
+        """
         transformed_data = []
         for row in self._content(worksheet):
             transformed_row = {}
@@ -85,19 +89,20 @@ class WorksheetParser(BaseModel):
 class GHGAWorksheetParser(WorksheetParser):
     """Extend WorksheetParser with GHGA worksheet specific parsers."""
 
-    def parse(self, worksheet):
-        """Function"""
+    def parse(self, worksheet: Worksheet):
+        """Render a worksheet into GHGAWorksheet model"""
         return GHGAWorksheet.model_validate(
-            {"worksheet": {self.name: self._parse_worksheet(worksheet)}}
+            {"worksheet": {
+                self.config.settings.name: self._parse(worksheet)}}
         )
 
-    def _parse_worksheet(self, worksheet) -> dict[str, dict]:
-        """Parse worksheet row by row into a dictionary of row-primary-keys as keys and
+    def _parse(self, worksheet: Worksheet) -> dict[str, dict]:
+        """Parse a worksheet row by row into a dictionary of row-primary-keys as keys and
         a dictionary of content and relations as the values.
         """
-        worksheet_data = self._processed_content(worksheet)
+        worksheet_data = self._transformed_content(worksheet)
         return {
-            row[self.config.settings.primary_key]: {
+            row[self.config.settings.primary_key]: {  # type: ignore
                 "content": self._relation_free_content(row),
                 "relations": self._relations(row),
             }
@@ -123,24 +128,48 @@ class GHGAWorksheetParser(WorksheetParser):
         }
 
 
-class GHGAWorkbookParser:
-    """Class"""
+class GHGAWorkbookParser(BaseModel):
+    """Parser class for converting a workbook into a GHGAWorkbook."""
 
-    def parse(self, workbook: Workbook, config: WorkbookConfig) -> GHGAWorkbook:
-        """Parse a workbook into GHGAWorkbook"""
+    config: WorkbookConfig = Field(
+        ...,
+        description="Configuration for processing the workbook, including worksheet"
+        + " settings and column transformations.",
+    )
+
+    workbook: Path = Field(
+        ...,
+        description="Path to the Excel workbook file (.xlsx) that will be parsed."
+        + " This file contains the data to be transformed and processed.",
+    )
+
+    exclude: list = Field(
+        default=[
+            "__transpiler_protocol",
+            "__sheet_meta",
+            "__column_meta",
+        ],
+        description="List of sheet names to exclude from processing."
+        + " These are typically meta sheets that contain configuration data or metadata"
+        + " rather than actual worksheet data. Default value corresponds to the GHGA"
+        + " standard configuration sheets on the GHGA submission workbook.",
+    )
+
+    def parse(self) -> GHGAWorkbook:
+        """Converts the given workbook into a GHGAWorkbook instance.
+
+        This method iterates through the sheets of the provided workbook, excluding
+        any meta sheets (i.e., '__transpiler_protocol', '__sheet_meta', '__column_meta').
+        """
+        ghga_workbook = read_workbook(self.workbook)
         return GHGAWorkbook.model_validate(
             {
                 "workbook": tuple(
-                    GHGAWorksheetParser(
-                        name=name, config=config.worksheets[name]
-                    ).parse(workbook[name])
-                    for name in workbook.sheetnames
-                    if name
-                    not in [
-                        "__transpiler_protocol",
-                        "__sheet_meta",
-                        "__column_meta",
-                    ]
+                    GHGAWorksheetParser(config=self.config.worksheets[name]).parse(
+                        ghga_workbook[name]
+                    )
+                    for name in ghga_workbook.sheetnames
+                    if name not in self.exclude
                 )
             }
         )

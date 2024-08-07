@@ -17,12 +17,13 @@
 
 import sys
 from pathlib import Path
+from typing import Optional
 
 import typer
 
-from ghga_transpiler.core import convert_workbook, produce_datapack
-
 from . import __version__, io
+from .core import convert_workbook
+from .datapack import produce_datapack
 
 # from .core import InvalidSematicVersion, convert_workbook
 from .exceptions import UnknownVersionError
@@ -72,6 +73,7 @@ def transpile(
     converted = produce_datapack(ghga_workbook)
 
     try:
-        io.write_datapack(data=converted, path=output_file, force=force)
+        io.write_datapack(data=converted, path=output_file,
+                          yaml_format=False, force=force)
     except FileExistsError as exc:
         sys.exit(f"ERROR: {exc}")

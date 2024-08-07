@@ -59,7 +59,7 @@ class ColumnMeta(BaseModel):
 
     def relation(self) -> bool:
         """If a column is a relation column"""
-        if self.ref_class:
+        if self.ref_class:  # noqa: SIM103
             return True
         return False
 

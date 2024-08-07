@@ -25,22 +25,36 @@ from openpyxl import Workbook, load_workbook
 from schemapack import dumps_datapack
 from schemapack.spec.datapack import DataPack
 
+from .core import WorkbookConfig
+from .utils import read_meta_information, worksheet_meta_information
+
 
 def read_workbook(path: Path) -> Workbook:
     """Function to read-in a workbook"""
     return load_workbook(path)
 
 
-def _write_json(data: str, file: TextIO):
-    """Writes data to the specified file"""
-    json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
+def read_workbook_config(workbook: Workbook) -> WorkbookConfig:
+    """Gets workbook configurations from the worksheet __sheet_meta"""
+    worksheet_meta = worksheet_meta_information(
+        read_meta_information(workbook, "__column_meta"),
+        read_meta_information(workbook, "__sheet_meta"),
+    )
+    return WorkbookConfig.model_validate({"worksheets": worksheet_meta})
 
 
-def write_datapack(data: DataPack, path: Path | None, force: bool) -> None:
+# def _write_json(data: str, file: TextIO):
+#     """Writes data to the specified file"""
+#     json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
+
+
+def write_datapack(
+    data: DataPack, path: Path | None, yaml_format: bool, force: bool
+) -> None:
     """Writes data as JSON to the specified output path or
     to stdout if the path is None.
     """
-    datapack = dumps_datapack(data, yaml_format=False)
+    datapack = dumps_datapack(data, yaml_format=yaml_format)
     if path is None:
         sys.stdout.write(datapack)
     elif path.exists() and not force:
