@@ -16,17 +16,14 @@
 """CLI-specific wrappers around core functions."""
 
 import sys
+from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Annotated
 
 import typer
 
 from . import __version__, io
-from .core import convert_workbook
-from .datapack import produce_datapack
-
-# from .core import InvalidSematicVersion, convert_workbook
-from .exceptions import UnknownVersionError
+from .transpile import transpile
 
 cli = typer.Typer()
 
@@ -38,42 +35,70 @@ def version_callback(value: bool):
         raise typer.Exit()
 
 
+def format_callback(value: str):
+    """Validates the user input for format parameter"""
+    if value not in ["json", "yaml"]:
+        raise typer.BadParameter("Only 'json' or 'yaml' is allowed.")
+    return value
+
+
+class Format(str, Enum):
+    """Enum class for output format types"""
+
+    json = "json"
+    yaml = "yaml"
+
+
 @cli.command()
-def transpile(
-    spread_sheet: Path = typer.Argument(
-        ...,
-        exists=True,
-        help="The path to input file (XLSX)",
-        dir_okay=False,
-        readable=True,
-    ),
-    output_file: Path | None = typer.Argument(
-        None, help="The path to output file (JSON).", dir_okay=False
-    ),
-    force: bool = typer.Option(
-        False, "--force", "-f", help="Override output file if it exists."
-    ),
-    transpiler_protocol: bool = typer.Option(
-        False,
-        "--version",
-        "-v",
-        callback=version_callback,
-        is_eager=True,
-        help="Print package version",
-    ),
+def main(
+    spread_sheet: Annotated[
+        Path,
+        typer.Argument(
+            exists=True,
+            help="The path to input file (XLSX)",
+            dir_okay=False,
+            readable=True,
+        ),
+    ],
+    output_file: Annotated[
+        Path | None,
+        typer.Argument(help="The path to output file (JSON).", dir_okay=False),
+    ] = None,
+    format: Annotated[
+        Format,
+        typer.Option(
+            "--format",
+            "-t",
+            help="Output format: 'json' or 'yaml'",
+            callback=format_callback,
+            is_eager=True,
+        ),
+    ] = Format.json,
+    force: Annotated[
+        bool, typer.Option("--force", "-f", help="Override output file if it exists.")
+    ] = False,
+    version: Annotated[
+        bool,
+        typer.Option(
+            "--version",
+            "-v",
+            callback=version_callback,
+            is_eager=True,
+            help="Print package version",
+        ),
+    ] = False,
 ):
     """ghga-transpiler is a command line utility to transpile the official GHGA
     metadata XLSX workbooks to JSON. TODO Validation
     """
     try:
-        ghga_workbook = convert_workbook(spread_sheet)
-    except (SyntaxError, UnknownVersionError) as exc:
+        ghga_datapack = transpile(spread_sheet)
+    except SyntaxError as exc:
         sys.exit(f"Unable to parse input file '{spread_sheet}': {exc}")
-
-    converted = produce_datapack(ghga_workbook)
-
+    yaml_format = format == "yaml"
     try:
-        io.write_datapack(data=converted, path=output_file,
-                          yaml_format=False, force=force)
+        io.write_datapack(
+            data=ghga_datapack, path=output_file, yaml_format=yaml_format, force=force
+        )
     except FileExistsError as exc:
         sys.exit(f"ERROR: {exc}")

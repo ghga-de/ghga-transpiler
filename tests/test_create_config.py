@@ -18,7 +18,7 @@
 
 from openpyxl import load_workbook
 
-from ghga_transpiler.core import get_workbook_config
+from ghga_transpiler.transpile import get_workbook_config
 
 from .fixtures.test_data_objects.config_objects import (
     BOOKS_COLUMN_META,
@@ -29,8 +29,8 @@ from .fixtures.test_data_objects.config_objects import (
 from .fixtures.utils import get_project_root
 
 
-def test_sheet_meta_configs() -> None:
-    """Testing if __sheet_meta contains the correct set of worksheet configurations"""
+def test_workbook_config() -> None:
+    """Testing if __sheet_meta and __column_meta contain the correct set of workbook configurations"""
     workbook_path = (
         get_project_root() / "tests" / "fixtures" / "workbooks" / "a_workbook.xlsx"
     )
@@ -44,6 +44,3 @@ def test_sheet_meta_configs() -> None:
     for worksheet_name, worksheet in workbook_config.worksheets.items():
         assert worksheet.settings == expected_sheet_meta[worksheet_name]
         assert worksheet.columns == expected_column_meta[worksheet_name]
-
-
-# buraya bi tane unhappy test case olur da sheetname unique degilse bakalim config hata verecek mi

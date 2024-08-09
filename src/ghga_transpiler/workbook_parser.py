@@ -13,14 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"Module containing logic to parse a GHGA workbook"
 
-from pathlib import Path
-
+from openpyxl import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from .config import WorkbookConfig, WorksheetSettings
-from .io import read_workbook
 from .models import GHGAWorkbook, GHGAWorksheet
 
 
@@ -92,8 +91,7 @@ class GHGAWorksheetParser(WorksheetParser):
     def parse(self, worksheet: Worksheet):
         """Render a worksheet into GHGAWorksheet model"""
         return GHGAWorksheet.model_validate(
-            {"worksheet": {
-                self.config.settings.name: self._parse(worksheet)}}
+            {"worksheet": {self.config.settings.name: self._parse(worksheet)}}
         )
 
     def _parse(self, worksheet: Worksheet) -> dict[str, dict]:
@@ -131,13 +129,14 @@ class GHGAWorksheetParser(WorksheetParser):
 class GHGAWorkbookParser(BaseModel):
     """Parser class for converting a workbook into a GHGAWorkbook."""
 
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     config: WorkbookConfig = Field(
         ...,
         description="Configuration for processing the workbook, including worksheet"
         + " settings and column transformations.",
     )
 
-    workbook: Path = Field(
+    workbook: Workbook = Field(
         ...,
         description="Path to the Excel workbook file (.xlsx) that will be parsed."
         + " This file contains the data to be transformed and processed.",
@@ -161,14 +160,13 @@ class GHGAWorkbookParser(BaseModel):
         This method iterates through the sheets of the provided workbook, excluding
         any meta sheets (i.e., '__transpiler_protocol', '__sheet_meta', '__column_meta').
         """
-        ghga_workbook = read_workbook(self.workbook)
         return GHGAWorkbook.model_validate(
             {
                 "workbook": tuple(
                     GHGAWorksheetParser(config=self.config.worksheets[name]).parse(
-                        ghga_workbook[name]
+                        self.workbook[name]
                     )
-                    for name in ghga_workbook.sheetnames
+                    for name in self.workbook.sheetnames
                     if name not in self.exclude
                 )
             }

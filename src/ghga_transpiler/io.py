@@ -16,36 +16,22 @@
 
 """IO related functionality"""
 
-import json
 import sys
 from pathlib import Path
-from typing import TextIO
 
 from openpyxl import Workbook, load_workbook
 from schemapack import dumps_datapack
 from schemapack.spec.datapack import DataPack
 
-from .core import WorkbookConfig
-from .utils import read_meta_information, worksheet_meta_information
+from .exceptions import WorkbookNotFound
 
 
 def read_workbook(path: Path) -> Workbook:
     """Function to read-in a workbook"""
-    return load_workbook(path)
-
-
-def read_workbook_config(workbook: Workbook) -> WorkbookConfig:
-    """Gets workbook configurations from the worksheet __sheet_meta"""
-    worksheet_meta = worksheet_meta_information(
-        read_meta_information(workbook, "__column_meta"),
-        read_meta_information(workbook, "__sheet_meta"),
-    )
-    return WorkbookConfig.model_validate({"worksheets": worksheet_meta})
-
-
-# def _write_json(data: str, file: TextIO):
-#     """Writes data to the specified file"""
-#     json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
+    try:
+        return load_workbook(path)
+    except FileNotFoundError as err:
+        raise WorkbookNotFound(f"Spreadsheet file not found on {path}") from err
 
 
 def write_datapack(
