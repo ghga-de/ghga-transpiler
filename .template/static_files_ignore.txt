@@ -3,6 +3,7 @@
 
 scripts/update_openapi_docs.py
 scripts/update_readme.py
+scripts/script_utils/deps.py
 scripts/update_pyproject.py
 
 .github/workflows/check_config_docs.yaml
