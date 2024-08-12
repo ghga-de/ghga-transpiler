@@ -100,7 +100,7 @@ class GHGAWorksheetParser(WorksheetParser):
         """
         worksheet_data = self._transformed_content(worksheet)
         return {
-            row[self.config.settings.primary_key]: {  # type: ignore
+            row[self.config.settings.primary_key]: {
                 "content": self._relation_free_content(row),
                 "relations": self._relations(row),
             }
