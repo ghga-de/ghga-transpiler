@@ -1,51 +1,76 @@
 annotated-types==0.7.0 \
     --hash=sha256:1f02e8b43a8fbbc3f3e0d4f0f4bfc8131bcb4eebe8849b8e5c773f3a1c582a53 \
     --hash=sha256:aff07c09a53a08bc8cfccb9c85b05f1aa9a2a6f23728d790723543408344ce89
-    # via pydantic
+    # via
+    #   -c lock/requirements-dev.txt
+    #   pydantic
 arcticfreeze==0.1.1 \
     --hash=sha256:977a1d7c74498d00201d65519fa59f2b59e5a2b303668f7ecaec58a270ce5eda \
     --hash=sha256:c9811b3c787bfdb0e2ea721b0a99bb0e700c91945fb1c9ce0822cb859b409916
-    # via schemapack
+    # via
+    #   -c lock/requirements-dev.txt
+    #   schemapack
 attrs==24.1.0 \
     --hash=sha256:377b47448cb61fea38533f671fba0d0f8a96fd58facd4dc518e3dac9dbea0905 \
     --hash=sha256:adbdec84af72d38be7628e353a09b6a6790d15cd71819f6e9d7b0faa8a125745
     # via
+    #   -c lock/requirements-dev.txt
     #   jsonschema
     #   referencing
 defusedxml==0.7.1 \
     --hash=sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69 \
     --hash=sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61
+    # via
+    #   -c lock/requirements-dev.txt
+    #   ghga-transpiler (pyproject.toml)
 et-xmlfile==1.1.0 \
     --hash=sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c \
     --hash=sha256:a2ba85d1d6a74ef63837eed693bcb89c3f752169b0e3e7ae5b16ca5e1b3deada
-    # via openpyxl
+    # via
+    #   -c lock/requirements-dev.txt
+    #   openpyxl
 immutabledict==4.2.0 \
     --hash=sha256:d728b2c2410d698d95e6200237feb50a695584d20289ad3379a439aa3d90baba \
     --hash=sha256:e003fd81aad2377a5a758bf7e1086cf3b70b63e9a5cc2f46bce8d0a2b4727c5f
-    # via arcticfreeze
+    # via
+    #   -c lock/requirements-dev.txt
+    #   arcticfreeze
 jsonschema==4.23.0 \
     --hash=sha256:d71497fef26351a33265337fa77ffeb82423f3ea21283cd9467bb03999266bc4 \
     --hash=sha256:fbadb6f8b144a8f8cf9f0b89ba94501d143e50411a1278633f56a7acf7fd5566
-    # via schemapack
+    # via
+    #   -c lock/requirements-dev.txt
+    #   schemapack
 jsonschema-specifications==2023.12.1 \
     --hash=sha256:48a76787b3e70f5ed53f1160d2b81f586e4ca6d1548c5de7085d1682674764cc \
     --hash=sha256:87e4fdf3a94858b8a2ba2778d9ba57d8a9cafca7c7489c46ba0d30a8bc6a9c3c
-    # via jsonschema
+    # via
+    #   -c lock/requirements-dev.txt
+    #   jsonschema
 markdown-it-py==3.0.0 \
     --hash=sha256:355216845c60bd96232cd8d8c40e8f9765cc86f46880e43a8fd22dc1a1a8cab1 \
     --hash=sha256:e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb
-    # via rich
+    # via
+    #   -c lock/requirements-dev.txt
+    #   rich
 mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
     --hash=sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba
-    # via markdown-it-py
+    # via
+    #   -c lock/requirements-dev.txt
+    #   markdown-it-py
 openpyxl==3.1.5 \
     --hash=sha256:5282c12b107bffeef825f4617dc029afaf41d0ea60823bbb665ef3079dc79de2 \
     --hash=sha256:cf0e3cf56142039133628b5acffe8ef0c12bc902d2aadd3e0fe5878dc08d1050
+    # via
+    #   -c lock/requirements-dev.txt
+    #   ghga-transpiler (pyproject.toml)
 pydantic==2.8.2 \
     --hash=sha256:6f62c13d067b0755ad1c21a34bdd06c0c12625a22b0fc09c6b149816604f7c2a \
     --hash=sha256:73ee9fddd406dc318b885c7a2eab8a6472b68b8fb5ba8150949fc3db939f23c8
     # via
+    #   -c lock/requirements-dev.txt
+    #   ghga-transpiler (pyproject.toml)
     #   pydantic-settings
     #   schemapack
 pydantic-core==2.20.1 \
@@ -138,19 +163,27 @@ pydantic-core==2.20.1 \
     --hash=sha256:f9aa05d09ecf4c75157197f27cdc9cfaeb7c5f15021c6373932bf3e124af029f \
     --hash=sha256:fa2fddcb7107e0d1808086ca306dcade7df60a13a6c347a7acf1ec139aa6789a \
     --hash=sha256:faa6b09ee09433b87992fb5a2859efd1c264ddc37280d2dd5db502126d0e7f27
-    # via pydantic
+    # via
+    #   -c lock/requirements-dev.txt
+    #   pydantic
 pydantic-settings==2.4.0 \
     --hash=sha256:bb6849dc067f1687574c12a639e231f3a6feeed0a12d710c1382045c5db1c315 \
     --hash=sha256:ed81c3a0f46392b4d7c0a565c05884e6e54b3456e6f0fe4d8814981172dc9a88
-    # via schemapack
+    # via
+    #   -c lock/requirements-dev.txt
+    #   schemapack
 pygments==2.18.0 \
     --hash=sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199 \
     --hash=sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a
-    # via rich
+    # via
+    #   -c lock/requirements-dev.txt
+    #   rich
 python-dotenv==1.0.1 \
     --hash=sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca \
     --hash=sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a
-    # via pydantic-settings
+    # via
+    #   -c lock/requirements-dev.txt
+    #   pydantic-settings
 pyyaml==6.0.1 \
     --hash=sha256:04ac92ad1925b2cff1db0cfebffb6ffc43457495c9b3c39d3fcae417d7125dc5 \
     --hash=sha256:062582fca9fabdd2c8b54a3ef1c978d786e0f6b3a1510e0ac93ef59e0ddae2bc \
@@ -203,16 +236,22 @@ pyyaml==6.0.1 \
     --hash=sha256:fca0e3a251908a499833aa292323f32437106001d436eca0e6e7833256674585 \
     --hash=sha256:fd1592b3fdf65fff2ad0004b5e363300ef59ced41c2e6b3a99d4089fa8c5435d \
     --hash=sha256:fd66fc5d0da6d9815ba2cebeb4205f95818ff4b79c3ebe268e75d961704af52f
+    # via
+    #   -c lock/requirements-dev.txt
+    #   ghga-transpiler (pyproject.toml)
 referencing==0.35.1 \
     --hash=sha256:25b42124a6c8b632a425174f24087783efb348a6f1e0008e63cd4466fedf703c \
     --hash=sha256:eda6d3234d62814d1c64e305c1331c9a3a6132da475ab6382eaa997b21ee75de
     # via
+    #   -c lock/requirements-dev.txt
     #   jsonschema
     #   jsonschema-specifications
 rich==13.7.1 \
     --hash=sha256:4edbae314f59eb482f54e9e30bf00d33350aaa94f4bfcd4e9e3110e64d0d7222 \
     --hash=sha256:9be308cb1fe2f1f57d67ce99e95af38a1e2bc71ad9813b0e247cf7ffbcc3a432
-    # via schemapack
+    # via
+    #   -c lock/requirements-dev.txt
+    #   schemapack
 rpds-py==0.19.1 \
     --hash=sha256:01227f8b3e6c8961490d869aa65c99653df80d2f0a7fde8c64ebddab2b9b02fd \
     --hash=sha256:08ce9c95a0b093b7aec75676b356a27879901488abc27e9d029273d280438505 \
@@ -318,12 +357,15 @@ rpds-py==0.19.1 \
     --hash=sha256:f9bc4161bd3b970cd6a6fcda70583ad4afd10f2750609fb1f3ca9505050d4ef3 \
     --hash=sha256:fdf4890cda3b59170009d012fca3294c00140e7f2abe1910e6a730809d0f3f9b
     # via
+    #   -c lock/requirements-dev.txt
     #   jsonschema
     #   referencing
 ruamel-yaml==0.18.6 \
     --hash=sha256:57b53ba33def16c4f3d807c0ccbc00f8a6081827e81ba2491691b76882d0c636 \
     --hash=sha256:8b27e6a217e786c6fbe5634d8f3f11bc63e0f80f6a5890f28863d9c45aac311b
-    # via schemapack
+    # via
+    #   -c lock/requirements-dev.txt
+    #   schemapack
 ruamel-yaml-clib==0.2.8 \
     --hash=sha256:024cfe1fc7c7f4e1aff4a81e718109e13409767e4f871443cbff3dba3578203d \
     --hash=sha256:03d1162b6d1df1caa3a4bd27aa51ce17c9afc2046c31b0ad60a0a96ec22f8001 \
@@ -375,16 +417,25 @@ ruamel-yaml-clib==0.2.8 \
     --hash=sha256:edaef1c1200c4b4cb914583150dcaa3bc30e592e907c01117c08b13a07255ec2 \
     --hash=sha256:f481f16baec5290e45aebdc2a5168ebc6d35189ae6fea7a58787613a25f6e875 \
     --hash=sha256:fff3573c2db359f091e1589c3d7c5fc2f86f5bdb6f24252c2d8e539d4e45f412
-    # via ruamel-yaml
+    # via
+    #   -c lock/requirements-dev.txt
+    #   ruamel-yaml
 schemapack==2.0.0a4 \
     --hash=sha256:5e5a703f16cdb01067ac51a34362658db83e2adc48e61f4517c7d755154fbf68 \
     --hash=sha256:a550df6bf0a4c5dc8293479a190600197a4a62b3fe3850c33b0ebe06ff11d729
+    # via
+    #   -c lock/requirements-dev.txt
+    #   ghga-transpiler (pyproject.toml)
 semver==3.0.2 \
     --hash=sha256:6253adb39c70f6e51afed2fa7152bcd414c411286088fb4b9effb133885ab4cc \
     --hash=sha256:b1ea4686fe70b981f85359eda33199d60c53964284e0cfb4977d243e37cf4bf4
+    # via
+    #   -c lock/requirements-dev.txt
+    #   ghga-transpiler (pyproject.toml)
 typing-extensions==4.12.2 \
     --hash=sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d \
     --hash=sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8
     # via
+    #   -c lock/requirements-dev.txt
     #   pydantic
     #   pydantic-core
