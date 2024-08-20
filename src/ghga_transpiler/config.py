@@ -90,7 +90,7 @@ class WorksheetSettings(BaseModel):
         """Returns relations of a worksheet where column name is considered as the
         relation name
         """
-        return [column.column_name for column in self.columns if column.relation()]
+        return [column.column_name for column in self.columns if column.is_relation()]
 
 
 class WorkbookConfig(BaseModel):
