@@ -52,11 +52,9 @@ class ColumnMeta(BaseModel):
             return to_attributes() if self.type == "object" else to_list()
         return lambda value: value
 
-    def relation(self) -> bool:
-        """If a column is a relation column"""
-        if self.ref_class:  # noqa: SIM103
-            return True
-        return False
+    def is_relation(self) -> bool:
+        """Return whether this is a relation column"""
+        return bool(self.ref_class)
 
 
 class SheetMeta(BaseModel):
