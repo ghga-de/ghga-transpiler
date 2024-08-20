@@ -23,7 +23,7 @@ from .exceptions import MetaColumnNotFound
 
 
 class MetaInfo(BaseModel):
-    """Class with constants that is requires to parse the configuration worksheets
+    """Class with constants that are required to parse the configuration worksheets
     of a workbook.
     """
 
