@@ -100,7 +100,7 @@ class WorkbookConfig(BaseModel):
 
     @model_validator(mode="after")
     def check_name(cls, values):  # noqa
-        """Function to ensure that each worksheets has a unique sheet_name and name attributes."""
+        """Ensure that each worksheet has a unique sheet_name and name attributes."""
         # Check for duplicate attribute names
         attrs_counter = Counter(ws for ws in values.worksheets)
         dup_attrs = [name for name, count in attrs_counter.items() if count > 1]
