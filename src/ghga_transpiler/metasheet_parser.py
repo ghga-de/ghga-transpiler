@@ -74,7 +74,7 @@ def reshape_columns_meta(column_meta: list, name_column: str) -> dict[str, list]
             raise MetaColumnNotFound(
                 f"{name_column} column not found in column meta sheet"
             ) from err
-        worksheet_columns.setdefault(sheet_name, []).append(item)
+        worksheet_columns[sheet_name].append(item)
     return worksheet_columns
 
 
