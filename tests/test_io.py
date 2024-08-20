@@ -87,7 +87,7 @@ def test_write_datapack_json_no_force(tmp_path: Path):
 
 
 def test_write_datapack_json_stdout(capfd: pytest.CaptureFixture[str]):
-    """Test write_datapack overwrite of output"""
+    """Test write_datapack overwrite of output with JSON"""
     io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK, path=None, yaml_format=False, force=True
     )
