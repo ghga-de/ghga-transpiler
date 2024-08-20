@@ -42,8 +42,8 @@ class WorksheetParser(BaseModel):
         ]
 
     def _rows(self, worksheet: Worksheet) -> list:
-        """Create a list of rows of a worksheet."""
-        return list(
+        """Create a list of non-empty rows of a worksheet."""
+        return [
             row
             for row in worksheet.iter_rows(
                 self.config.settings.start_row,
@@ -53,7 +53,7 @@ class WorksheetParser(BaseModel):
                 values_only=True,
             )
             if not all(cell is None for cell in row)
-        )
+        ]
 
     def _content(self, worksheet: Worksheet) -> list[dict]:
         """Compute and return the content of the worksheet, rows as worksheet row values and
