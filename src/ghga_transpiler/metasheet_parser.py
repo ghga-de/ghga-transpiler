@@ -44,7 +44,7 @@ class MetaInfo(BaseModel):
     name_column: str = Field(
         default="sheet",
         description="The name of the column in"
-        + " COLUMN_META and SHEET_META worksheets that holds the"
+        + " column_meta and sheet_meta worksheets that holds the"
         + " names of the worksheets in the workbook that the settings"
         + " are applied to.",
     )

@@ -118,12 +118,9 @@ class GHGAWorksheetParser(WorksheetParser):
         """Clean up the content data from the relation, i.e., remove the key value pairs
         belonging to a relation from the row content.
         """
-        return {
-            key: value
-            for key, value in row.items()
-            if key != self.config.settings.primary_key
-            and key not in self._relations(row)
-        }
+        relations = self._relations(row)
+        relations[self.config.settings.primary_key] = None
+        return {key: value for key, value in row.items() if key not in relations}
 
 
 class GHGAWorkbookParser(BaseModel):
