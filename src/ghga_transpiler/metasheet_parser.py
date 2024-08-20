@@ -66,7 +66,7 @@ def reshape_columns_meta(column_meta: list, name_column: str) -> dict[str, list]
     names and values are lists of column metadata dictionaries. Worksheet names comes
     from the column 'name_column'.
     """
-    worksheet_columns: dict = {}
+    worksheet_columns: dict[str, list[dict]] = defaultdict(list)
     for item in column_meta:
         try:
             sheet_name = item.get(name_column)
