@@ -15,6 +15,8 @@
 
 """Helper functions to parse the configuration sheets in a workbook"""
 
+from collections import defaultdict
+
 from openpyxl import Workbook
 from pydantic import BaseModel, Field
 
@@ -52,7 +54,9 @@ def read_meta_information(workbook: Workbook, meta_sheet_name: str):
     """Reads the content of a worksheet"""
     if meta_sheet_name in workbook.sheetnames:
         sheet_meta_header = [cell.value for cell in workbook[meta_sheet_name][1]]
-        sheet_meta_values = workbook[meta_sheet_name].iter_rows(min_row=2, values_only=True)
+        sheet_meta_values = workbook[meta_sheet_name].iter_rows(
+            min_row=2, values_only=True
+        )
         return [
             dict(zip(sheet_meta_header, val, strict=True)) for val in sheet_meta_values
         ]
@@ -104,8 +108,7 @@ def worksheet_meta_information(
     reshaped_settings = reshape_settings_meta(settings, meta_info.name_column)
     reshaped_columns = reshape_columns_meta(columns, meta_info.name_column)
     return {
-        key: {"settings": reshaped_settings[key],
-              "columns": reshaped_columns[key]}
+        key: {"settings": reshaped_settings[key], "columns": reshaped_columns[key]}
         for key in reshaped_settings
     }
 
