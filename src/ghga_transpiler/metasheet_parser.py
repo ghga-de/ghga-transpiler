@@ -103,12 +103,12 @@ def worksheet_meta_information(
     """Creates a dictionary containing both settings and columns metadata for each worksheet"""
     settings = read_meta_information(workbook, meta_info.sheet_meta)
     columns = read_meta_information(workbook, meta_info.column_meta)
+    reshaped_settings = reshape_settings_meta(settings, meta_info.name_column)
+    reshaped_columns = reshape_columns_meta(columns, meta_info.name_column)
     return {
-        key: {
-            "settings": reshape_settings_meta(settings, meta_info.name_column)[key],
-            "columns": reshape_columns_meta(columns, meta_info.name_column)[key],
-        }
-        for key in reshape_settings_meta(settings, meta_info.name_column)
+        key: {"settings": reshaped_settings[key],
+              "columns": reshaped_columns[key]}
+        for key in reshaped_settings
     }
 
 
