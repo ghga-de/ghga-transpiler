@@ -46,16 +46,11 @@ class ColumnMeta(BaseModel):
 
     def transformation(self) -> Callable | None:
         """Assigns transformation function based on column properties"""
-        if self.multivalued and self.enum:
-            return to_snake_case_list()
-        elif self.enum:
-            return to_snake_case()
-        elif self.multivalued and self.type == "object":
-            return to_attributes()
-        elif self.multivalued:
-            return to_list()
-        else:
-            return lambda value: value
+        if self.enum:
+            return to_snake_case_list() if self.multivalued else to_snake_case()
+        if self.multivalued:
+            return to_attributes() if self.type == "object" else to_list()
+        return lambda value: value
 
     def relation(self) -> bool:
         """If a column is a relation column"""
