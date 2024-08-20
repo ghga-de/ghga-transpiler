@@ -30,7 +30,7 @@ class WorksheetParser(BaseModel):
 
     def _header(self, worksheet: Worksheet):
         """Return a list of column names of a worksheet."""
-        return list(
+        return [
             cell.value
             for row in worksheet.iter_rows(
                 self.config.settings.header_row,
@@ -39,7 +39,7 @@ class WorksheetParser(BaseModel):
                 self.config.settings.end_column,
             )
             for cell in row
-        )
+        ]
 
     def _rows(self, worksheet: Worksheet) -> list:
         """Create a list of rows of a worksheet."""
