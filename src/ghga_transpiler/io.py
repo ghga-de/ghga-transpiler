@@ -40,8 +40,9 @@ def read_workbook(path: Path) -> Workbook:
 def write_datapack(
     data: DataPack, path: Path | None, yaml_format: bool, force: bool
 ) -> None:
-    """Write data as JSON or YAML to the specified output path or
-    to stdout if the path is None.
+    """Writes data as JSON to the specified output path or
+    to stdout if the path is None, or overwrites an existing output file if
+    'force' is True.
     """
     datapack = dumps_datapack(data, yaml_format=yaml_format)
     if path is None:
