@@ -15,7 +15,7 @@
 #
 #
 
-"""Data that are used in unit tests"""
+"""Data that is expected as output in unit tests"""
 
 from arcticfreeze import FrozenDict
 from schemapack.spec.datapack import DataPack, Resource
