@@ -52,9 +52,7 @@ def read_meta_information(workbook: Workbook, meta_sheet_name: str):
     """Reads the content of a worksheet"""
     if meta_sheet_name in workbook.sheetnames:
         sheet_meta_header = [cell.value for cell in workbook[meta_sheet_name][1]]
-        sheet_meta_values = list(
-            workbook[meta_sheet_name].iter_rows(min_row=2, values_only=True)
-        )
+        sheet_meta_values = workbook[meta_sheet_name].iter_rows(min_row=2, values_only=True)
         return [
             dict(zip(sheet_meta_header, val, strict=True)) for val in sheet_meta_values
         ]
