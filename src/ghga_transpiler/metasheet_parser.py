@@ -37,7 +37,7 @@ class MetaInfo(BaseModel):
         default="__sheet_meta",
         description="Name of a sheet that"
         + " consists of general settings of individual worksheets"
-        + "(e.g. header_row, start_column) in a workbook.",
+        + " (e.g. header_row, start_column) in a workbook.",
     )
     name_column: str = Field(
         default="sheet",
