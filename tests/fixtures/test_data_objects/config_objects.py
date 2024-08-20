@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Configurations that are used in unit tests"""
+"""Configurations that are expected as output in unit tests"""
 
 from ghga_transpiler.config import ColumnMeta, SheetMeta
 
