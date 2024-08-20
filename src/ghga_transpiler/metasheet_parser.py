@@ -21,7 +21,7 @@ from openpyxl import Workbook
 from pydantic import BaseModel, Field
 
 from .config import WorkbookConfig
-from .exceptions import MetaColumnNotFound
+from .exceptions import MetaColumnNotFound, MetaColumnNotUnique
 
 
 class MetaInfo(BaseModel):
@@ -96,7 +96,10 @@ def reshape_settings_meta(settings_meta: list, name_column: str) -> dict[str, di
                 f"{name_column} column not found in settings meta sheet"
             ) from err
         if sheet_name in worksheet_settings:
-            raise MetaColumnNotUnique(f"Duplicate sheet name {sheet_name} in settings meta column {name_column}")
+            raise MetaColumnNotUnique(
+                f"Duplicate sheet name {
+                    sheet_name} in settings meta column {name_column}"
+            )
         worksheet_settings[sheet_name] = item
     return worksheet_settings
 

@@ -34,3 +34,9 @@ class MetaColumnNotFound(KeyError):
     """Raised when the 'sheet' column holding the sheet names on the meta_sheets
     (__column_meta, __sheet_meta) does not exist.
     """
+
+
+class MetaColumnNotUnique(ValueError):
+    """Raised when the 'sheet' column holding the sheet names on the meta_sheets
+    (__column_meta, __sheet_meta) is not unique.
+    """
