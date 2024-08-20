@@ -65,8 +65,8 @@ def test_write_datapack_json_force(tmp_path: Path):
 
 
 def test_write_datapack_yaml_force(tmp_path):
-    """Test write_json overwrite of output"""
-    out_path = tmp_path.joinpath("out.json")
+    """Test write_yaml overwrite of output"""
+    out_path = tmp_path.joinpath("out.yaml")
     out_path.touch()
     io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK, path=out_path, yaml_format=True, force=True
