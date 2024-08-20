@@ -91,7 +91,7 @@ def reshape_settings_meta(settings_meta: list, name_column: str) -> dict[str, di
             sheet_name = item.get(name_column)
         except KeyError as err:
             raise MetaColumnNotFound(
-                f"{name_column} column with sheet is not found"
+                f"{name_column} column not found in settings meta sheet"
             ) from err
         worksheet_settings.setdefault(sheet_name, item)
     return worksheet_settings
