@@ -44,7 +44,7 @@ class MetaInfo(BaseModel):
         description="The name of the column in"
         + " COLUMN_META and SHEET_META worksheets that holds the"
         + " names of the worksheets in the workbook that the settings"
-        + " are apply to.",
+        + " are applied to.",
     )
 
 
