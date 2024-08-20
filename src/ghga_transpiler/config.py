@@ -83,7 +83,7 @@ class WorksheetSettings(BaseModel):
         return {
             column.column_name: column.transformation()
             for column in self.columns
-            if column.transformation() != None
+            if column.transformation() is not None
         }
 
     def get_relations(self) -> list:
