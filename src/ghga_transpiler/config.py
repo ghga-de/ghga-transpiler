@@ -101,19 +101,24 @@ class WorkbookConfig(BaseModel):
     @model_validator(mode="after")
     def check_name(cls, values):  # noqa
         """Ensure that each worksheet has a unique sheet_name and name attributes."""
+        # Check for duplicate worksheet names
+        ws_counter = Counter(values.worksheets.keys())
+        dup_ws_names = [name for name, count in ws_counter.items() if count > 1]
+        if dup_ws_names:
+            raise DuplicatedName(
+                "Duplicate worksheet names: " + ", ".join(dup_ws_names)
+            )
+
         # Check for duplicate attribute names
-        attrs_counter = Counter(ws for ws in values.worksheets)
+        attrs_counter = Counter(
+            f"{column.sheet_name}.{column.column_name}"
+            for ws in values.worksheets.values()
+            for column in ws.columns
+        )
         dup_attrs = [name for name, count in attrs_counter.items() if count > 1]
         if dup_attrs:
             raise DuplicatedName(
                 "Duplicate target attribute names: " + ", ".join(dup_attrs)
             )
 
-        # Check for duplicate worksheet names
-        attrs_counter = Counter(ws for ws in values.worksheets)
-        dup_ws_names = [name for name, count in attrs_counter.items() if count > 1]
-        if dup_ws_names:
-            raise DuplicatedName(
-                "Duplicate worksheet names: " + ", ".join(dup_ws_names)
-            )
         return values
