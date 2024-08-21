@@ -32,7 +32,7 @@ from .fixtures.test_data_objects.conversion_data import (
 
 
 def test_write_datapack_json(tmp_path: Path):
-    """Test write_datapack in json format"""
+    """Test write_datapack in JSON format"""
     out_path = tmp_path.joinpath("out.json")
     io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK, path=out_path, yaml_format=False, force=False
