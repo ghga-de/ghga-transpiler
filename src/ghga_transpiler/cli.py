@@ -25,7 +25,7 @@ from typing import Annotated
 
 import typer
 
-from . import __version__, io
+from . import __version__, transpiler_io
 from .transpile import transpile
 
 cli = typer.Typer()
@@ -100,7 +100,7 @@ def main(
         sys.exit(f"Unable to parse input file '{spread_sheet}': {exc}")
     yaml_format = format == "yaml"
     try:
-        io.write_datapack(
+        transpiler_io.write_datapack(
             data=ghga_datapack, path=output_file, yaml_format=yaml_format, force=force
         )
     except FileExistsError as exc:

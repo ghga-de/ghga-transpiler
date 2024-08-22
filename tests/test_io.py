@@ -23,7 +23,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from ghga_transpiler import io
+from ghga_transpiler import transpiler_io
 
 from .fixtures.test_data_objects.conversion_data import (
     EXPECTED_CONVERSION_DATAPACK,
@@ -34,7 +34,7 @@ from .fixtures.test_data_objects.conversion_data import (
 def test_write_datapack_json(tmp_path: Path):
     """Test write_datapack in JSON format"""
     out_path = tmp_path.joinpath("out.json")
-    io.write_datapack(
+    transpiler_io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK, path=out_path, yaml_format=False, force=False
     )
 
@@ -44,9 +44,9 @@ def test_write_datapack_json(tmp_path: Path):
 
 
 def test_write_datapack_yaml(tmp_path: Path):
-    """Test write_datapack in json format"""
-    out_path = tmp_path.joinpath("out.json")
-    io.write_datapack(
+    """Test write_datapack in YAML format"""
+    out_path = tmp_path.joinpath("out.yaml")
+    transpiler_io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK, path=out_path, yaml_format=True, force=False
     )
 
@@ -59,7 +59,7 @@ def test_write_datapack_json_force(tmp_path: Path):
     """Test write_json overwrite of output"""
     out_path = tmp_path.joinpath("out.json")
     out_path.touch()
-    io.write_datapack(
+    transpiler_io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK, path=out_path, yaml_format=False, force=True
     )
 
@@ -68,7 +68,7 @@ def test_write_datapack_yaml_force(tmp_path):
     """Test write_yaml overwrite of output"""
     out_path = tmp_path.joinpath("out.yaml")
     out_path.touch()
-    io.write_datapack(
+    transpiler_io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK, path=out_path, yaml_format=True, force=True
     )
 
@@ -82,7 +82,7 @@ def test_write_datapack_no_force(tmp_path: Path, yaml_format: bool):
     out_path = tmp_path.joinpath(f"out.{ext}")
     out_path.touch()
     with pytest.raises(FileExistsError):
-        io.write_datapack(
+        transpiler_io.write_datapack(
             data=EXPECTED_CONVERSION_DATAPACK,
             path=out_path,
             yaml_format=yaml_format,
@@ -95,7 +95,7 @@ def test_write_datapack_no_force(tmp_path: Path, yaml_format: bool):
 )
 def test_write_datapack_stdout(capfd: pytest.CaptureFixture[str], yaml_format: bool):
     """Test write_datapack overwrite of output"""
-    io.write_datapack(
+    transpiler_io.write_datapack(
         data=EXPECTED_CONVERSION_DATAPACK,
         path=None,
         yaml_format=yaml_format,

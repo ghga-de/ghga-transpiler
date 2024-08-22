@@ -23,9 +23,9 @@ from openpyxl import Workbook
 from schemapack.spec.datapack import DataPack
 
 from .config import WorkbookConfig
-from .io import read_workbook
 from .metasheet_parser import get_workbook_config
 from .models import GHGAWorkbook
+from .transpiler_io import read_workbook
 from .workbook_parser import GHGAWorkbookParser
 
 
