@@ -73,34 +73,34 @@ def test_write_datapack_yaml_force(tmp_path):
     )
 
 
-def test_write_datapack_json_no_force(tmp_path: Path):
+@pytest.mark.parametrize(
+    "yaml_format", [True, False], ids=["yaml_format", "json_format"]
+)
+def test_write_datapack_no_force(tmp_path: Path, yaml_format: bool):
     """Test write_datapack abort if output exists"""
-    out_path = tmp_path.joinpath("out.yaml")
+    ext = "yaml" if yaml_format else "json"
+    out_path = tmp_path.joinpath(f"out.{ext}")
     out_path.touch()
     with pytest.raises(FileExistsError):
         io.write_datapack(
             data=EXPECTED_CONVERSION_DATAPACK,
             path=out_path,
-            yaml_format=False,
+            yaml_format=yaml_format,
             force=False,
         )
 
 
-def test_write_datapack_json_stdout(capfd: pytest.CaptureFixture[str]):
-    """Test write_datapack overwrite of output with JSON"""
-    io.write_datapack(
-        data=EXPECTED_CONVERSION_DATAPACK, path=None, yaml_format=False, force=True
-    )
-    captured = capfd.readouterr()
-    data = json.loads(captured.out)
-    assert data == EXPECTED_CONVERSION_JSON
-
-
-def test_write_datapack_yaml_stdout(capfd: pytest.CaptureFixture[str]):
+@pytest.mark.parametrize(
+    "yaml_format", [True, False], ids=["yaml_format", "json_format"]
+)
+def test_write_datapack_stdout(capfd: pytest.CaptureFixture[str], yaml_format: bool):
     """Test write_datapack overwrite of output"""
     io.write_datapack(
-        data=EXPECTED_CONVERSION_DATAPACK, path=None, yaml_format=True, force=True
+        data=EXPECTED_CONVERSION_DATAPACK,
+        path=None,
+        yaml_format=yaml_format,
+        force=True,
     )
     captured = capfd.readouterr()
-    data = yaml.safe_load(captured.out)
+    data = yaml.safe_load(captured.out) if yaml_format else json.loads(captured.out)
     assert data == EXPECTED_CONVERSION_JSON
