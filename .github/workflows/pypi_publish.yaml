@@ -8,5 +8,5 @@ jobs:
     with:
       package_version: 3.0.0
       test_pypi: "false"
-      python_latest: false
+      python_latest: true
     secrets: inherit

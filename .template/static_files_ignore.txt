@@ -9,5 +9,3 @@ scripts/update_pyproject.py
 .github/workflows/check_config_docs.yaml
 .github/workflows/check_openapi_spec.yaml
 .github/workflows/check_readme.yaml
-
-.pyproject_generation/pyproject_template.toml
