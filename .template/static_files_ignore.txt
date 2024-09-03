@@ -3,14 +3,7 @@
 
 scripts/update_openapi_docs.py
 scripts/update_readme.py
-scripts/script_utils/deps.py
-scripts/update_pyproject.py
 
 .github/workflows/check_config_docs.yaml
 .github/workflows/check_openapi_spec.yaml
 .github/workflows/check_readme.yaml
-
-.pre-commit-config.yaml
-
-.pyproject_generation/pyproject_template.toml
-.devcontainer/devcontainer.json

@@ -25,9 +25,6 @@
 					"source.organizeImports": "explicit"
 				},
 				"editor.formatOnSave": true,
-				"[yaml]": {
-					"editor.formatOnSave": false
-				},
 				"editor.renderWhitespace": "all",
 				"editor.rulers": [
 					88
