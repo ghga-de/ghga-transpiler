@@ -18,8 +18,14 @@
           "name": "Process 1"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_1"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_1"
+          }
         }
       },
       "ANALYSIS_PROCESS_2": {
@@ -27,8 +33,14 @@
           "name": "Process 2"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_2"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_2"
+          }
         }
       },
       "ANALYSIS_PROCESS_3": {
@@ -36,8 +48,14 @@
           "name": "Process 3"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_3"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_3"
+          }
         }
       },
       "ANALYSIS_PROCESS_4": {
@@ -45,8 +63,14 @@
           "name": "Process 4"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_4"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_4"
+          }
         }
       },
       "ANALYSIS_PROCESS_5": {
@@ -54,8 +78,14 @@
           "name": "Process 5"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_5"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_5"
+          }
         }
       },
       "ANALYSIS_PROCESS_6": {
@@ -63,8 +93,14 @@
           "name": "Process 6"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_6"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_6"
+          }
         }
       },
       "ANALYSIS_PROCESS_7": {
@@ -72,8 +108,14 @@
           "name": "Process 7"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_7"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_7"
+          }
         }
       },
       "ANALYSIS_PROCESS_8": {
@@ -81,8 +123,14 @@
           "name": "Process 8"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_8"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_8"
+          }
         }
       },
       "ANALYSIS_PROCESS_9": {
@@ -90,8 +138,14 @@
           "name": "Process 9"
         },
         "relations": {
-          "analysis": "ANALYSIS_1",
-          "sequencing_process_input_files": "SEQ_FILE_9"
+          "analysis": {
+            "targetClass": "Analysis",
+            "targetResources": "ANALYSIS_1"
+          },
+          "sequencing_process_input_files": {
+            "targetClass": "SequencingProcessFile",
+            "targetResources": "SEQ_FILE_9"
+          }
         }
       }
     },
@@ -106,7 +160,10 @@
           "size": 15
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_1"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_1"
+          }
         }
       },
       "OUTPUT_2": {
@@ -119,7 +176,10 @@
           "size": 70
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_2"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_2"
+          }
         }
       },
       "OUTPUT_3": {
@@ -132,7 +192,10 @@
           "size": 501
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_3"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_3"
+          }
         }
       },
       "OUTPUT_4": {
@@ -145,7 +208,10 @@
           "size": 512
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_4"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_4"
+          }
         }
       },
       "OUTPUT_5": {
@@ -158,7 +224,10 @@
           "size": 970
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_5"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_5"
+          }
         }
       },
       "OUTPUT_6": {
@@ -171,7 +240,10 @@
           "size": 2048
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_6"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_6"
+          }
         }
       },
       "OUTPUT_7": {
@@ -184,7 +256,10 @@
           "size": 61441
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_7"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_7"
+          }
         }
       },
       "OUTPUT_8": {
@@ -197,7 +272,10 @@
           "size": 92161
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_8"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_8"
+          }
         }
       },
       "OUTPUT_9": {
@@ -210,7 +288,10 @@
           "size": 43009
         },
         "relations": {
-          "analysis_process": "ANALYSIS_PROCESS_9"
+          "analysis_process": {
+            "targetClass": "AnalysisProcess",
+            "targetResources": "ANALYSIS_PROCESS_9"
+          }
         }
       }
     },
@@ -226,7 +307,10 @@
           "type": "Blood"
         },
         "relations": {
-          "individual": "INDV_1"
+          "individual": {
+            "targetClass": "Individual",
+            "targetResources": "INDV_1"
+          }
         }
       },
       "BIOSPECIMEN_2": {
@@ -240,7 +324,10 @@
           "type": "Subcutaneous fat"
         },
         "relations": {
-          "individual": "INDV_1"
+          "individual": {
+            "targetClass": "Individual",
+            "targetResources": "INDV_1"
+          }
         }
       }
     },
@@ -254,7 +341,10 @@
           "name": "Condition A"
         },
         "relations": {
-          "study": "STUDY_A"
+          "study": {
+            "targetClass": "Study",
+            "targetResources": "STUDY_A"
+          }
         }
       },
       "COND_2": {
@@ -266,7 +356,10 @@
           "name": "Condition B"
         },
         "relations": {
-          "study": "STUDY_B"
+          "study": {
+            "targetClass": "Study",
+            "targetResources": "STUDY_B"
+          }
         }
       }
     },
@@ -291,7 +384,10 @@
           "policy_url": "http://some/policy"
         },
         "relations": {
-          "data_access_committee": "DAC_1"
+          "data_access_committee": {
+            "targetClass": "DataAccessCommittee",
+            "targetResources": "DAC_1"
+          }
         }
       },
       "DAP_2": {
@@ -306,7 +402,10 @@
           "policy_url": "http://some/other/policy"
         },
         "relations": {
-          "data_access_committee": "DAC_1"
+          "data_access_committee": {
+            "targetClass": "DataAccessCommittee",
+            "targetResources": "DAC_1"
+          }
         }
       }
     },
@@ -321,7 +420,10 @@
           ]
         },
         "relations": {
-          "data_access_policy": "DAP_1"
+          "data_access_policy": {
+            "targetClass": "DataAccessPolicy",
+            "targetResources": "DAP_1"
+          }
         }
       },
       "DS_B": {
@@ -333,7 +435,10 @@
           ]
         },
         "relations": {
-          "data_access_policy": "DAP_2"
+          "data_access_policy": {
+            "targetClass": "DataAccessPolicy",
+            "targetResources": "DAP_2"
+          }
         }
       }
     },
@@ -408,7 +513,10 @@
           "year": 1965
         },
         "relations": {
-          "study": "STUDY_A"
+          "study": {
+            "targetClass": "Study",
+            "targetResources": "STUDY_A"
+          }
         }
       },
       "PUB_2": {
@@ -421,7 +529,10 @@
           "year": 1967
         },
         "relations": {
-          "study": "STUDY_B"
+          "study": {
+            "targetClass": "Study",
+            "targetResources": "STUDY_B"
+          }
         }
       }
     },
@@ -435,8 +546,14 @@
           "type": "CF_DNA"
         },
         "relations": {
-          "biospecimen": "BIOSPECIMEN_1",
-          "condition": "COND_1"
+          "biospecimen": {
+            "targetClass": "Biospecimen",
+            "targetResources": "BIOSPECIMEN_1"
+          },
+          "condition": {
+            "targetClass": "Condition",
+            "targetResources": "COND_1"
+          }
         }
       },
       "SAMPLE_2": {
@@ -448,8 +565,14 @@
           "type": "CF_DNA"
         },
         "relations": {
-          "biospecimen": "BIOSPECIMEN_2",
-          "condition": "COND_2"
+          "biospecimen": {
+            "targetClass": "Biospecimen",
+            "targetResources": "BIOSPECIMEN_2"
+          },
+          "condition": {
+            "targetClass": "Condition",
+            "targetResources": "COND_2"
+          }
         }
       }
     },
@@ -462,8 +585,14 @@
           "type": "Experiement type A"
         },
         "relations": {
-          "library_preparation_protocol": "LIB_PREP_1",
-          "sequencing_protocol": "SEQ_PRO_1"
+          "library_preparation_protocol": {
+            "targetClass": "LibraryPreparationProtocol",
+            "targetResources": "LIB_PREP_1"
+          },
+          "sequencing_protocol": {
+            "targetClass": "SequencingProtocol",
+            "targetResources": "SEQ_PRO_1"
+          }
         }
       }
     },
@@ -478,8 +607,14 @@
           "sequencing_run_id": "RUN_123"
         },
         "relations": {
-          "sample": "SAMPLE_1",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_1"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_2": {
@@ -492,8 +627,14 @@
           "sequencing_run_id": "RUN_124"
         },
         "relations": {
-          "sample": "SAMPLE_1",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_1"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_3": {
@@ -506,8 +647,14 @@
           "sequencing_run_id": "RUN_125"
         },
         "relations": {
-          "sample": "SAMPLE_1",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_1"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_4": {
@@ -520,8 +667,14 @@
           "sequencing_run_id": "RUN_126"
         },
         "relations": {
-          "sample": "SAMPLE_2",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_2"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_5": {
@@ -534,8 +687,14 @@
           "sequencing_run_id": "RUN_127"
         },
         "relations": {
-          "sample": "SAMPLE_2",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_2"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_6": {
@@ -548,8 +707,14 @@
           "sequencing_run_id": "RUN_128"
         },
         "relations": {
-          "sample": "SAMPLE_2",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_2"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_7": {
@@ -562,8 +727,14 @@
           "sequencing_run_id": "RUN_129"
         },
         "relations": {
-          "sample": "SAMPLE_2",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_2"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_8": {
@@ -576,8 +747,14 @@
           "sequencing_run_id": "RUN_130"
         },
         "relations": {
-          "sample": "SAMPLE_2",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_2"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       },
       "SEQ_PROCESS_9": {
@@ -590,8 +767,14 @@
           "sequencing_run_id": "RUN_131"
         },
         "relations": {
-          "sample": "SAMPLE_2",
-          "sequencing_experiment": "SEQ_EXP_1"
+          "sample": {
+            "targetClass": "Sample",
+            "targetResources": "SAMPLE_2"
+          },
+          "sequencing_experiment": {
+            "targetClass": "SequencingExperiment",
+            "targetResources": "SEQ_EXP_1"
+          }
         }
       }
     },
@@ -607,7 +790,10 @@
           "size": 37
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_1"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_1"
+          }
         }
       },
       "SEQ_FILE_2": {
@@ -621,7 +807,10 @@
           "size": 153
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_2"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_2"
+          }
         }
       },
       "SEQ_FILE_3": {
@@ -635,7 +824,10 @@
           "size": 1000
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_3"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_3"
+          }
         }
       },
       "SEQ_FILE_4": {
@@ -649,7 +841,10 @@
           "size": 1024
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_4"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_4"
+          }
         }
       },
       "SEQ_FILE_5": {
@@ -663,7 +858,10 @@
           "size": 1050
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_5"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_5"
+          }
         }
       },
       "SEQ_FILE_6": {
@@ -677,7 +875,10 @@
           "size": 4000
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_6"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_6"
+          }
         }
       },
       "SEQ_FILE_7": {
@@ -691,7 +892,10 @@
           "size": 53249
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_7"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_7"
+          }
         }
       },
       "SEQ_FILE_8": {
@@ -705,7 +909,10 @@
           "size": 96257
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_8"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_8"
+          }
         }
       },
       "SEQ_FILE_9": {
@@ -719,7 +926,10 @@
           "size": 49153
         },
         "relations": {
-          "sequencing_process": "SEQ_PROCESS_9"
+          "sequencing_process": {
+            "targetClass": "SequencingProcess",
+            "targetResources": "SEQ_PROCESS_9"
+          }
         }
       }
     },
@@ -789,7 +999,10 @@
           "size": 40
         },
         "relations": {
-          "study": "STUDY_A"
+          "study": {
+            "targetClass": "Study",
+            "targetResources": "STUDY_A"
+          }
         }
       }
     },
@@ -797,9 +1010,18 @@
       "TRIO_1": {
         "content": {},
         "relations": {
-          "child": "INDV_1",
-          "father": "FATHER_1",
-          "mother": "MOTHER_1"
+          "child": {
+            "targetClass": "Individual",
+            "targetResources": "INDV_1"
+          },
+          "father": {
+            "targetClass": "Individual",
+            "targetResources": "FATHER_1"
+          },
+          "mother": {
+            "targetClass": "Individual",
+            "targetResources": "MOTHER_1"
+          }
         }
       }
     }

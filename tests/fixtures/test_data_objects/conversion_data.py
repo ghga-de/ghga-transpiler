@@ -18,7 +18,7 @@
 """Data that is expected as output in unit tests"""
 
 from arcticfreeze import FrozenDict
-from schemapack._internals.spec.datapack import ResourceRelation  # type: ignore
+from schemapack._internals.spec.datapack import ResourceRelation
 from schemapack.spec.datapack import DataPack, Resource
 
 EXPECTED_CONVERSION_DATAPACK = DataPack(
