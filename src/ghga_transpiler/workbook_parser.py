@@ -112,7 +112,14 @@ class GHGAWorksheetParser(WorksheetParser):
         resource that is in the relation as the value
         """
         relations = self.config.get_relations()
-        return {relation: row[relation] for relation in relations if relation in row}
+        return {
+            relation[0]: {
+                "targetClass": relation[1],
+                "targetResources": row[relation[0]],
+            }
+            for relation in relations
+            if relation[0] in row
+        }
 
     def _relation_free_content(self, row: dict) -> dict:
         """Clean up the content data from the relation, i.e., remove the key value pairs

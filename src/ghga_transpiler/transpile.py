@@ -37,7 +37,10 @@ def parse_workbook(workbook: Workbook, config: WorkbookConfig) -> GHGAWorkbook:
 def transpile_to_datapack(workbook: GHGAWorkbook) -> DataPack:
     """Convert GHAWorkbook into a Datapack instance."""
     return DataPack(
-        datapack="0.3.0", resources=FrozenDict(workbook.model_dump()), rootResource=None
+        datapack="0.3.0",
+        resources=FrozenDict(workbook.model_dump()),
+        rootResource=None,
+        rootClass=None,
     )
 
 

@@ -26,6 +26,7 @@ repos:
         exclude: '.*\.json|example_config.yaml'
       - id: check-yaml
       - id: check-added-large-files
+        args: ["--maxkb=1024"]
       - id: check-ast
       - id: check-json
         exclude: devcontainer.json
@@ -45,13 +46,13 @@ repos:
       - id: no-commit-to-branch
         args: [--branch, dev, --branch, int, --branch, main]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.6
+    rev: v0.11.5
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.1
+    rev: v1.15.0
     hooks:
       - id: mypy
         args: [--no-warn-unused-ignores]

@@ -97,8 +97,9 @@ def reshape_settings_meta(settings_meta: list, name_column: str) -> dict[str, di
             ) from err
         if sheet_name in worksheet_settings:
             raise MetaColumnNotUnique(
-                f"Duplicate sheet name {
-                    sheet_name} in settings meta column {name_column}"
+                f"Duplicate sheet name {sheet_name} in settings meta column {
+                    name_column
+                }"
             )
         worksheet_settings[sheet_name] = item
     return worksheet_settings
