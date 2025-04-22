@@ -113,12 +113,12 @@ class GHGAWorksheetParser(WorksheetParser):
         """
         relations = self.config.get_relations()
         return {
-            relation[0]: {
-                "targetClass": relation[1],
-                "targetResources": row[relation[0]],
+            relation.name: {
+                "targetClass": relation.target_class,
+                "targetResources": row[relation.name],
             }
             for relation in relations
-            if relation[0] in row
+            if relation.name in row
         }
 
     def _relation_free_content(self, row: dict) -> dict:
