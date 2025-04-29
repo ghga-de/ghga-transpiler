@@ -7,3 +7,6 @@ scripts/update_readme.py
 .github/workflows/check_config_docs.yaml
 .github/workflows/check_openapi_spec.yaml
 .github/workflows/check_readme.yaml
+
+
+scripts/update_config_docs.py

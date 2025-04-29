@@ -9,7 +9,7 @@ dependencies = [
     "pydantic >=2, <3",
     "PyYAML ~= 6.0",
     "semver == 3.*",
-    "schemapack == 2.0.0-alpha.4"
+    "schemapack == 2.0.0"
 ]
 
 [project.urls]
