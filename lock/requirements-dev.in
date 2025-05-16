@@ -5,3 +5,7 @@
 
 # additional requirements can be listed here
 testcontainers[kafka,mongo]>=4.4.1
+exceptiongroup>=1.2.2 # for Python<3.11
+tomli>= 2.0.0 # for Python<3.11
+importlib-metadata>=4.4 # for Python<3.10
+eval-type-backport==0.2.0 # for Python<3.10
