@@ -629,9 +629,9 @@ tornado==6.5 \
     --hash=sha256:f81067dad2e4443b015368b24e802d0083fecada4f0a4572fdb72fc06e54a9a6 \
     --hash=sha256:fd20c816e31be1bbff1f7681f970bbbd0bb241c364220140228ba24242bcdc59
     # via snakeviz
-typer==0.15.3 \
-    --hash=sha256:818873625d0569653438316567861899f7e9972f2e6e0c16dab608345ced713c \
-    --hash=sha256:c86a65ad77ca531f03de08d1b9cb67cd09ad02ddddf4b34745b5008f43b239bd
+typer==0.15.4 \
+    --hash=sha256:89507b104f9b6a0730354f27c39fae5b63ccd0c95b1ce1f1a6ba0cfd329997c3 \
+    --hash=sha256:eb0651654dcdea706780c466cf06d8f174405a659ffff8f163cfbfee98c0e173
     # via
     #   -r lock/requirements-dev-template.in
     #   ghga-transpiler (pyproject.toml)
