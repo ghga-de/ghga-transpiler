@@ -4,9 +4,9 @@ annotated-types==0.7.0 \
     # via
     #   -c lock/requirements-dev.txt
     #   pydantic
-click==8.1.0 \
-    --hash=sha256:19a4baa64da924c5e0cd889aba8e947f280309f1a2ce0947a3e3a7bcb7cc72d6 \
-    --hash=sha256:977c213473c7665d3aa092b41ff12063227751c41d7b17165013e10069cc5cd2
+click==8.2.0 \
+    --hash=sha256:6b303f0b2aa85f1cb4e5303078fadcbcd4e476f114fab9b5007005711839325c \
+    --hash=sha256:f5452aeddd9988eefa20f90f05ab66f17fce1ee2a36907fd30b05bbb5953814d
     # via
     #   -c lock/requirements-dev.txt
     #   ghga-transpiler (pyproject.toml)
@@ -231,9 +231,9 @@ shellingham==1.5.4 \
     # via
     #   -c lock/requirements-dev.txt
     #   typer
-typer==0.15.4 \
-    --hash=sha256:89507b104f9b6a0730354f27c39fae5b63ccd0c95b1ce1f1a6ba0cfd329997c3 \
-    --hash=sha256:eb0651654dcdea706780c466cf06d8f174405a659ffff8f163cfbfee98c0e173
+typer==0.15.3 \
+    --hash=sha256:818873625d0569653438316567861899f7e9972f2e6e0c16dab608345ced713c \
+    --hash=sha256:c86a65ad77ca531f03de08d1b9cb67cd09ad02ddddf4b34745b5008f43b239bd
     # via
     #   -c lock/requirements-dev.txt
     #   ghga-transpiler (pyproject.toml)
