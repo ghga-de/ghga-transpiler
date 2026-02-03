@@ -25,9 +25,6 @@
 					"source.organizeImports": "explicit"
 				},
 				"editor.formatOnSave": true,
-				"[yaml]": {
-					"editor.formatOnSave": false
-				},
 				"editor.renderWhitespace": "all",
 				"editor.rulers": [
 					88
@@ -52,10 +49,11 @@
 				"github.vscode-pull-request-github",
 				"streetsidesoftware.code-spell-checker",
 				"yzhang.markdown-all-in-one",
-				"visualstudioexptteam.vscodeintellicode",
 				"ymotongpoo.licenser",
 				"charliermarsh.ruff",
-				"ms-python.mypy-type-checker"
+				"ms-python.mypy-type-checker",
+				"-ms-python.autopep8",
+				"-visualstudioexptteam.vscodeintellicode"
 			]
 		}
 	},
@@ -72,6 +70,8 @@
 	},
 	"features": {
 		// details can be found here: https://github.com/devcontainers/features/tree/main/src/docker-outside-of-docker
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+			"moby": false
+		}
 	}
 }
